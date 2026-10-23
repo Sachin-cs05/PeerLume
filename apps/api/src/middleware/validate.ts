@@ -1,9 +1,9 @@
 import type { Request, Response, NextFunction } from 'express';
-import { ZodError, type AnyZodObject } from 'zod';
+import { ZodError, type ZodSchema } from 'zod';
 import { HTTP_STATUS } from '@peerlume/shared';
 import { sendError } from '../utils/apiResponse.js';
 
-export function validateBody(schema: AnyZodObject) {
+export function validateBody(schema: ZodSchema) {
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       req.body = await schema.parseAsync(req.body);
@@ -23,7 +23,7 @@ export function validateBody(schema: AnyZodObject) {
   };
 }
 
-export function validateQuery(schema: AnyZodObject) {
+export function validateQuery(schema: ZodSchema) {
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       req.query = (await schema.parseAsync(req.query)) as Request['query'];

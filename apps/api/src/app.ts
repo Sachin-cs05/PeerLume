@@ -1,6 +1,7 @@
 import express, { type Express } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
 import { env } from './config/env.js';
 import { requestLogger } from './middleware/requestLogger.js';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
@@ -10,6 +11,9 @@ import { apiRoutes } from './routes/index.js';
 export function createApp(): Express {
   const app = express();
 
+  // Trust proxy for rate-limiting and secure cookies behind local/cloud proxies
+  app.set('trust proxy', 1);
+
   // Security HTTP Headers
   app.use(helmet());
 
@@ -17,8 +21,12 @@ export function createApp(): Express {
   app.use(
     cors({
       origin: (origin, callback) => {
-        // Allow requests with no origin (e.g., mobile apps, curl) or matching WEB_ORIGIN
-        if (!origin || origin === env.WEB_ORIGIN) {
+        // Allow requests with no origin (mobile, curl) or matching configured/dev origins
+        if (
+          !origin ||
+          origin === env.WEB_ORIGIN ||
+          (env.NODE_ENV === 'development' && /^http:\/\/localhost:(5173|5174|5175)$/.test(origin))
+        ) {
           callback(null, true);
         } else {
           callback(new Error(`Origin ${origin} not allowed by CORS`));
@@ -30,7 +38,8 @@ export function createApp(): Express {
     })
   );
 
-  // Body Parsing with size limits
+  // Body and Cookie Parsing
+  app.use(cookieParser(env.COOKIE_SECRET));
   app.use(express.json({ limit: '1mb' }));
   app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 

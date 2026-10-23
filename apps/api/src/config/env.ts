@@ -22,7 +22,30 @@ const envSchema = z.object({
       return parsed;
     }),
   WEB_ORIGIN: z.string().default('http://localhost:5173'),
+  APP_BASE_URL: z.string().default('http://localhost:5173'),
   DATABASE_URL: z.string().min(1, 'DATABASE_URL environment variable is required'),
+
+  // Authentication Secrets
+  JWT_ACCESS_SECRET: z
+    .string()
+    .min(16, 'JWT_ACCESS_SECRET must be at least 16 characters')
+    .default('peerlume_dev_jwt_access_secret_super_secure_32chars!'),
+  JWT_REFRESH_SECRET: z
+    .string()
+    .min(16, 'JWT_REFRESH_SECRET must be at least 16 characters')
+    .default('peerlume_dev_jwt_refresh_secret_super_secure_32chars!'),
+  COOKIE_SECRET: z
+    .string()
+    .min(16, 'COOKIE_SECRET must be at least 16 characters')
+    .default('peerlume_dev_cookie_signing_secret_super_secure!'),
+
+  // Optional Email Configuration
+  EMAIL_PROVIDER: z.enum(['development', 'smtp']).default('development'),
+  SMTP_HOST: z.string().optional(),
+  SMTP_PORT: z.string().optional(),
+  SMTP_USER: z.string().optional(),
+  SMTP_PASS: z.string().optional(),
+  EMAIL_FROM: z.string().default('PeerLume <noreply@peerlume.local>'),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);

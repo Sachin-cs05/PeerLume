@@ -31,9 +31,9 @@ export const LandingPage: React.FC = () => {
 
       {/* Hero Section */}
       <section className="relative max-w-5xl mx-auto px-4 sm:px-6 text-center space-y-6">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-300 text-xs font-semibold tracking-wide animate-fade-in">
-          <Sparkles className="w-3.5 h-3.5 text-brand-400" />
-          <span>Peer-to-Peer Learning Platform • Phase 1 Foundation</span>
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs font-semibold tracking-wide animate-fade-in">
+          <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+          <span>Peer-to-Peer Learning Platform • Phase 2 Live</span>
         </div>
 
         <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.1]">
@@ -49,30 +49,37 @@ export const LandingPage: React.FC = () => {
           centralized administrative gatekeepers.
         </p>
 
-        {/* Phase 1 Status Banner */}
+        {/* Phase 2 Status Banner */}
         <div className="pt-2">
-          <Alert variant="info" className="max-w-xl mx-auto text-left">
-            <span className="font-semibold text-brand-300">Phase 1 Architecture Active:</span> Core monorepo, Express REST API, PostgreSQL Prisma foundation, and responsive frontend are live. Authentication, chat, matching, and study rooms will arrive in upcoming phases.
+          <Alert variant="success" className="max-w-xl mx-auto text-left">
+            <span className="font-semibold text-emerald-300">Phase 2 Active:</span> Student Registration, Secure Argon2id Authentication, and Persistent Student Profiles (Skills & Goals) are live. Create your account to set up your learning identity.
           </Alert>
         </div>
 
-        {/* Call to Actions (clearly framed for Phase 1 vs Future) */}
+        {/* Call to Actions */}
         <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
-          <Button
-            size="lg"
-            variant="primary"
-            rightIcon={<ArrowRight className="w-4 h-4" />}
-            onClick={() => {
-              const el = document.getElementById('learning-modes');
-              el?.scrollIntoView({ behavior: 'smooth' });
-            }}
-          >
-            Explore Learning Modes
-          </Button>
+          <a href="/register">
+            <Button
+              size="lg"
+              variant="primary"
+              rightIcon={<ArrowRight className="w-4 h-4" />}
+            >
+              Join PeerLume
+            </Button>
+          </a>
+
+          <a href="/login">
+            <Button
+              size="lg"
+              variant="secondary"
+            >
+              Sign In
+            </Button>
+          </a>
 
           <Button
             size="lg"
-            variant="secondary"
+            variant="outline"
             onClick={() => {
               const el = document.getElementById('system-health');
               el?.scrollIntoView({ behavior: 'smooth' });

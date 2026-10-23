@@ -1,4 +1,4 @@
-// PeerLume Prisma Schema - Phase 1: Foundation
+// PeerLume Prisma Schema - Phase 2: Authentication & Student Profiles
 // "Learn Together. Grow Together."
 
 generator client {
@@ -10,15 +10,167 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Foundational User model for student accounts.
-// Future phases will extend this model with skills, learning goals, sessions, and connections.
+// -----------------------------------------------------------------------------
+// Core User Model
 // Note: PeerLume has NO Admin role or Admin dashboard; all users are peer students.
+// -----------------------------------------------------------------------------
+
 model User {
-  id          String   @id @default(uuid())
-  email       String   @unique
-  displayName String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id              String   @id @default(uuid())
+  email           String   @unique
+  passwordHash    String   @map("password_hash")
+  fullName        String   @map("full_name")
+  isEmailVerified Boolean  @default(false) @map("is_email_verified")
+  avatarUrl       String?  @map("avatar_url")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  profile                  StudentProfile?
+  refreshSessions          RefreshSession[]
+  emailVerificationTokens  EmailVerificationToken[]
+  passwordResetTokens      PasswordResetToken[]
 
   @@map("users")
+}
+
+// -----------------------------------------------------------------------------
+// Student Profile & Academic Details
+// -----------------------------------------------------------------------------
+
+enum PreferredLearningMode {
+  ONLINE
+  IN_PERSON
+  HYBRID
+}
+
+enum ProfileVisibility {
+  PUBLIC
+  CAMPUS_ONLY
+  CONNECTIONS_ONLY
+}
+
+model StudentProfile {
+  id                    String                @id @default(uuid())
+  userId                String                @unique @map("user_id")
+  college               String
+  degree                String
+  branch                String
+  semester              String
+  bio                   String?               @db.Text
+  languages             String[]              @default(["English"])
+  preferredLearningMode PreferredLearningMode @default(HYBRID) @map("preferred_learning_mode")
+  visibility            ProfileVisibility     @default(PUBLIC)
+  createdAt             DateTime              @default(now()) @map("created_at")
+  updatedAt             DateTime              @updatedAt @map("updated_at")
+
+  user           User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  teachingSkills UserTeachingSkill[]
+  learningGoals  UserLearningGoal[]
+
+  @@map("student_profiles")
+}
+
+// -----------------------------------------------------------------------------
+// Normalized Skills & Goal Tracking
+// -----------------------------------------------------------------------------
+
+model Skill {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  category  String?  @default("General")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  teachingUsers UserTeachingSkill[]
+  learningUsers UserLearningGoal[]
+
+  @@map("skills")
+}
+
+enum SkillProficiency {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+model UserTeachingSkill {
+  id          String           @id @default(uuid())
+  profileId   String           @map("profile_id")
+  skillId     String           @map("skill_id")
+  proficiency SkillProficiency @default(INTERMEDIATE)
+  createdAt   DateTime         @default(now()) @map("created_at")
+
+  profile StudentProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  skill   Skill          @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@unique([profileId, skillId])
+  @@map("user_teaching_skills")
+}
+
+enum GoalPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+model UserLearningGoal {
+  id                String       @id @default(uuid())
+  profileId         String       @map("profile_id")
+  skillId           String       @map("skill_id")
+  targetDescription String?      @map("target_description")
+  priority          GoalPriority @default(MEDIUM)
+  createdAt         DateTime     @default(now()) @map("created_at")
+
+  profile StudentProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  skill   Skill          @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@unique([profileId, skillId])
+  @@map("user_learning_goals")
+}
+
+// -----------------------------------------------------------------------------
+// Authentication Tokens & Sessions
+// -----------------------------------------------------------------------------
+
+model RefreshSession {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  hashedToken String   @unique @map("hashed_token")
+  userAgent   String?  @map("user_agent")
+  ipAddress   String?  @map("ip_address")
+  expiresAt   DateTime @map("expires_at")
+  isRevoked   Boolean  @default(false) @map("is_revoked")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("refresh_sessions")
+}
+
+model EmailVerificationToken {
+  id        String    @id @default(uuid())
+  userId    String    @map("user_id")
+  tokenHash String    @unique @map("token_hash")
+  expiresAt DateTime  @map("expires_at")
+  usedAt    DateTime? @map("used_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("email_verification_tokens")
+}
+
+model PasswordResetToken {
+  id        String    @id @default(uuid())
+  userId    String    @map("user_id")
+  tokenHash String    @unique @map("token_hash")
+  expiresAt DateTime  @map("expires_at")
+  usedAt    DateTime? @map("used_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("password_reset_tokens")
 }

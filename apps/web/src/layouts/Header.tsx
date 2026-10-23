@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Sparkles, Menu, X, Users, Compass, BookOpen, Layers } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Sparkles, Menu, X, Users, Compass, BookOpen, User, LogOut, LayoutDashboard } from 'lucide-react';
 import { Badge } from '../components/ui/Badge.js';
 import { Button } from '../components/ui/Button.js';
+import { useAuth } from '../context/AuthContext.js';
 
 export const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-slate-800/80 bg-slate-900/80 backdrop-blur-md">
@@ -22,57 +30,108 @@ export const Header: React.FC = () => {
               <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-200 to-brand-300 bg-clip-text text-transparent">
                 PeerLume
               </span>
-              <span className="hidden sm:inline-block ml-2 text-[10px] font-semibold text-brand-400 tracking-wider uppercase px-2 py-0.5 rounded-full bg-brand-500/10 border border-brand-500/20">
-                Phase 1
+              <span className="hidden sm:inline-block ml-2 text-[10px] font-semibold text-emerald-400 tracking-wider uppercase px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+                Phase 2
               </span>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-6">
-            <div className="flex items-center gap-2 text-sm text-slate-300 hover:text-white transition-colors cursor-pointer group">
-              <Users className="w-4 h-4 text-brand-400" />
-              <span>Learn with Friends</span>
-              <Badge variant="neutral" size="sm" className="opacity-70 group-hover:opacity-100">
-                Phase 2
-              </Badge>
-            </div>
+            {user ? (
+              <>
+                <Link
+                  to="/dashboard"
+                  className="flex items-center gap-2 text-sm text-slate-300 hover:text-white transition-colors"
+                >
+                  <LayoutDashboard className="w-4 h-4 text-brand-400" />
+                  <span>Dashboard</span>
+                </Link>
 
-            <div className="flex items-center gap-2 text-sm text-slate-300 hover:text-white transition-colors cursor-pointer group">
-              <Compass className="w-4 h-4 text-teal-400" />
-              <span>Discover Partners</span>
-              <Badge variant="neutral" size="sm" className="opacity-70 group-hover:opacity-100">
-                Phase 2
-              </Badge>
-            </div>
+                <Link
+                  to="/profile"
+                  className="flex items-center gap-2 text-sm text-slate-300 hover:text-white transition-colors"
+                >
+                  <User className="w-4 h-4 text-teal-400" />
+                  <span>My Profile</span>
+                </Link>
 
-            <div className="flex items-center gap-2 text-sm text-slate-300 hover:text-white transition-colors cursor-pointer group">
-              <BookOpen className="w-4 h-4 text-amber-400" />
-              <span>Study Sessions</span>
-              <Badge variant="neutral" size="sm" className="opacity-70 group-hover:opacity-100">
-                Upcoming
-              </Badge>
-            </div>
+                <div className="flex items-center gap-2 text-sm text-slate-400 group cursor-default">
+                  <Users className="w-4 h-4 text-slate-500" />
+                  <span>Circles</span>
+                  <Badge variant="neutral" size="sm" className="opacity-70">
+                    Phase 3
+                  </Badge>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="flex items-center gap-2 text-sm text-slate-300 hover:text-white transition-colors group cursor-default">
+                  <Users className="w-4 h-4 text-brand-400" />
+                  <span>Learn with Friends</span>
+                  <Badge variant="brand" size="sm">
+                    Live
+                  </Badge>
+                </div>
+
+                <div className="flex items-center gap-2 text-sm text-slate-300 hover:text-white transition-colors group cursor-default">
+                  <Compass className="w-4 h-4 text-teal-400" />
+                  <span>Discover Partners</span>
+                  <Badge variant="brand" size="sm">
+                    Live
+                  </Badge>
+                </div>
+
+                <div className="flex items-center gap-2 text-sm text-slate-400 group cursor-default">
+                  <BookOpen className="w-4 h-4 text-amber-400" />
+                  <span>Study Sessions</span>
+                  <Badge variant="neutral" size="sm" className="opacity-70">
+                    Phase 3
+                  </Badge>
+                </div>
+              </>
+            )}
           </nav>
 
           {/* Actions & Status */}
           <div className="hidden sm:flex items-center gap-3">
-            <a
-              href="#architecture"
-              className="text-xs text-slate-400 hover:text-slate-200 flex items-center gap-1.5 transition-colors"
-            >
-              <Layers className="w-3.5 h-3.5" />
-              Architecture
-            </a>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                alert('Authentication and student registration will be enabled in Phase 2.');
-              }}
-            >
-              Student Portal (Phase 2)
-            </Button>
+            {user ? (
+              <div className="flex items-center gap-3">
+                <Link
+                  to="/profile"
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-800/80 border border-slate-700 hover:border-slate-600 transition-colors"
+                >
+                  <div className="w-6 h-6 rounded-lg bg-brand-600 flex items-center justify-center text-xs font-bold text-white">
+                    {user.fullName.charAt(0).toUpperCase()}
+                  </div>
+                  <span className="text-xs font-semibold text-slate-200 max-w-[120px] truncate">
+                    {user.fullName}
+                  </span>
+                </Link>
+
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleLogout}
+                  leftIcon={<LogOut className="w-4 h-4" />}
+                >
+                  Logout
+                </Button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-3">
+                <Link to="/login">
+                  <Button variant="ghost" size="sm">
+                    Sign In
+                  </Button>
+                </Link>
+                <Link to="/register">
+                  <Button variant="primary" size="sm">
+                    Join PeerLume
+                  </Button>
+                </Link>
+              </div>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -91,37 +150,65 @@ export const Header: React.FC = () => {
       {/* Mobile dropdown */}
       {mobileMenuOpen && (
         <div className="md:hidden border-b border-slate-800 bg-slate-900/95 px-4 pt-2 pb-6 space-y-3">
-          <div className="flex items-center justify-between py-2 border-b border-slate-800/60">
-            <span className="text-sm font-medium text-slate-300 flex items-center gap-2">
-              <Users className="w-4 h-4 text-brand-400" /> Learn with Friends
-            </span>
-            <Badge variant="neutral" size="sm">Coming Phase 2</Badge>
-          </div>
-          <div className="flex items-center justify-between py-2 border-b border-slate-800/60">
-            <span className="text-sm font-medium text-slate-300 flex items-center gap-2">
-              <Compass className="w-4 h-4 text-teal-400" /> Discover Partners
-            </span>
-            <Badge variant="neutral" size="sm">Coming Phase 2</Badge>
-          </div>
-          <div className="flex items-center justify-between py-2 border-b border-slate-800/60">
-            <span className="text-sm font-medium text-slate-300 flex items-center gap-2">
-              <BookOpen className="w-4 h-4 text-amber-400" /> Study Sessions
-            </span>
-            <Badge variant="neutral" size="sm">Coming Phase 3</Badge>
-          </div>
-          <div className="pt-2">
-            <Button
-              variant="primary"
-              size="sm"
-              className="w-full"
-              onClick={() => {
-                setMobileMenuOpen(false);
-                alert('Authentication will be available in Phase 2.');
-              }}
-            >
-              Student Portal (Coming Phase 2)
-            </Button>
-          </div>
+          {user ? (
+            <>
+              <div className="py-2 border-b border-slate-800 text-xs font-semibold text-slate-300">
+                Signed in as <span className="text-white">{user.fullName}</span>
+              </div>
+              <Link
+                to="/dashboard"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-between py-2 text-sm font-medium text-slate-300"
+              >
+                <span>Dashboard</span>
+              </Link>
+              <Link
+                to="/profile"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-between py-2 text-sm font-medium text-slate-300"
+              >
+                <span>My Profile</span>
+              </Link>
+              <Link
+                to="/profile/edit"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-between py-2 text-sm font-medium text-slate-300"
+              >
+                <span>Edit Skills</span>
+              </Link>
+              <div className="pt-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    handleLogout();
+                  }}
+                  leftIcon={<LogOut className="w-4 h-4" />}
+                >
+                  Sign Out
+                </Button>
+              </div>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block py-2 text-sm font-medium text-slate-300"
+              >
+                Sign In
+              </Link>
+              <Link
+                to="/register"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block py-2 text-sm font-medium text-brand-400"
+              >
+                Create Student Account
+              </Link>
+            </>
+          )}
         </div>
       )}
     </header>
