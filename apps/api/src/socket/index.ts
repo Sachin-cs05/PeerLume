@@ -520,6 +520,287 @@ export function initSocketIO(httpServer: HttpServer): SocketIOServer {
     });
 
     // -------------------------------------------------------------------------
+    // Phase 7: Interactive Study Room & Whiteboard Real-Time Events
+    // -------------------------------------------------------------------------
+    socket.on(
+      SOCKET_EVENTS.STUDY_ROOM_JOIN,
+      async (payload: { roomId: string }, ack?: (res: any) => void) => {
+        try {
+          if (!payload?.roomId) {
+            ack?.({ success: false, error: 'Room ID required' });
+            return;
+          }
+
+          const room = await prisma.studyRoom.findUnique({
+            where: { id: payload.roomId },
+            include: {
+              participants: true,
+              creator: { select: { id: true, fullName: true } },
+            },
+          });
+
+          if (!room || !room.isActive) {
+            ack?.({ success: false, error: 'Study room not found or inactive' });
+            return;
+          }
+
+          // Check block between user and room creator
+          const isBlocked = await prisma.userBlock.findFirst({
+            where: {
+              OR: [
+                { blockerId: userId, blockedId: room.creatorId },
+                { blockerId: room.creatorId, blockedId: userId },
+              ],
+            },
+          });
+
+          if (isBlocked) {
+            ack?.({ success: false, error: 'Access blocked' });
+            return;
+          }
+
+          const participant = room.participants.find((p) => p.userId === userId && !p.leftAt);
+          const isOwner = room.creatorId === userId;
+
+          if (!participant && !isOwner) {
+            // Check session membership if tied to a session
+            let eligible = false;
+            if (room.sessionId) {
+              const sp = await prisma.sessionParticipant.findFirst({
+                where: { sessionId: room.sessionId, userId, status: 'ACCEPTED' },
+              });
+              eligible = Boolean(sp);
+            }
+            if (!eligible) {
+              ack?.({ success: false, error: 'Unauthorized: Not a room participant' });
+              return;
+            }
+          }
+
+          const roomChannel = `study_room:${payload.roomId}`;
+          socket.join(roomChannel);
+
+          const currentUser = await prisma.user.findUnique({
+            where: { id: userId },
+            select: { id: true, fullName: true, avatarUrl: true },
+          });
+
+          // Broadcast user joined to other members in the study room
+          socket.to(roomChannel).emit(SOCKET_EVENTS.STUDY_ROOM_USER_JOINED, {
+            roomId: payload.roomId,
+            user: currentUser,
+            role: participant?.role || (isOwner ? 'OWNER' : 'EDITOR'),
+          });
+
+          logger.info(`User ${userId} joined study room ${roomChannel}`);
+          ack?.({
+            success: true,
+            roomId: payload.roomId,
+            role: participant?.role || (isOwner ? 'OWNER' : 'EDITOR'),
+          });
+        } catch (err: any) {
+          logger.error('Error handling study-room:join:', err);
+          ack?.({ success: false, error: err?.message || 'Join failed' });
+        }
+      }
+    );
+
+    socket.on(SOCKET_EVENTS.STUDY_ROOM_LEAVE, (payload: { roomId: string }) => {
+      if (payload?.roomId) {
+        const roomChannel = `study_room:${payload.roomId}`;
+        socket.leave(roomChannel);
+        socket.to(roomChannel).emit(SOCKET_EVENTS.STUDY_ROOM_USER_LEFT, {
+          roomId: payload.roomId,
+          userId,
+        });
+        logger.info(`User ${userId} left study room ${roomChannel}`);
+      }
+    });
+
+    socket.on(
+      SOCKET_EVENTS.STUDY_ROOM_SIGNAL,
+      (payload: { roomId: string; targetUserId: string; signal: any }) => {
+        if (!payload?.roomId || !payload?.targetUserId || !payload?.signal) return;
+        // Forward WebRTC signal to target user within the study room
+        io?.to(`user:${payload.targetUserId}`).emit(SOCKET_EVENTS.STUDY_ROOM_SIGNAL, {
+          roomId: payload.roomId,
+          senderId: userId,
+          signal: payload.signal,
+        });
+      }
+    );
+
+    socket.on(
+      SOCKET_EVENTS.WHITEBOARD_INIT,
+      async (payload: { roomId: string; boardId?: string }, ack?: (res: any) => void) => {
+        try {
+          if (!payload?.roomId) {
+            ack?.({ success: false, error: 'Room ID required' });
+            return;
+          }
+
+          const participant = await prisma.studyRoomParticipant.findFirst({
+            where: { roomId: payload.roomId, userId },
+          });
+
+          const isOwner = await prisma.studyRoom.count({
+            where: { id: payload.roomId, creatorId: userId },
+          });
+
+          const role = isOwner ? 'OWNER' : participant?.role || 'EDITOR';
+
+          const { whiteboardSyncService } = await import('../services/whiteboardSync.service.js');
+          const board = await whiteboardSyncService.getOrCreateBoard(payload.roomId, payload.boardId);
+
+          ack?.({
+            success: true,
+            roomId: payload.roomId,
+            boardId: board.boardId,
+            elements: board.elements,
+            version: board.version,
+            role,
+          });
+        } catch (err: any) {
+          logger.error('Error handling whiteboard:init:', err);
+          ack?.({ success: false, error: err?.message || 'Whiteboard init failed' });
+        }
+      }
+    );
+
+    socket.on(
+      SOCKET_EVENTS.WHITEBOARD_DRAW_STEP,
+      async (payload: { roomId: string; boardId: string; step: any }, ack?: (res: any) => void) => {
+        try {
+          if (!payload?.roomId || !payload?.boardId || !payload?.step) return;
+
+          const participant = await prisma.studyRoomParticipant.findFirst({
+            where: { roomId: payload.roomId, userId },
+          });
+
+          const isOwner = await prisma.studyRoom.count({
+            where: { id: payload.roomId, creatorId: userId },
+          });
+
+          const role = isOwner ? 'OWNER' : participant?.role || 'EDITOR';
+          if (role === 'VIEWER') {
+            ack?.({ success: false, error: 'Unauthorized: Viewers cannot modify whiteboard' });
+            return;
+          }
+
+          const { whiteboardSyncService } = await import('../services/whiteboardSync.service.js');
+          const result = await whiteboardSyncService.applyDrawStep(
+            userId,
+            payload.roomId,
+            payload.boardId,
+            payload.step,
+            role
+          );
+
+          // Broadcast draw step to other room members
+          const roomChannel = `study_room:${payload.roomId}`;
+          socket.to(roomChannel).emit(SOCKET_EVENTS.WHITEBOARD_DRAW_STEP, {
+            roomId: payload.roomId,
+            boardId: payload.boardId,
+            step: payload.step,
+            version: result.version,
+          });
+
+          ack?.({ success: true, version: result.version });
+        } catch (err: any) {
+          logger.error('Error handling whiteboard:draw-step:', err);
+          ack?.({ success: false, error: err?.message || 'Draw step failed' });
+        }
+      }
+    );
+
+    socket.on(
+      SOCKET_EVENTS.WHITEBOARD_CURSOR,
+      async (payload: { roomId: string; x: number; y: number }) => {
+        if (!payload?.roomId) return;
+        const roomChannel = `study_room:${payload.roomId}`;
+        socket.to(roomChannel).emit(SOCKET_EVENTS.WHITEBOARD_CURSOR, {
+          roomId: payload.roomId,
+          userId,
+          x: payload.x,
+          y: payload.y,
+        });
+      }
+    );
+
+    socket.on(
+      SOCKET_EVENTS.WHITEBOARD_CLEAR,
+      async (payload: { roomId: string; boardId: string }, ack?: (res: any) => void) => {
+        try {
+          if (!payload?.roomId || !payload?.boardId) return;
+
+          const participant = await prisma.studyRoomParticipant.findFirst({
+            where: { roomId: payload.roomId, userId },
+          });
+          const isOwner = await prisma.studyRoom.count({
+            where: { id: payload.roomId, creatorId: userId },
+          });
+          const role = isOwner ? 'OWNER' : participant?.role || 'EDITOR';
+
+          if (role === 'VIEWER') {
+            ack?.({ success: false, error: 'Viewers cannot clear whiteboard' });
+            return;
+          }
+
+          const { whiteboardSyncService } = await import('../services/whiteboardSync.service.js');
+          const result = await whiteboardSyncService.applyDrawStep(
+            userId,
+            payload.roomId,
+            payload.boardId,
+            { type: 'clear' },
+            role
+          );
+
+          const roomChannel = `study_room:${payload.roomId}`;
+          socket.to(roomChannel).emit(SOCKET_EVENTS.WHITEBOARD_CLEAR, {
+            roomId: payload.roomId,
+            boardId: payload.boardId,
+            version: result.version,
+          });
+
+          ack?.({ success: true, version: result.version });
+        } catch (err: any) {
+          logger.error('Error handling whiteboard:clear:', err);
+          ack?.({ success: false, error: err?.message });
+        }
+      }
+    );
+
+    socket.on(
+      SOCKET_EVENTS.WHITEBOARD_SAVE,
+      async (payload: { roomId: string; boardId: string; description?: string }, ack?: (res: any) => void) => {
+        try {
+          if (!payload?.roomId) return;
+
+          const { whiteboardSyncService } = await import('../services/whiteboardSync.service.js');
+          const result = await whiteboardSyncService.saveBoardNow(
+            userId,
+            payload.roomId,
+            payload.boardId,
+            payload.description
+          );
+
+          const roomChannel = `study_room:${payload.roomId}`;
+          io?.to(roomChannel).emit(SOCKET_EVENTS.WHITEBOARD_SAVED, {
+            roomId: payload.roomId,
+            boardId: payload.boardId,
+            version: result.version,
+            savedAt: result.savedAt,
+          });
+
+          ack?.({ success: true, version: result.version, savedAt: result.savedAt });
+        } catch (err: any) {
+          logger.error('Error handling whiteboard:save:', err);
+          ack?.({ success: false, error: err?.message || 'Save failed' });
+        }
+      }
+    );
+
+    // -------------------------------------------------------------------------
     // Disconnection Handling
     // -------------------------------------------------------------------------
     socket.on('disconnect', () => {

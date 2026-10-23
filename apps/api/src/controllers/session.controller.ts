@@ -196,3 +196,40 @@ export async function handleGetCalendar(
     next(error);
   }
 }
+
+export async function handleExportSessionIcs(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const userId = req.user!.id;
+    const { sessionId } = req.params;
+    const { generateSessionIcs } = await import('../services/calendarExport.service.js');
+    const { ics, filename } = await generateSessionIcs(userId, sessionId as string);
+
+    res.setHeader('Content-Type', 'text/calendar; charset=utf-8');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.status(HTTP_STATUS.OK).send(ics);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function handleExportUserCalendarIcs(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const userId = req.user!.id;
+    const { generateUserCalendarIcs } = await import('../services/calendarExport.service.js');
+    const { ics, filename } = await generateUserCalendarIcs(userId);
+
+    res.setHeader('Content-Type', 'text/calendar; charset=utf-8');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.status(HTTP_STATUS.OK).send(ics);
+  } catch (error) {
+    next(error);
+  }
+}

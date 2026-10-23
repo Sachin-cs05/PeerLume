@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { App } from './app/App.js';
 import './index.css';
+import { registerServiceWorker } from './registerServiceWorker.js';
+
+registerServiceWorker();
 
 const rootElement = document.getElementById('root');
 

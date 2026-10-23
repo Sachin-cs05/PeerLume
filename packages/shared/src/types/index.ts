@@ -692,5 +692,218 @@ export interface CodeAwarenessUpdatePayload {
   update: number[];
 }
 
+// -----------------------------------------------------------------------------
+// Phase 7: Interactive Study Rooms, Whiteboards & Preferences Types
+// -----------------------------------------------------------------------------
 
+export type StudyRoomRole = 'OWNER' | 'EDITOR' | 'VIEWER';
 
+export interface StudyRoomParticipantDto {
+  id: string;
+  roomId: string;
+  userId: string;
+  role: StudyRoomRole;
+  joinedAt: string;
+  leftAt?: string | null;
+  user?: {
+    id: string;
+    fullName: string;
+    email: string;
+    avatarUrl?: string | null;
+  };
+}
+
+export interface StudyRoomDto {
+  id: string;
+  title: string;
+  topic: string;
+  description?: string | null;
+  sessionId?: string | null;
+  creatorId: string;
+  isActive: boolean;
+  endedAt?: string | null;
+  createdAt: string;
+  updatedAt: string;
+  creator?: {
+    id: string;
+    fullName: string;
+    email: string;
+    avatarUrl?: string | null;
+  };
+  session?: {
+    id: string;
+    title: string;
+    topic: string;
+    startTime: string;
+    endTime: string;
+  } | null;
+  participants?: StudyRoomParticipantDto[];
+  whiteboards?: WhiteboardDocumentDto[];
+}
+
+export interface CreateStudyRoomInput {
+  title: string;
+  topic: string;
+  description?: string;
+  sessionId?: string;
+  inviteeIds?: string[];
+}
+
+export interface UpdateStudyRoomInput {
+  title?: string;
+  topic?: string;
+  description?: string;
+}
+
+export interface AddStudyRoomParticipantInput {
+  userId: string;
+  role?: StudyRoomRole;
+}
+
+export interface UpdateStudyRoomParticipantRoleInput {
+  role: StudyRoomRole;
+}
+
+// Whiteboard
+export type WhiteboardTool =
+  | 'select'
+  | 'pen'
+  | 'eraser'
+  | 'line'
+  | 'arrow'
+  | 'rectangle'
+  | 'circle'
+  | 'text';
+
+export interface WhiteboardPoint {
+  x: number;
+  y: number;
+}
+
+export interface WhiteboardElement {
+  id: string;
+  type: WhiteboardTool;
+  points?: WhiteboardPoint[];
+  x?: number;
+  y?: number;
+  width?: number;
+  height?: number;
+  text?: string;
+  color: string;
+  strokeWidth: number;
+  fillColor?: string;
+  isDeleted?: boolean;
+}
+
+export interface WhiteboardDocumentDto {
+  id: string;
+  roomId: string;
+  title: string;
+  elements: WhiteboardElement[];
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface WhiteboardRevisionDto {
+  id: string;
+  boardId: string;
+  elements: WhiteboardElement[];
+  description?: string | null;
+  createdById: string;
+  createdAt: string;
+  createdBy?: {
+    id: string;
+    fullName: string;
+    avatarUrl?: string | null;
+  };
+}
+
+export interface WhiteboardInitPayload {
+  roomId: string;
+  boardId: string;
+  title: string;
+  elements: WhiteboardElement[];
+  version: number;
+  role: StudyRoomRole;
+}
+
+export interface WhiteboardDrawStepPayload {
+  roomId: string;
+  boardId: string;
+  step: {
+    type: 'element:add' | 'element:update' | 'element:delete' | 'clear';
+    element?: WhiteboardElement;
+    elementId?: string;
+  };
+}
+
+export interface WhiteboardElementsUpdatePayload {
+  roomId: string;
+  boardId: string;
+  elements: WhiteboardElement[];
+  version: number;
+}
+
+export interface WhiteboardCursorPayload {
+  roomId: string;
+  userId: string;
+  userName: string;
+  color: string;
+  x: number;
+  y: number;
+}
+
+// Search
+export type SearchEntityType =
+  | 'all'
+  | 'students'
+  | 'friends'
+  | 'sessions'
+  | 'resources'
+  | 'workspaces'
+  | 'study_rooms';
+
+export interface SearchResultItem {
+  id: string;
+  type: 'student' | 'friend' | 'session' | 'resource' | 'workspace' | 'study_room';
+  title: string;
+  subtitle?: string;
+  metadata?: Record<string, any>;
+  url: string;
+}
+
+export interface GlobalSearchResponse {
+  query: string;
+  total: number;
+  results: SearchResultItem[];
+  categories: {
+    students: SearchResultItem[];
+    friends: SearchResultItem[];
+    sessions: SearchResultItem[];
+    resources: SearchResultItem[];
+    workspaces: SearchResultItem[];
+    study_rooms: SearchResultItem[];
+  };
+}
+
+// User Preferences & Themes
+export type AppTheme = 'light' | 'dark' | 'system';
+
+export interface UserPreferencesDto {
+  id: string;
+  userId: string;
+  theme: AppTheme;
+  emailNotifications: boolean;
+  soundEnabled: boolean;
+  reducedMotion: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface UpdateUserPreferencesInput {
+  theme?: AppTheme;
+  emailNotifications?: boolean;
+  soundEnabled?: boolean;
+  reducedMotion?: boolean;
+}

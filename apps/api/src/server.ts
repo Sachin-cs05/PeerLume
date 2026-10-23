@@ -35,7 +35,13 @@ async function startServer(): Promise<void> {
       const { codeSyncService } = await import('./services/codeSync.service.js');
       await codeSyncService.flushAll();
     } catch (flushErr) {
-      logger.error('Error flushing collaborative documents on shutdown:', flushErr);
+      logger.error('Error flushing collaborative code documents on shutdown:', flushErr);
+    }
+    try {
+      const { whiteboardSyncService } = await import('./services/whiteboardSync.service.js');
+      await whiteboardSyncService.flushAll();
+    } catch (flushErr) {
+      logger.error('Error flushing whiteboard documents on shutdown:', flushErr);
     }
 
     if (server) {

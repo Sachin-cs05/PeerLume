@@ -16,6 +16,7 @@ import {
   History,
   Sparkles,
   X,
+  Download,
 } from 'lucide-react';
 
 export const SessionsPage: React.FC = () => {
@@ -30,10 +31,22 @@ export const SessionsPage: React.FC = () => {
   const [sessions, setSessions] = useState<LearningSessionDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isExporting, setIsExporting] = useState(false);
 
   // Modal states
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(Boolean(initialPartnerId));
   const [reschedulingSession, setReschedulingSession] = useState<LearningSessionDto | null>(null);
+
+  const handleExportCalendar = async () => {
+    setIsExporting(true);
+    try {
+      await apiService.calendarExport.downloadCalendarIcs();
+    } catch (err: any) {
+      alert(err.message || 'Failed to export calendar');
+    } finally {
+      setIsExporting(false);
+    }
+  };
 
   const fetchSessions = async () => {
     setLoading(true);
@@ -139,13 +152,23 @@ export const SessionsPage: React.FC = () => {
           </p>
         </div>
 
-        <Button
-          variant="primary"
-          leftIcon={<Plus className="w-4 h-4" />}
-          onClick={() => setIsCreateModalOpen(true)}
-        >
-          Schedule Session
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            leftIcon={<Download className="w-4 h-4 text-emerald-400" />}
+            onClick={handleExportCalendar}
+            isLoading={isExporting}
+          >
+            Export Calendar (.ics)
+          </Button>
+          <Button
+            variant="primary"
+            leftIcon={<Plus className="w-4 h-4" />}
+            onClick={() => setIsCreateModalOpen(true)}
+          >
+            Schedule Session
+          </Button>
+        </div>
       </div>
 
       {error && <Alert variant="error">{error}</Alert>}

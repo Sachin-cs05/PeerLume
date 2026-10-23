@@ -24,6 +24,8 @@ import {
   X,
   Target,
   Code2,
+  Download,
+  Presentation,
 } from 'lucide-react';
 
 export const SessionDetailPage: React.FC = () => {
@@ -156,6 +158,20 @@ export const SessionDetailPage: React.FC = () => {
       if (res.data) fetchSessionData();
     } catch {
       // Handled
+    }
+  };
+
+  const [isExporting, setIsExporting] = useState(false);
+
+  const handleExportIcs = async () => {
+    if (!session) return;
+    setIsExporting(true);
+    try {
+      await apiService.calendarExport.downloadSessionIcs(session.id, session.title);
+    } catch (err: any) {
+      alert(err.message || 'Failed to export session calendar');
+    } finally {
+      setIsExporting(false);
     }
   };
 
@@ -307,6 +323,24 @@ export const SessionDetailPage: React.FC = () => {
                 </Button>
               </Link>
             )}
+
+            {session.status === 'ACCEPTED' && (
+              <Link to={`/study-rooms?sessionId=${session.id}`}>
+                <Button variant="outline" size="sm" leftIcon={<Presentation className="w-4 h-4 text-brand-400" />}>
+                  Study Room
+                </Button>
+              </Link>
+            )}
+
+            <Button
+              variant="outline"
+              size="sm"
+              leftIcon={<Download className="w-4 h-4 text-emerald-400" />}
+              onClick={handleExportIcs}
+              isLoading={isExporting}
+            >
+              Export (.ics)
+            </Button>
 
             {['PENDING', 'ACCEPTED'].includes(session.status) && (
               <Button

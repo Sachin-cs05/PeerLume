@@ -14,6 +14,9 @@ import { sessionRoutes } from './session.routes.js';
 import { resourceRoutes } from './resource.routes.js';
 import { dashboardRoutes } from './dashboard.routes.js';
 import { codeWorkspaceRouter } from './codeWorkspace.routes.js';
+import { studyRoomRoutes } from './studyRoom.routes.js';
+import { searchRoutes } from './search.routes.js';
+import { preferenceRoutes } from './preference.routes.js';
 
 const router = Router();
 
@@ -33,6 +36,9 @@ router.use('/sessions', sessionRoutes);
 router.use('/resources', resourceRoutes);
 router.use('/dashboard', dashboardRoutes);
 router.use('/code-workspaces', codeWorkspaceRouter);
+router.use('/study-rooms', studyRoomRoutes);
+router.use('/search', searchRoutes);
+router.use('/preferences', preferenceRoutes);
 
 export const apiRoutes = router;
 

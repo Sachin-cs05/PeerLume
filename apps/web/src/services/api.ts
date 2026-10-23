@@ -36,6 +36,18 @@ import type {
   CreateCodeDocumentInput,
   UpdateCodeDocumentInput,
   WorkspaceRole,
+  StudyRoomDto,
+  StudyRoomParticipantDto,
+  WhiteboardDocumentDto,
+  WhiteboardRevisionDto,
+  CreateStudyRoomInput,
+  UpdateStudyRoomInput,
+  AddStudyRoomParticipantInput,
+  StudyRoomRole,
+  GlobalSearchResponse,
+  SearchEntityType,
+  UserPreferencesDto,
+  UpdateUserPreferencesInput,
 } from '@peerlume/shared';
 
 export const API_BASE_URL =
@@ -667,6 +679,165 @@ export const apiService = {
       return apiRequest<CodeDocumentDto>(`/code-workspaces/${workspaceId}/documents/${documentId}/revisions/${revisionId}/restore`, {
         method: 'POST',
       });
+    },
+  },
+
+  // Phase 7: Interactive Study Rooms & Collaborative Whiteboard
+  studyRooms: {
+    async list(params?: { sessionId?: string; activeOnly?: boolean; page?: number; limit?: number }): Promise<ApiResult<{ rooms: StudyRoomDto[]; total: number; page: number; limit: number }>> {
+      const q = new URLSearchParams();
+      if (params?.sessionId) q.set('sessionId', params.sessionId);
+      if (params?.activeOnly !== undefined) q.set('activeOnly', String(params.activeOnly));
+      if (params?.page) q.set('page', String(params.page));
+      if (params?.limit) q.set('limit', String(params.limit));
+      const queryStr = q.toString() ? `?${q.toString()}` : '';
+      return apiRequest<{ rooms: StudyRoomDto[]; total: number; page: number; limit: number }>(`/study-rooms${queryStr}`);
+    },
+
+    async get(roomId: string): Promise<ApiResult<StudyRoomDto>> {
+      return apiRequest<StudyRoomDto>(`/study-rooms/${roomId}`);
+    },
+
+    async create(input: CreateStudyRoomInput): Promise<ApiResult<StudyRoomDto>> {
+      return apiRequest<StudyRoomDto>('/study-rooms', {
+        method: 'POST',
+        body: JSON.stringify(input),
+      });
+    },
+
+    async update(roomId: string, input: UpdateStudyRoomInput): Promise<ApiResult<StudyRoomDto>> {
+      return apiRequest<StudyRoomDto>(`/study-rooms/${roomId}`, {
+        method: 'PATCH',
+        body: JSON.stringify(input),
+      });
+    },
+
+    async join(roomId: string): Promise<ApiResult<StudyRoomDto>> {
+      return apiRequest<StudyRoomDto>(`/study-rooms/${roomId}/join`, {
+        method: 'POST',
+      });
+    },
+
+    async leave(roomId: string): Promise<ApiResult<{ message: string }>> {
+      return apiRequest<{ message: string }>(`/study-rooms/${roomId}/leave`, {
+        method: 'POST',
+      });
+    },
+
+    async end(roomId: string): Promise<ApiResult<{ message: string }>> {
+      return apiRequest<{ message: string }>(`/study-rooms/${roomId}/end`, {
+        method: 'POST',
+      });
+    },
+
+    async addParticipant(roomId: string, input: AddStudyRoomParticipantInput): Promise<ApiResult<StudyRoomParticipantDto>> {
+      return apiRequest<StudyRoomParticipantDto>(`/study-rooms/${roomId}/participants`, {
+        method: 'POST',
+        body: JSON.stringify(input),
+      });
+    },
+
+    async updateParticipantRole(roomId: string, participantId: string, role: StudyRoomRole): Promise<ApiResult<StudyRoomParticipantDto>> {
+      return apiRequest<StudyRoomParticipantDto>(`/study-rooms/${roomId}/participants/${participantId}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ role }),
+      });
+    },
+
+    async removeParticipant(roomId: string, participantId: string): Promise<ApiResult<{ message: string }>> {
+      return apiRequest<{ message: string }>(`/study-rooms/${roomId}/participants/${participantId}`, {
+        method: 'DELETE',
+      });
+    },
+
+    async getWhiteboard(roomId: string): Promise<ApiResult<WhiteboardDocumentDto>> {
+      return apiRequest<WhiteboardDocumentDto>(`/study-rooms/${roomId}/board`);
+    },
+
+    async saveWhiteboard(roomId: string, description?: string): Promise<ApiResult<{ version: number; savedAt: string }>> {
+      return apiRequest<{ version: number; savedAt: string }>(`/study-rooms/${roomId}/board/save`, {
+        method: 'POST',
+        body: JSON.stringify({ description }),
+      });
+    },
+
+    async listRevisions(roomId: string): Promise<ApiResult<WhiteboardRevisionDto[]>> {
+      return apiRequest<WhiteboardRevisionDto[]>(`/study-rooms/${roomId}/board/revisions`);
+    },
+
+    async restoreRevision(roomId: string, revisionId: string): Promise<ApiResult<{ elements: any[]; version: number }>> {
+      return apiRequest<{ elements: any[]; version: number }>(`/study-rooms/${roomId}/board/revisions/${revisionId}/restore`, {
+        method: 'POST',
+      });
+    },
+  },
+
+  // Phase 7: Global Search
+  search: {
+    async query(q: string, type: SearchEntityType = 'all', limit: number = 20): Promise<ApiResult<GlobalSearchResponse>> {
+      const params = new URLSearchParams({ q, type, limit: String(limit) });
+      return apiRequest<GlobalSearchResponse>(`/search?${params.toString()}`);
+    },
+  },
+
+  // Phase 7: User Preferences
+  preferences: {
+    async get(): Promise<ApiResult<UserPreferencesDto>> {
+      return apiRequest<UserPreferencesDto>('/preferences');
+    },
+
+    async update(input: UpdateUserPreferencesInput): Promise<ApiResult<UserPreferencesDto>> {
+      return apiRequest<UserPreferencesDto>('/preferences', {
+        method: 'PATCH',
+        body: JSON.stringify(input),
+      });
+    },
+  },
+
+  // Phase 7: Calendar Export
+  calendarExport: {
+    getSessionExportUrl(sessionId: string): string {
+      return `${API_BASE_URL}/sessions/${sessionId}/export.ics`;
+    },
+    getUserCalendarExportUrl(): string {
+      return `${API_BASE_URL}/sessions/calendar/export.ics`;
+    },
+    async downloadSessionIcs(sessionId: string, sessionTitle?: string): Promise<void> {
+      const url = `${API_BASE_URL}/sessions/${sessionId}/export.ics`;
+      const token = localStorage.getItem('token');
+      const res = await fetch(url, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        credentials: 'include',
+      });
+      if (!res.ok) throw new Error('Failed to export session calendar (.ics)');
+      const blob = await res.blob();
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = downloadUrl;
+      const safeTitle = (sessionTitle || 'session').toLowerCase().replace(/[^a-z0-9_-]/g, '_');
+      a.download = `peerlume_${safeTitle}.ics`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(downloadUrl);
+    },
+    async downloadCalendarIcs(): Promise<void> {
+      const url = `${API_BASE_URL}/sessions/calendar/export.ics`;
+      const token = localStorage.getItem('token');
+      const res = await fetch(url, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        credentials: 'include',
+      });
+      if (!res.ok) throw new Error('Failed to export calendar (.ics)');
+      const blob = await res.blob();
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = downloadUrl;
+      a.download = 'peerlume_schedule.ics';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(downloadUrl);
     },
   },
 };

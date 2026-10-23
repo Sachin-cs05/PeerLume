@@ -12,6 +12,8 @@ import {
   handleCompleteSession,
   handleCheckAvailability,
   handleGetCalendar,
+  handleExportSessionIcs,
+  handleExportUserCalendarIcs,
 } from '../controllers/session.controller.js';
 import { handleGetSessionResources } from '../controllers/resource.controller.js';
 
@@ -23,7 +25,9 @@ router.post('/', handleCreateSession);
 router.get('/', handleListSessions);
 router.get('/availability', handleCheckAvailability);
 router.get('/calendar', handleGetCalendar);
+router.get('/calendar/export.ics', handleExportUserCalendarIcs);
 router.get('/:sessionId', handleGetSessionById);
+router.get('/:sessionId/export.ics', handleExportSessionIcs);
 router.post('/:sessionId/accept', handleAcceptInvitation);
 router.post('/:sessionId/decline', handleDeclineInvitation);
 router.post('/:sessionId/reschedule', handleProposeReschedule);

@@ -62,6 +62,12 @@ model User {
   codeWorkspaceParticipations CodeWorkspaceParticipant[] @relation("CodeWorkspaceParticipants")
   createdDocumentRevisions     DocumentRevision[]         @relation("DocumentRevisionsCreated")
 
+  // Phase 7: Interactive Study Rooms, Whiteboards & Preferences
+  createdStudyRooms            StudyRoom[]                @relation("CreatedStudyRooms")
+  studyRoomParticipants        StudyRoomParticipant[]     @relation("StudyRoomParticipants")
+  createdWhiteboardRevisions   WhiteboardRevision[]       @relation("WhiteboardRevisionsCreated")
+  preferences                  UserPreference?
+
   @@map("users")
 }
 
@@ -470,6 +476,7 @@ model LearningSession {
   resources           LearningResource[]
   reminders           SessionReminder[]
   codeWorkspaces      CodeWorkspace[]      @relation("SessionWorkspaces")
+  studyRooms          StudyRoom[]          @relation("SessionStudyRooms")
 
   @@index([organizerId])
   @@index([startTime, endTime])
@@ -641,6 +648,102 @@ model DocumentRevision {
   @@index([documentId, createdAt])
   @@index([workspaceId])
   @@map("document_revisions")
+}
+
+// -----------------------------------------------------------------------------
+// Phase 7: Interactive Study Rooms, Whiteboards & Preferences
+// -----------------------------------------------------------------------------
+
+enum StudyRoomRole {
+  OWNER
+  EDITOR
+  VIEWER
+}
+
+model StudyRoom {
+  id          String   @id @default(uuid())
+  title       String
+  topic       String
+  description String?  @db.Text
+  sessionId   String?  @map("session_id")
+  creatorId   String   @map("creator_id")
+  isActive    Boolean  @default(true) @map("is_active")
+  endedAt     DateTime? @map("ended_at")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  creator      User                   @relation("CreatedStudyRooms", fields: [creatorId], references: [id], onDelete: Cascade)
+  session      LearningSession?       @relation("SessionStudyRooms", fields: [sessionId], references: [id], onDelete: SetNull)
+  participants StudyRoomParticipant[]
+  whiteboards  WhiteboardDocument[]
+
+  @@index([creatorId])
+  @@index([sessionId])
+  @@index([isActive])
+  @@map("study_rooms")
+}
+
+model StudyRoomParticipant {
+  id       String        @id @default(uuid())
+  roomId   String        @map("room_id")
+  userId   String        @map("user_id")
+  role     StudyRoomRole @default(EDITOR)
+  joinedAt DateTime      @default(now()) @map("joined_at")
+  leftAt   DateTime?     @map("left_at")
+
+  room StudyRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user User      @relation("StudyRoomParticipants", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([roomId, userId])
+  @@index([userId])
+  @@index([roomId])
+  @@map("study_room_participants")
+}
+
+model WhiteboardDocument {
+  id        String   @id @default(uuid())
+  roomId    String   @map("room_id")
+  title     String   @default("Main Board")
+  elements  Json     @default("[]")
+  version   Int      @default(1)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  room      StudyRoom            @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  revisions WhiteboardRevision[]
+
+  @@index([roomId])
+  @@map("whiteboard_documents")
+}
+
+model WhiteboardRevision {
+  id          String   @id @default(uuid())
+  boardId     String   @map("board_id")
+  elements    Json
+  description String?
+  createdById String   @map("created_by_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  board     WhiteboardDocument @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  createdBy User               @relation("WhiteboardRevisionsCreated", fields: [createdById], references: [id], onDelete: Cascade)
+
+  @@index([boardId, createdAt])
+  @@map("whiteboard_revisions")
+}
+
+model UserPreference {
+  id                 String   @id @default(uuid())
+  userId             String   @unique @map("user_id")
+  theme              String   @default("system") // "light", "dark", "system"
+  emailNotifications Boolean  @default(true) @map("email_notifications")
+  soundEnabled       Boolean  @default(true) @map("sound_enabled")
+  reducedMotion      Boolean  @default(false) @map("reduced_motion")
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_preferences")
 }
 
 

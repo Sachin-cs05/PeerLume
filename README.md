@@ -493,6 +493,68 @@ $$\text{MatchScore} = \text{TeachToLearn} (50\%) + \text{Reciprocal} (25\%) + \t
 
 ---
 
+## 🎨 Phase 7: Interactive Study Room & Advanced User Experience
+
+### 1. Interactive Study Room & Shared Whiteboard Architecture
+- **Room Lifecycle**: Students create dedicated rooms with title, topic, optional session linkage, and invitations to connected friends. Membership rules support `OWNER`, `EDITOR`, and `VIEWER` roles.
+- **Collaborative Whiteboard**:
+  - Drawing tools: Pen, Brush, Eraser, Lines, Arrows, Rectangles, Circles, Text, and Math Formulas.
+  - Interactive canvas manipulation: Select/Pan, Zoom (25%–300%), Undo/Redo stacks, and canvas clear with confirmation modal.
+  - Operational Real-time Synchronization:
+    - Step-based incremental draw broadcasts over Socket.IO (`whiteboard:draw-step`) ensuring concurrent drawing without state clobbering.
+    - Remote cursor presence broadcasts (`whiteboard:cursor`) rendering peer pointers in real time.
+    - Role enforcement on socket and REST: `VIEWER` connections cannot broadcast changes, trigger saves, or alter revisions.
+- **Persistence & Revision History**:
+  - In-memory canvas cache with 2.5s debounced autosave to PostgreSQL (`WhiteboardDocument`).
+  - Manual checkpoints and named revision snapshots (`WhiteboardRevision`).
+  - Safe revision restore: Restores generate a new version entry rather than destructively mutating history.
+- **Integrated Voice/Video & Resources**:
+  - In-room WebRTC calling panel with local video preview and audio/video toggle controls.
+  - Quick-access resource drawer to view shared notes, documents, and launch Phase 6 collaborative code workspaces.
+
+### 2. Advanced User Experience Features
+- **Theme System (Dark Mode / Light Mode)**:
+  - System-preference detection with user override stored in `localStorage` and synchronized to `UserPreference` in the database.
+  - Zero-flash inline script initialization in `index.html`.
+  - Accessible theme toggles in desktop and mobile headers.
+- **Global Search (Ctrl+K / Cmd+K)**:
+  - Permission-aware search across 5 entity domains: Student Profiles, Friends, Learning Sessions, Resources, and Code Workspaces.
+  - Database-level privacy enforcement: excludes private resources, inaccessible sessions, and blocked users.
+  - Full keyboard navigation (Arrow Up/Down, Enter, Escape).
+- **Calendar Enhancements & RFC 5545 `.ics` Export**:
+  - Single-session `.ics` export with date/time, topic, organizer, and meeting details.
+  - Comprehensive schedule `.ics` export for all confirmed sessions.
+- **Progressive Web App (PWA)**:
+  - Web App Manifest (`manifest.json`) with student branding and standalone display mode.
+  - Service worker (`sw.js`) with cache-first strategy for static assets.
+  - **Strict Security Policy**: Authenticated API routes (`/api/*`) and WebSocket streams are explicitly excluded from CacheStorage to prevent public caching of student data.
+  - Real-time online/offline network banner with automatic reconnect detection.
+- **Accessibility Enhancements**:
+  - Semantic HTML landmarks (`<nav>`, `<main>`, `<dialog>`), visible focus outlines, and screen-reader alternatives (Accessible Board Elements list).
+
+### 3. Study Room & UX Endpoints
+- `POST /api/study-rooms` — Create a study room.
+- `GET /api/study-rooms` — List accessible rooms (with query filter).
+- `GET /api/study-rooms/:roomId` — Get room details and membership.
+- `PATCH /api/study-rooms/:roomId` — Update room title/topic.
+- `POST /api/study-rooms/:roomId/join` — Join a study room.
+- `POST /api/study-rooms/:roomId/leave` — Leave a study room.
+- `POST /api/study-rooms/:roomId/end` — End room (Owner only).
+- `POST /api/study-rooms/:roomId/participants` — Invite peer to room.
+- `PATCH /api/study-rooms/:roomId/participants/:id/role` — Update participant role.
+- `DELETE /api/study-rooms/:roomId/participants/:id` — Remove participant.
+- `GET /api/study-rooms/:roomId/board` — Get whiteboard state.
+- `POST /api/study-rooms/:roomId/board/save` — Save board checkpoint.
+- `GET /api/study-rooms/:roomId/board/revisions` — List board revision history.
+- `POST /api/study-rooms/:roomId/board/revisions/:id/restore` — Restore board revision.
+- `GET /api/search?q=...&type=...` — Permission-aware global search.
+- `GET /api/preferences` — Get student UI preferences.
+- `PATCH /api/preferences` — Update theme and reduced motion settings.
+- `GET /api/sessions/:id/export.ics` — Export session as iCalendar `.ics`.
+- `GET /api/sessions/calendar/export.ics` — Export personal schedule as iCalendar `.ics`.
+
+---
+
 ## 🗺️ Phase Roadmap
 
 - [x] **Phase 1: Project Foundation**
@@ -542,7 +604,16 @@ $$\text{MatchScore} = \text{TeachToLearn} (50\%) + \text{Reciprocal} (25\%) + \t
   - PostgreSQL document persistence with debounced autosaving and versioned revision restoration.
   - Isolated execution boundary with starter templates and zero arbitrary server-side code execution.
   - 77/77 automated tests passing across all suites.
-- [ ] **Phase 7: Interactive Study Room & Shared Whiteboard** *(Awaiting explicit user instruction)*
-  - Group audio/video study circles.
-  - Interactive shared canvas/whiteboard for visual problem solving.
+- [x] **Phase 7: Interactive Study Room & Advanced User Experience**
+  - Dedicated virtual study rooms with explicit owner/editor/viewer roles and friend invitation workflow.
+  - Interactive collaborative whiteboard with rich toolset (pen, brush, shapes, eraser, text, math formulas, undo/redo, zoom/pan).
+  - Near real-time Socket.IO step-synchronization, presence cursors, and 2.5s debounced database persistence.
+  - Versioned revision snapshots and safe non-destructive rollback.
+  - Integrated in-room WebRTC voice/video calls and shared workspace resources.
+  - Universal Dark Mode / Light Mode with instant load execution and database preference persistence.
+  - Permission-aware Global Search (Ctrl+K) across 5 core entities with strict blocking exclusion.
+  - In-app session export and full schedule export in standard RFC 5545 iCalendar (`.ics`) format.
+  - Production PWA with manifest, service worker (with strict API caching bypass), and offline banner.
+  - 96/96 automated tests passing across all 7 test suites.
+- [ ] **Phase 8: Planned Future Enhancement** *(Awaiting explicit user instruction)*
 

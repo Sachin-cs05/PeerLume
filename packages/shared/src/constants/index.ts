@@ -91,6 +91,27 @@ export const API_ENDPOINTS = {
       `/api/code-workspaces/${id}/documents/${docId}/revisions/${revId}/restore`,
     BY_SESSION: (sessionId: string) => `/api/code-workspaces/session/${sessionId}`,
   },
+  STUDY_ROOMS: {
+    ROOT: '/api/study-rooms',
+    BY_ID: (id: string) => `/api/study-rooms/${id}`,
+    JOIN: (id: string) => `/api/study-rooms/${id}/join`,
+    LEAVE: (id: string) => `/api/study-rooms/${id}/leave`,
+    END: (id: string) => `/api/study-rooms/${id}/end`,
+    PARTICIPANTS: (id: string) => `/api/study-rooms/${id}/participants`,
+    PARTICIPANT_BY_ID: (id: string, participantId: string) =>
+      `/api/study-rooms/${id}/participants/${participantId}`,
+    BOARD: (id: string) => `/api/study-rooms/${id}/board`,
+    BOARD_REVISIONS: (id: string) => `/api/study-rooms/${id}/board/revisions`,
+    RESTORE_BOARD: (id: string, revId: string) =>
+      `/api/study-rooms/${id}/board/revisions/${revId}/restore`,
+    BY_SESSION: (sessionId: string) => `/api/study-rooms/session/${sessionId}`,
+  },
+  SEARCH: '/api/search',
+  PREFERENCES: '/api/preferences',
+  CALENDAR_EXPORT: {
+    SESSION: (sessionId: string) => `/api/sessions/${sessionId}/export.ics`,
+    USER: '/api/sessions/calendar/export.ics',
+  },
 } as const;
 
 
@@ -134,6 +155,23 @@ export const SOCKET_EVENTS = {
   CODE_SAVE: 'code:save',
   CODE_SAVED: 'code:saved',
   CODE_ERROR: 'code:error',
+
+  // Phase 7: Interactive Study Room & Whiteboard
+  STUDY_ROOM_JOIN: 'study-room:join',
+  STUDY_ROOM_LEAVE: 'study-room:leave',
+  STUDY_ROOM_USER_JOINED: 'study-room:user-joined',
+  STUDY_ROOM_USER_LEFT: 'study-room:user-left',
+  STUDY_ROOM_ENDED: 'study-room:ended',
+  STUDY_ROOM_SIGNAL: 'study-room:signal',
+
+  WHITEBOARD_INIT: 'whiteboard:init',
+  WHITEBOARD_DRAW_STEP: 'whiteboard:draw-step',
+  WHITEBOARD_ELEMENTS_UPDATE: 'whiteboard:elements-update',
+  WHITEBOARD_CURSOR: 'whiteboard:cursor',
+  WHITEBOARD_CLEAR: 'whiteboard:clear',
+  WHITEBOARD_SAVE: 'whiteboard:save',
+  WHITEBOARD_SAVED: 'whiteboard:saved',
+  WHITEBOARD_ERROR: 'whiteboard:error',
 } as const;
 
 export const SUPPORTED_LANGUAGES = [

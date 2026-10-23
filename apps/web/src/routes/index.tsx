@@ -18,6 +18,8 @@ import { SessionDetailPage } from '../pages/sessions/SessionDetailPage.js';
 import { WorkspacePage } from '../pages/workspace/WorkspacePage.js';
 import { CodeWorkspacesPage } from '../pages/code/CodeWorkspacesPage.js';
 import { CodeEditorPage } from '../pages/code/CodeEditorPage.js';
+import { StudyRoomsPage } from '../pages/study-rooms/StudyRoomsPage.js';
+import { StudyRoomPage } from '../pages/study-rooms/StudyRoomPage.js';
 import { ProtectedRoute } from '../components/guards/ProtectedRoute.js';
 import { GuestRoute } from '../components/guards/GuestRoute.js';
 
@@ -138,6 +140,22 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <CodeEditorPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'study-rooms',
+        element: (
+          <ProtectedRoute>
+            <StudyRoomsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'study-rooms/:roomId',
+        element: (
+          <ProtectedRoute>
+            <StudyRoomPage />
           </ProtectedRoute>
         ),
       },
