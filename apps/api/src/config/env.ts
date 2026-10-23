@@ -54,6 +54,24 @@ const envSchema = z.object({
   TURN_SERVER: z.string().optional(),
   TURN_USERNAME: z.string().optional(),
   TURN_CREDENTIAL: z.string().optional(),
+}).superRefine((data, ctx) => {
+  if (data.NODE_ENV === 'production') {
+    const secrets = [
+      { name: 'JWT_ACCESS_SECRET', value: data.JWT_ACCESS_SECRET },
+      { name: 'JWT_REFRESH_SECRET', value: data.JWT_REFRESH_SECRET },
+      { name: 'COOKIE_SECRET', value: data.COOKIE_SECRET },
+    ];
+
+    for (const { name, value } of secrets) {
+      if (value.length < 32 || value.includes('peerlume_dev')) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: `${name} must be a secure production secret (at least 32 characters and cannot contain "peerlume_dev") when NODE_ENV is production`,
+          path: [name],
+        });
+      }
+    }
+  }
 });
 
 
