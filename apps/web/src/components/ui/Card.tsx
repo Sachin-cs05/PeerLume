@@ -12,9 +12,8 @@ export const Card: React.FC<CardProps> = ({
 }) => {
   return (
     <div
-      className={`glass-card rounded-2xl p-6 ${
-        hoverEffect ? 'glass-card-hover' : ''
-      } ${className}`}
+      className={`glass-card rounded-2xl p-6 ${hoverEffect ? 'glass-card-hover' : ''
+        } ${className}`}
       {...props}
     >
       {children}

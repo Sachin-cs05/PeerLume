@@ -168,12 +168,11 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
               isCodeMode
                 ? 'Paste or type code snippet here...'
                 : isLinkMode
-                ? 'Add an optional note about this link...'
-                : 'Type a message... (Press Enter to send, Shift+Enter for new line)'
+                  ? 'Add an optional note about this link...'
+                  : 'Type a message... (Press Enter to send, Shift+Enter for new line)'
             }
-            className={`w-full bg-transparent p-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none resize-none ${
-              isCodeMode ? 'font-mono text-xs' : ''
-            }`}
+            className={`w-full bg-transparent p-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none resize-none ${isCodeMode ? 'font-mono text-xs' : ''
+              }`}
           />
 
           {/* Bottom toolbar inside input box */}
@@ -185,11 +184,10 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
                   setIsCodeMode(!isCodeMode);
                   setIsLinkMode(false);
                 }}
-                className={`p-1.5 rounded-md text-xs font-medium transition-colors flex items-center gap-1 ${
-                  isCodeMode
+                className={`p-1.5 rounded-md text-xs font-medium transition-colors flex items-center gap-1 ${isCodeMode
                     ? 'bg-blue-100 text-blue-700'
                     : 'text-gray-500 hover:text-gray-800 hover:bg-gray-100'
-                }`}
+                  }`}
                 title="Share Code Snippet"
               >
                 <Code2 className="w-4 h-4" />
@@ -202,11 +200,10 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
                   setIsLinkMode(!isLinkMode);
                   setIsCodeMode(false);
                 }}
-                className={`p-1.5 rounded-md text-xs font-medium transition-colors flex items-center gap-1 ${
-                  isLinkMode
+                className={`p-1.5 rounded-md text-xs font-medium transition-colors flex items-center gap-1 ${isLinkMode
                     ? 'bg-purple-100 text-purple-700'
                     : 'text-gray-500 hover:text-gray-800 hover:bg-gray-100'
-                }`}
+                  }`}
                 title="Share Resource Link"
               >
                 <LinkIcon className="w-4 h-4" />

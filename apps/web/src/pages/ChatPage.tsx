@@ -250,9 +250,8 @@ export const ChatPage: React.FC = () => {
       {/* LEFT SIDEBAR: CONVERSATION LIST */}
       {/* ----------------------------------------------------------------- */}
       <div
-        className={`w-full md:w-80 lg:w-96 border-r border-gray-200 flex flex-col bg-gray-50/50 ${
-          activeConversationId ? 'hidden md:flex' : 'flex'
-        }`}
+        className={`w-full md:w-80 lg:w-96 border-r border-gray-200 flex flex-col bg-gray-50/50 ${activeConversationId ? 'hidden md:flex' : 'flex'
+          }`}
       >
         {/* Search header */}
         <div className="p-3 border-b border-gray-200 bg-white">
@@ -311,9 +310,8 @@ export const ChatPage: React.FC = () => {
       {/* RIGHT MAIN CHAT AREA */}
       {/* ----------------------------------------------------------------- */}
       <div
-        className={`flex-1 flex flex-col bg-white ${
-          !activeConversationId ? 'hidden md:flex' : 'flex'
-        }`}
+        className={`flex-1 flex flex-col bg-white ${!activeConversationId ? 'hidden md:flex' : 'flex'
+          }`}
       >
         {activeConversation ? (
           <>
@@ -335,11 +333,10 @@ export const ChatPage: React.FC = () => {
                     {activeConversation.participant.fullName.slice(0, 2).toUpperCase()}
                   </div>
                   <span
-                    className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-white ${
-                      onlineUsers.has(activeConversation.participant.id)
+                    className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-white ${onlineUsers.has(activeConversation.participant.id)
                         ? 'bg-emerald-500'
                         : 'bg-gray-300'
-                    }`}
+                      }`}
                   />
                 </div>
 

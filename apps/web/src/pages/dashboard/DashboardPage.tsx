@@ -153,11 +153,10 @@ export const DashboardPage: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
             <Link
               to="/profile/edit"
-              className={`group p-4 rounded-2xl border transition-all flex flex-col justify-between gap-3 ${
-                isProfileComplete
+              className={`group p-4 rounded-2xl border transition-all flex flex-col justify-between gap-3 ${isProfileComplete
                   ? 'bg-slate-900/60 border-emerald-500/30 hover:border-emerald-500/50'
                   : 'bg-slate-900 border-slate-800 hover:border-brand-500/50'
-              }`}
+                }`}
             >
               <div className="flex items-start justify-between">
                 <div className={`p-2 rounded-xl ${isProfileComplete ? 'bg-emerald-500/10 text-emerald-400' : 'bg-brand-500/10 text-brand-400'}`}>
@@ -185,11 +184,10 @@ export const DashboardPage: React.FC = () => {
 
             <Link
               to="/discover"
-              className={`group p-4 rounded-2xl border transition-all flex flex-col justify-between gap-3 ${
-                isPartnerFound
+              className={`group p-4 rounded-2xl border transition-all flex flex-col justify-between gap-3 ${isPartnerFound
                   ? 'bg-slate-900/60 border-emerald-500/30 hover:border-emerald-500/50'
                   : 'bg-slate-900 border-slate-800 hover:border-brand-500/50'
-              }`}
+                }`}
             >
               <div className="flex items-start justify-between">
                 <div className={`p-2 rounded-xl ${isPartnerFound ? 'bg-emerald-500/10 text-emerald-400' : 'bg-brand-500/10 text-brand-400'}`}>
@@ -217,11 +215,10 @@ export const DashboardPage: React.FC = () => {
 
             <Link
               to="/sessions"
-              className={`group p-4 rounded-2xl border transition-all flex flex-col justify-between gap-3 ${
-                isSessionScheduled
+              className={`group p-4 rounded-2xl border transition-all flex flex-col justify-between gap-3 ${isSessionScheduled
                   ? 'bg-slate-900/60 border-emerald-500/30 hover:border-emerald-500/50'
                   : 'bg-slate-900 border-slate-800 hover:border-brand-500/50'
-              }`}
+                }`}
             >
               <div className="flex items-start justify-between">
                 <div className={`p-2 rounded-xl ${isSessionScheduled ? 'bg-emerald-500/10 text-emerald-400' : 'bg-brand-500/10 text-brand-400'}`}>

@@ -136,11 +136,10 @@ export const StudentCard: React.FC<StudentCardProps> = ({
               <button
                 onClick={handleToggleSave}
                 disabled={loading}
-                className={`p-1.5 rounded-lg border transition-colors ${
-                  isSaved
+                className={`p-1.5 rounded-lg border transition-colors ${isSaved
                     ? 'bg-brand-500/20 border-brand-500/40 text-brand-300'
                     : 'bg-slate-800/80 border-slate-700/60 text-slate-400 hover:text-white'
-                }`}
+                  }`}
                 title={isSaved ? 'Remove from saved' : 'Save learning partner'}
                 aria-label="Save partner"
               >

@@ -115,12 +115,12 @@ export const DiscoverPage: React.FC = () => {
 
   const hasActiveFilters = Boolean(
     searchQuery ||
-      skillFilter ||
-      collegeFilter ||
-      branchFilter ||
-      semesterFilter ||
-      languageFilter ||
-      preferredMode
+    skillFilter ||
+    collegeFilter ||
+    branchFilter ||
+    semesterFilter ||
+    languageFilter ||
+    preferredMode
   );
 
   return (
@@ -150,11 +150,10 @@ export const DiscoverPage: React.FC = () => {
                   setViewMode('recommended');
                   setPage(1);
                 }}
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-                  viewMode === 'recommended'
+                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${viewMode === 'recommended'
                     ? 'bg-gradient-to-r from-brand-600 to-purple-600 text-white shadow-md'
                     : 'text-slate-400 hover:text-white'
-                }`}
+                  }`}
               >
                 <Sparkles className="w-3.5 h-3.5 text-amber-300" />
                 <span>Smart Matching</span>
@@ -164,11 +163,10 @@ export const DiscoverPage: React.FC = () => {
                   setViewMode('directory');
                   setPage(1);
                 }}
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-                  viewMode === 'directory'
+                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${viewMode === 'directory'
                     ? 'bg-gradient-to-r from-brand-600 to-purple-600 text-white shadow-md'
                     : 'text-slate-400 hover:text-white'
-                }`}
+                  }`}
               >
                 <Users className="w-3.5 h-3.5" />
                 <span>All Students</span>
@@ -340,30 +338,30 @@ export const DiscoverPage: React.FC = () => {
             action={
               hasActiveFilters
                 ? {
-                    label: 'Clear Active Filters',
-                    variant: 'outline',
-                    onClick: handleResetFilters,
-                  }
+                  label: 'Clear Active Filters',
+                  variant: 'outline',
+                  onClick: handleResetFilters,
+                }
                 : {
-                    label: 'Add Your Skills & Goals',
-                    href: '/profile/edit',
-                  }
+                  label: 'Add Your Skills & Goals',
+                  href: '/profile/edit',
+                }
             }
           />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {viewMode === 'recommended'
               ? recommendations.map((rec) => (
-                  <StudentCard
-                    key={rec.student.id}
-                    student={rec.student}
-                    recommendation={rec}
-                    onRefresh={fetchResults}
-                  />
-                ))
+                <StudentCard
+                  key={rec.student.id}
+                  student={rec.student}
+                  recommendation={rec}
+                  onRefresh={fetchResults}
+                />
+              ))
               : directoryStudents.map((st) => (
-                  <StudentCard key={st.id} student={st} onRefresh={fetchResults} />
-                ))}
+                <StudentCard key={st.id} student={st} onRefresh={fetchResults} />
+              ))}
           </div>
         )}
 

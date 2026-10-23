@@ -31,20 +31,19 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({
 
   const lastTime = lastMessage
     ? new Date(lastMessage.createdAt).toLocaleDateString([], {
-        month: 'short',
-        day: 'numeric',
-      })
+      month: 'short',
+      day: 'numeric',
+    })
     : '';
 
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`w-full text-left p-3 flex items-center gap-3 rounded-xl transition-all border ${
-        isSelected
+      className={`w-full text-left p-3 flex items-center gap-3 rounded-xl transition-all border ${isSelected
           ? 'bg-blue-50 border-blue-200 shadow-sm'
           : 'bg-white border-transparent hover:bg-gray-50'
-      }`}
+        }`}
     >
       {/* Avatar with Presence Indicator */}
       <div className="relative shrink-0">
@@ -61,9 +60,8 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({
         </div>
         {/* Presence Dot */}
         <span
-          className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white ${
-            isOnline ? 'bg-emerald-500' : 'bg-gray-300'
-          }`}
+          className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white ${isOnline ? 'bg-emerald-500' : 'bg-gray-300'
+            }`}
           title={isOnline ? 'Online' : 'Offline'}
         />
       </div>
@@ -87,9 +85,8 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({
 
         <div className="flex items-center justify-between mt-1">
           <p
-            className={`text-xs truncate flex items-center gap-1 ${
-              unreadCount > 0 ? 'font-semibold text-gray-900' : 'text-gray-500'
-            }`}
+            className={`text-xs truncate flex items-center gap-1 ${unreadCount > 0 ? 'font-semibold text-gray-900' : 'text-gray-500'
+              }`}
           >
             {lastMessage?.type === 'CODE' && <Code2 className="w-3 h-3 text-blue-500 shrink-0" />}
             {lastMessage?.type === 'LINK' && <LinkIcon className="w-3 h-3 text-purple-500 shrink-0" />}

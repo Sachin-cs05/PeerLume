@@ -78,11 +78,10 @@ export const Header: React.FC = () => {
 
   const getNavLinkClass = (path: string) => {
     const isActive = location.pathname === path || location.pathname.startsWith(`${path}/`);
-    return `flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-medium transition-all ${
-      isActive
+    return `flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-medium transition-all ${isActive
         ? 'text-brand-600 dark:text-brand-400 bg-brand-500/10 font-semibold'
         : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60'
-    }`;
+      }`;
   };
 
   return (
@@ -136,18 +135,16 @@ export const Header: React.FC = () => {
                       onClick={() => setStudyDropdownOpen((prev) => !prev)}
                       aria-expanded={studyDropdownOpen}
                       aria-haspopup="true"
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-medium transition-all ${
-                        isStudyActive
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-medium transition-all ${isStudyActive
                           ? 'text-brand-600 dark:text-brand-400 bg-brand-500/10 font-semibold'
                           : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60'
-                      }`}
+                        }`}
                     >
                       <BookOpen className="w-4 h-4 text-amber-500" />
                       <span>Study</span>
                       <ChevronDown
-                        className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                          studyDropdownOpen ? 'rotate-180' : ''
-                        }`}
+                        className={`w-3.5 h-3.5 transition-transform duration-200 ${studyDropdownOpen ? 'rotate-180' : ''
+                          }`}
                       />
                     </button>
 
@@ -160,9 +157,8 @@ export const Header: React.FC = () => {
                           to="/study-rooms"
                           role="menuitem"
                           onClick={() => setStudyDropdownOpen(false)}
-                          className={`flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors group ${
-                            location.pathname.startsWith('/study-rooms') ? 'bg-slate-100 dark:bg-slate-800/60' : ''
-                          }`}
+                          className={`flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors group ${location.pathname.startsWith('/study-rooms') ? 'bg-slate-100 dark:bg-slate-800/60' : ''
+                            }`}
                         >
                           <div className="p-2 rounded-lg bg-rose-500/10 text-rose-500 shrink-0 mt-0.5">
                             <Presentation className="w-4 h-4" />
@@ -181,9 +177,8 @@ export const Header: React.FC = () => {
                           to="/sessions"
                           role="menuitem"
                           onClick={() => setStudyDropdownOpen(false)}
-                          className={`flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors group ${
-                            location.pathname.startsWith('/sessions') ? 'bg-slate-100 dark:bg-slate-800/60' : ''
-                          }`}
+                          className={`flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors group ${location.pathname.startsWith('/sessions') ? 'bg-slate-100 dark:bg-slate-800/60' : ''
+                            }`}
                         >
                           <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-500 shrink-0 mt-0.5">
                             <Calendar className="w-4 h-4" />
@@ -202,9 +197,8 @@ export const Header: React.FC = () => {
                           to="/code"
                           role="menuitem"
                           onClick={() => setStudyDropdownOpen(false)}
-                          className={`flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors group ${
-                            location.pathname.startsWith('/code') ? 'bg-slate-100 dark:bg-slate-800/60' : ''
-                          }`}
+                          className={`flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors group ${location.pathname.startsWith('/code') ? 'bg-slate-100 dark:bg-slate-800/60' : ''
+                            }`}
                         >
                           <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-500 shrink-0 mt-0.5">
                             <Code2 className="w-4 h-4" />
@@ -223,9 +217,8 @@ export const Header: React.FC = () => {
                           to="/workspace"
                           role="menuitem"
                           onClick={() => setStudyDropdownOpen(false)}
-                          className={`flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors group ${
-                            location.pathname.startsWith('/workspace') ? 'bg-slate-100 dark:bg-slate-800/60' : ''
-                          }`}
+                          className={`flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors group ${location.pathname.startsWith('/workspace') ? 'bg-slate-100 dark:bg-slate-800/60' : ''
+                            }`}
                         >
                           <div className="p-2 rounded-lg bg-amber-500/10 text-amber-500 shrink-0 mt-0.5">
                             <BookOpen className="w-4 h-4" />

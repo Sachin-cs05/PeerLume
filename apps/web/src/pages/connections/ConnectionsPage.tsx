@@ -173,11 +173,10 @@ export const ConnectionsPage: React.FC = () => {
         <div className="flex overflow-x-auto pb-2 scrollbar-none border-b border-slate-800 gap-2 sm:gap-4">
           <button
             onClick={() => setActiveTab('friends')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all shrink-0 ${
-              activeTab === 'friends'
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all shrink-0 ${activeTab === 'friends'
                 ? 'bg-brand-600 text-white shadow-lg shadow-brand-500/20'
                 : 'text-slate-400 hover:text-white hover:bg-slate-900'
-            }`}
+              }`}
           >
             <Users className="w-4 h-4" />
             <span>Friends</span>
@@ -190,11 +189,10 @@ export const ConnectionsPage: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('requests')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all shrink-0 ${
-              activeTab === 'requests'
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all shrink-0 ${activeTab === 'requests'
                 ? 'bg-brand-600 text-white shadow-lg shadow-brand-500/20'
                 : 'text-slate-400 hover:text-white hover:bg-slate-900'
-            }`}
+              }`}
           >
             <UserPlus className="w-4 h-4" />
             <span>Connection Requests</span>
@@ -207,11 +205,10 @@ export const ConnectionsPage: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('saved')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all shrink-0 ${
-              activeTab === 'saved'
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all shrink-0 ${activeTab === 'saved'
                 ? 'bg-brand-600 text-white shadow-lg shadow-brand-500/20'
                 : 'text-slate-400 hover:text-white hover:bg-slate-900'
-            }`}
+              }`}
           >
             <Bookmark className="w-4 h-4" />
             <span>Saved Partners</span>
@@ -224,11 +221,10 @@ export const ConnectionsPage: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('blocked')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all shrink-0 ${
-              activeTab === 'blocked'
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all shrink-0 ${activeTab === 'blocked'
                 ? 'bg-brand-600 text-white shadow-lg shadow-brand-500/20'
                 : 'text-slate-400 hover:text-white hover:bg-slate-900'
-            }`}
+              }`}
           >
             <ShieldAlert className="w-4 h-4" />
             <span>Blocked</span>
@@ -384,21 +380,19 @@ export const ConnectionsPage: React.FC = () => {
             <div className="flex gap-3 border-b border-slate-800 pb-2">
               <button
                 onClick={() => setRequestsSubTab('incoming')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${
-                  requestsSubTab === 'incoming'
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${requestsSubTab === 'incoming'
                     ? 'bg-slate-800 text-white'
                     : 'text-slate-400 hover:text-white'
-                }`}
+                  }`}
               >
                 Incoming ({incomingRequests.length})
               </button>
               <button
                 onClick={() => setRequestsSubTab('outgoing')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${
-                  requestsSubTab === 'outgoing'
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${requestsSubTab === 'outgoing'
                     ? 'bg-slate-800 text-white'
                     : 'text-slate-400 hover:text-white'
-                }`}
+                  }`}
               >
                 Outgoing ({outgoingRequests.length})
               </button>

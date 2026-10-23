@@ -24,11 +24,10 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message, isOwn }) => {
   return (
     <div className={`flex flex-col mb-3 ${isOwn ? 'items-end' : 'items-start'}`}>
       <div
-        className={`max-w-[85%] sm:max-w-[70%] rounded-2xl px-4 py-2.5 shadow-sm text-sm ${
-          isOwn
+        className={`max-w-[85%] sm:max-w-[70%] rounded-2xl px-4 py-2.5 shadow-sm text-sm ${isOwn
             ? 'bg-blue-600 text-white rounded-br-none'
             : 'bg-white border border-gray-200 text-gray-900 rounded-bl-none'
-        }`}
+          }`}
       >
         {/* SENDER NAME (for incoming messages) */}
         {!isOwn && (
@@ -68,9 +67,8 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message, isOwn }) => {
                 href={message.metadata.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`inline-flex items-center gap-1 text-xs underline font-medium ${
-                  isOwn ? 'text-blue-100 hover:text-white' : 'text-blue-600 hover:text-blue-800'
-                }`}
+                className={`inline-flex items-center gap-1 text-xs underline font-medium ${isOwn ? 'text-blue-100 hover:text-white' : 'text-blue-600 hover:text-blue-800'
+                  }`}
               >
                 <span>Visit resource</span>
                 <ExternalLink className="w-3 h-3" />
@@ -84,9 +82,8 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message, isOwn }) => {
 
         {/* TIMESTAMP & STATUS */}
         <div
-          className={`flex items-center justify-end gap-1 mt-1 text-[10px] select-none ${
-            isOwn ? 'text-blue-100' : 'text-gray-400'
-          }`}
+          className={`flex items-center justify-end gap-1 mt-1 text-[10px] select-none ${isOwn ? 'text-blue-100' : 'text-gray-400'
+            }`}
         >
           <span>{formattedTime}</span>
           {isOwn && (
