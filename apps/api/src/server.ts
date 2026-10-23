@@ -1,20 +1,28 @@
-import type { Server } from 'node:http';
+import { createServer, type Server } from 'node:http';
 import { app } from './app.js';
 import { env } from './config/env.js';
 import { prisma } from './config/prisma.js';
 import { logger } from './utils/logger.js';
 import { APP_NAME, APP_TAGLINE } from '@peerlume/shared';
+import { initSocketIO } from './socket/index.js';
 
 let server: Server;
 
 async function startServer(): Promise<void> {
-  server = app.listen(env.PORT, () => {
+  server = createServer(app);
+
+  // Initialize Socket.IO real-time engine
+  initSocketIO(server);
+
+  server.listen(env.PORT, () => {
     logger.info(`✨ ${APP_NAME} API Server started successfully!`);
     logger.info(`🎯 Tagline: "${APP_TAGLINE}"`);
     logger.info(`🚀 Listening on http://localhost:${env.PORT}`);
     logger.info(`📡 Environment: ${env.NODE_ENV}`);
     logger.info(`🩺 Health check: http://localhost:${env.PORT}/api/health`);
+    logger.info(`⚡ Real-Time Socket.IO: Ready for Chat, Presence & WebRTC Calls`);
   });
+
 
   const shutdown = async (signal: string) => {
     logger.info(`Received ${signal}. Gracefully shutting down ${APP_NAME} API server...`);

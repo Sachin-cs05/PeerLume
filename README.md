@@ -283,6 +283,56 @@ $$\text{MatchScore} = \text{TeachToLearn} (50\%) + \text{Reciprocal} (25\%) + \t
 
 ---
 
+## ⚡ Phase 4: Real-Time Chat, Audio/Video Calls & Notifications
+
+### 1. Real-Time Private Chat
+- **Conversations & Messages:** Persistent one-to-one message exchange backed by PostgreSQL with chronological ordering and cursor-based pagination.
+- **Message Types:** Full support for standard text, formatted code snippets with syntax highlighting and copy button, and shared learning resource links.
+- **Reliability & Idempotency:** Server timestamps, retry deduplication via `clientTempId`, and read status tracking with read receipts.
+- **Presence & Typing:** Real-time online/offline presence indicators and debounced typing indicator broadcast.
+
+### 2. Audio & Video Calling (WebRTC)
+- **Genuine Peer-to-Peer Calls:** Voice and video calling using WebRTC media streams with Socket.IO signaling.
+- **Call Controls:** Mute/unmute microphone, camera toggle, screen sharing during learning sessions, and hang up.
+- **NAT Traversal & ICE:** Environment-based configuration for Google STUN servers with TURN server credentials support for restricted networks (`STUN_SERVERS`, `TURN_SERVER`, `TURN_USERNAME`, `TURN_CREDENTIAL`).
+- **Safety & Blocking:** Enforces mutual blocking checks before signaling; blocked users cannot initiate or receive calls.
+
+### 3. Persistent Notifications
+- **Event Triggers:** Connection requests received, connection requests accepted, new messages, and missed calls.
+- **Read Receipts:** Individual notification mark-as-read, bulk "mark all as read", and live unread counter badge.
+- **Direct Navigation:** Clicking a notification immediately routes to the relevant conversation, connection request, or call.
+
+### 4. Phase 4 Endpoints & Events
+
+#### REST Endpoints
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/conversations` | List user's active conversations with unread counts and last message |
+| `POST` | `/api/conversations/direct` | Find or create direct conversation with another student |
+| `GET` | `/api/conversations/:id/messages` | Get paginated message history for conversation |
+| `POST` | `/api/conversations/:id/messages` | Send message (text, code, link) with idempotency key |
+| `POST` | `/api/conversations/:id/read` | Mark all unread messages in conversation as read |
+| `POST` | `/api/calls` | Initiate a new audio or video call session |
+| `GET` | `/api/calls/:id` | Get status and participants of a call session |
+| `POST` | `/api/calls/:id/end` | Cleanly terminate an active call session |
+| `PATCH`| `/api/calls/:id/status` | Update call state (ACCEPTED, REJECTED, MISSED, ENDED) |
+| `GET` | `/api/calls/config` | Retrieve WebRTC STUN/TURN ICE server configuration |
+| `GET` | `/api/notifications` | Get paginated persistent notifications |
+| `GET` | `/api/notifications/unread-count` | Get unread notification counter badge |
+| `PATCH`| `/api/notifications/:id/read` | Mark single notification as read |
+| `POST` | `/api/notifications/read-all` | Mark all user notifications as read |
+
+#### Socket.IO Real-Time Events
+- `room:join` / `room:leave`
+- `presence:update`
+- `message:send` / `message:new` / `message:read`
+- `typing:start` / `typing:stop`
+- `call:invite` / `call:ringing` / `call:accept` / `call:reject` / `call:end`
+- `call:offer` / `call:answer` / `call:ice-candidate`
+- `notification:new`
+
+---
+
 ## 🗺️ Phase Roadmap
 
 - [x] **Phase 1: Project Foundation**
@@ -308,8 +358,15 @@ $$\text{MatchScore} = \text{TeachToLearn} (50\%) + \text{Reciprocal} (25\%) + \t
   - Friends & Connections page (`/connections`) with tabs for Friends, Requests, Saved, and Blocked.
   - Public student profile preview modal (`StudentProfileModal`).
   - Comprehensive automated tests (26/26 tests passing).
-- [ ] **Phase 4: Real-Time Communication & Study Circles** *(Planned next)*
-  - Real-time peer-to-peer chat and messaging.
-  - Audio and video study calling.
-  - Scheduled study sessions.
-  - Knowledge-sharing workspace and collaborative code editor.
+- [x] **Phase 4: Real-Time Chat, Voice/Video Calls & Persistent Notifications**
+  - Persistent one-on-one private messaging with code snippet syntax formatting, link sharing, and typing indicators.
+  - Genuine WebRTC voice and video calls with Socket.IO signaling, STUN/TURN configuration, and screen sharing.
+  - Multi-tab presence management and user-specific room authorization.
+  - Persistent notification system with unread counters for messages, connections, and missed calls.
+  - Strict privacy enforcement: blocking halts messaging, calling, and notifications.
+  - 44/44 backend unit and integration tests passing.
+- [ ] **Phase 5: Collaborative Study Circles & Knowledge Workspace** *(Awaiting explicit user instruction)*
+  - Scheduled study sessions and group learning rooms.
+  - Real-time collaborative code editor and shared whiteboard.
+  - Learning resources repository.
+

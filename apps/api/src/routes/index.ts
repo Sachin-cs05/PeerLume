@@ -7,6 +7,9 @@ import { blockRoutes } from './block.routes.js';
 import { savedPartnerRoutes } from './savedPartner.routes.js';
 import { discoveryRoutes } from './discovery.routes.js';
 import { studentRoutes } from './student.routes.js';
+import { conversationRoutes } from './conversation.routes.js';
+import { callRoutes } from './call.routes.js';
+import { notificationRoutes } from './notification.routes.js';
 
 const router = Router();
 
@@ -19,6 +22,10 @@ router.use('/blocks', blockRoutes);
 router.use('/saved-partners', savedPartnerRoutes);
 router.use('/discovery', discoveryRoutes);
 router.use('/students', studentRoutes);
+router.use('/conversations', conversationRoutes);
+router.use('/calls', callRoutes);
+router.use('/notifications', notificationRoutes);
 
 export const apiRoutes = router;
+
 

@@ -34,6 +34,56 @@ export const API_ENDPOINTS = {
   },
   BLOCKS: '/api/blocks',
   SAVED_PARTNERS: '/api/saved-partners',
+  CONVERSATIONS: {
+    ROOT: '/api/conversations',
+    DIRECT: '/api/conversations/direct',
+    MESSAGES: (conversationId: string) => `/api/conversations/${conversationId}/messages`,
+    READ: (conversationId: string) => `/api/conversations/${conversationId}/read`,
+  },
+  CALLS: {
+    ROOT: '/api/calls',
+    BY_ID: (callId: string) => `/api/calls/${callId}`,
+    END: (callId: string) => `/api/calls/${callId}/end`,
+    CONFIG: '/api/calls/config',
+  },
+  NOTIFICATIONS: {
+    ROOT: '/api/notifications',
+    UNREAD_COUNT: '/api/notifications/unread-count',
+    READ: (notificationId: string) => `/api/notifications/${notificationId}/read`,
+    READ_ALL: '/api/notifications/read-all',
+  },
+} as const;
+
+export const SOCKET_EVENTS = {
+  CONNECT: 'connect',
+  DISCONNECT: 'disconnect',
+  CONNECT_ERROR: 'connect_error',
+  
+  // Room and presence
+  ROOM_JOIN: 'room:join',
+  ROOM_LEAVE: 'room:leave',
+  PRESENCE_UPDATE: 'presence:update',
+  
+  // Messaging
+  MESSAGE_SEND: 'message:send',
+  MESSAGE_NEW: 'message:new',
+  MESSAGE_READ: 'message:read',
+  MESSAGE_DELIVERED: 'message:delivered',
+  TYPING_START: 'typing:start',
+  TYPING_STOP: 'typing:stop',
+  
+  // Calling signaling
+  CALL_INVITE: 'call:invite',
+  CALL_RINGING: 'call:ringing',
+  CALL_ACCEPT: 'call:accept',
+  CALL_REJECT: 'call:reject',
+  CALL_OFFER: 'call:offer',
+  CALL_ANSWER: 'call:answer',
+  CALL_ICE_CANDIDATE: 'call:ice-candidate',
+  CALL_END: 'call:end',
+  
+  // Notifications
+  NOTIFICATION_NEW: 'notification:new',
 } as const;
 
 export const HTTP_STATUS = {
@@ -47,3 +97,4 @@ export const HTTP_STATUS = {
   INTERNAL_SERVER_ERROR: 500,
   SERVICE_UNAVAILABLE: 503,
 } as const;
+

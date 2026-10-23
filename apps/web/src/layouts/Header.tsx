@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Sparkles, Menu, X, Users, Compass, BookOpen, User, LogOut, LayoutDashboard } from 'lucide-react';
+import { Sparkles, Menu, X, Users, Compass, BookOpen, User, LogOut, LayoutDashboard, MessageSquare } from 'lucide-react';
 import { Badge } from '../components/ui/Badge.js';
 import { Button } from '../components/ui/Button.js';
 import { useAuth } from '../context/AuthContext.js';
+import { NotificationDropdown } from '../components/notifications/NotificationDropdown.js';
 
 export const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -31,7 +32,7 @@ export const Header: React.FC = () => {
                 PeerLume
               </span>
               <span className="hidden sm:inline-block ml-2 text-[10px] font-semibold text-emerald-400 tracking-wider uppercase px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
-                Phase 3
+                Phase 4
               </span>
             </div>
           </Link>
@@ -62,6 +63,14 @@ export const Header: React.FC = () => {
                 >
                   <Users className="w-4 h-4 text-brand-400" />
                   <span>Connections</span>
+                </Link>
+
+                <Link
+                  to="/chat"
+                  className="flex items-center gap-2 text-sm text-slate-300 hover:text-white transition-colors"
+                >
+                  <MessageSquare className="w-4 h-4 text-blue-400" />
+                  <span>Messages</span>
                 </Link>
 
                 <Link
@@ -105,6 +114,8 @@ export const Header: React.FC = () => {
           <div className="hidden sm:flex items-center gap-3">
             {user ? (
               <div className="flex items-center gap-3">
+                <NotificationDropdown />
+
                 <Link
                   to="/profile"
                   className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-800/80 border border-slate-700 hover:border-slate-600 transition-colors"
@@ -183,6 +194,13 @@ export const Header: React.FC = () => {
                 className="flex items-center justify-between py-2 text-sm font-medium text-slate-300"
               >
                 <span>Connections</span>
+              </Link>
+              <Link
+                to="/chat"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-between py-2 text-sm font-medium text-slate-300"
+              >
+                <span>Messages</span>
               </Link>
               <Link
                 to="/profile"

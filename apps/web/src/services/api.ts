@@ -321,7 +321,104 @@ export const apiService = {
       return apiRequest<SavedPartnerDto[]>('/saved-partners');
     },
   },
+
+  // Phase 4: Chat Conversations & Messaging
+  conversations: {
+    async list(): Promise<ApiResult<any[]>> {
+      return apiRequest<any[]>('/conversations');
+    },
+
+    async getOrCreateDirect(targetUserId: string): Promise<ApiResult<any>> {
+      return apiRequest<any>('/conversations/direct', {
+        method: 'POST',
+        body: JSON.stringify({ targetUserId }),
+      });
+    },
+
+    async getMessages(conversationId: string, limit = 40, before?: string): Promise<ApiResult<any[]>> {
+      const params = new URLSearchParams();
+      if (limit) params.set('limit', limit.toString());
+      if (before) params.set('before', before);
+      const qs = params.toString() ? `?${params.toString()}` : '';
+      return apiRequest<any[]>(`/conversations/${conversationId}/messages${qs}`);
+    },
+
+    async sendMessage(
+      conversationId: string,
+      input: { content: string; type?: string; metadata?: any; clientTempId?: string }
+    ): Promise<ApiResult<any>> {
+      return apiRequest<any>(`/conversations/${conversationId}/messages`, {
+        method: 'POST',
+        body: JSON.stringify(input),
+      });
+    },
+
+    async markAsRead(conversationId: string): Promise<ApiResult<{ markedCount: number; readAt: string }>> {
+      return apiRequest<{ markedCount: number; readAt: string }>(`/conversations/${conversationId}/read`, {
+        method: 'POST',
+      });
+    },
+  },
+
+  // Phase 4: Audio & Video Calling
+  calls: {
+    async initiate(receiverId: string, type: 'AUDIO' | 'VIDEO' = 'VIDEO'): Promise<ApiResult<any>> {
+      return apiRequest<any>('/calls', {
+        method: 'POST',
+        body: JSON.stringify({ receiverId, type }),
+      });
+    },
+
+    async get(callId: string): Promise<ApiResult<any>> {
+      return apiRequest<any>(`/calls/${callId}`);
+    },
+
+    async end(callId: string): Promise<ApiResult<any>> {
+      return apiRequest<any>(`/calls/${callId}/end`, {
+        method: 'POST',
+      });
+    },
+
+    async updateStatus(callId: string, status: string): Promise<ApiResult<any>> {
+      return apiRequest<any>(`/calls/${callId}/status`, {
+        method: 'PATCH',
+        body: JSON.stringify({ status }),
+      });
+    },
+
+    async getIceConfig(): Promise<ApiResult<{ iceServers: any[] }>> {
+      return apiRequest<{ iceServers: any[] }>('/calls/config');
+    },
+  },
+
+  // Phase 4: Notifications
+  notifications: {
+    async list(page = 1, pageSize = 20, unreadOnly = false): Promise<ApiResult<any>> {
+      const params = new URLSearchParams();
+      params.set('page', page.toString());
+      params.set('pageSize', pageSize.toString());
+      if (unreadOnly) params.set('unreadOnly', 'true');
+      return apiRequest<any>(`/notifications?${params.toString()}`);
+    },
+
+    async getUnreadCount(): Promise<ApiResult<{ unreadCount: number }>> {
+      return apiRequest<{ unreadCount: number }>('/notifications/unread-count');
+    },
+
+    async markAsRead(notificationId: string): Promise<ApiResult<any>> {
+      return apiRequest<any>(`/notifications/${notificationId}/read`, {
+        method: 'PATCH',
+      });
+    },
+
+    async markAllAsRead(): Promise<ApiResult<{ count: number }>> {
+      return apiRequest<{ count: number }>('/notifications/read-all', {
+        method: 'POST',
+      });
+    },
+  },
 };
 
 export const api = apiService;
+
 

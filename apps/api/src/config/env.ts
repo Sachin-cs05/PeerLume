@@ -46,7 +46,16 @@ const envSchema = z.object({
   SMTP_USER: z.string().optional(),
   SMTP_PASS: z.string().optional(),
   EMAIL_FROM: z.string().default('PeerLume <noreply@peerlume.local>'),
+
+  // WebRTC STUN/TURN Configuration
+  STUN_SERVERS: z
+    .string()
+    .default('stun:stun.l.google.com:19302,stun:stun1.l.google.com:19302'),
+  TURN_SERVER: z.string().optional(),
+  TURN_USERNAME: z.string().optional(),
+  TURN_CREDENTIAL: z.string().optional(),
 });
+
 
 const parsedEnv = envSchema.safeParse(process.env);
 

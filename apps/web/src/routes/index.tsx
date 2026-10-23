@@ -12,6 +12,7 @@ import { ProfileViewPage } from '../pages/profile/ProfileViewPage.js';
 import { ProfileEditPage } from '../pages/profile/ProfileEditPage.js';
 import { DiscoverPage } from '../pages/discovery/DiscoverPage.js';
 import { ConnectionsPage } from '../pages/connections/ConnectionsPage.js';
+import { ChatPage } from '../pages/ChatPage.js';
 import { ProtectedRoute } from '../components/guards/ProtectedRoute.js';
 import { GuestRoute } from '../components/guards/GuestRoute.js';
 
@@ -88,6 +89,14 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: 'chat',
+        element: (
+          <ProtectedRoute>
+            <ChatPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
         path: 'profile',
         element: (
           <ProtectedRoute>
@@ -107,6 +116,7 @@ export const router = createBrowserRouter([
         path: '*',
         element: <NotFoundPage />,
       },
+
     ],
   },
 ]);

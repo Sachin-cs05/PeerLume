@@ -40,6 +40,15 @@ model User {
   savedPartners          SavedPartner[]  @relation("SavedPartnersOwner")
   savedByStudents        SavedPartner[]  @relation("SavedPartnersTarget")
 
+  // Phase 4: Chat Conversations, Messages, Calls & Notifications
+  conversationsAsUser1   Conversation[]  @relation("Conversations1")
+  conversationsAsUser2   Conversation[]  @relation("Conversations2")
+  sentMessages           Message[]       @relation("SentMessages")
+  initiatedCalls         CallSession[]   @relation("InitiatedCalls")
+  receivedCalls          CallSession[]   @relation("ReceivedCalls")
+  notificationsReceived  Notification[]  @relation("NotificationsReceived")
+  notificationsTriggered Notification[]  @relation("NotificationsTriggered")
+
   @@map("users")
 }
 
@@ -258,3 +267,119 @@ model SavedPartner {
   @@index([savedStudentId])
   @@map("saved_partners")
 }
+
+// -----------------------------------------------------------------------------
+// Phase 4: Real-Time Messaging, Calls & Persistent Notifications
+// -----------------------------------------------------------------------------
+
+enum MessageType {
+  TEXT
+  CODE
+  LINK
+  RESOURCE
+  FILE
+}
+
+enum CallType {
+  AUDIO
+  VIDEO
+}
+
+enum CallStatus {
+  INITIATED
+  RINGING
+  ACCEPTED
+  REJECTED
+  MISSED
+  ENDED
+  FAILED
+}
+
+enum NotificationType {
+  FRIEND_REQUEST_RECEIVED
+  FRIEND_REQUEST_ACCEPTED
+  NEW_MESSAGE
+  CALL_INCOMING
+  CALL_MISSED
+}
+
+model Conversation {
+  id            String    @id @default(uuid())
+  user1Id       String    @map("user1_id")
+  user2Id       String    @map("user2_id")
+  lastMessageAt DateTime? @map("last_message_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  user1    User      @relation("Conversations1", fields: [user1Id], references: [id], onDelete: Cascade)
+  user2    User      @relation("Conversations2", fields: [user2Id], references: [id], onDelete: Cascade)
+  messages Message[]
+
+  @@unique([user1Id, user2Id])
+  @@index([user1Id])
+  @@index([user2Id])
+  @@index([lastMessageAt])
+  @@map("conversations")
+}
+
+model Message {
+  id             String      @id @default(uuid())
+  conversationId String      @map("conversation_id")
+  senderId       String      @map("sender_id")
+  type           MessageType @default(TEXT)
+  content        String      @db.Text
+  metadata       Json?       @map("metadata")
+  isRead         Boolean     @default(false) @map("is_read")
+  readAt         DateTime?   @map("read_at")
+  clientTempId   String?     @map("client_temp_id")
+  createdAt      DateTime    @default(now()) @map("created_at")
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender       User         @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId, createdAt])
+  @@index([senderId])
+  @@index([conversationId, isRead])
+  @@map("messages")
+}
+
+model CallSession {
+  id         String     @id @default(uuid())
+  callerId   String     @map("caller_id")
+  receiverId String     @map("receiver_id")
+  type       CallType   @default(VIDEO)
+  status     CallStatus @default(INITIATED)
+  startedAt  DateTime?  @map("started_at")
+  endedAt    DateTime?  @map("ended_at")
+  createdAt  DateTime   @default(now()) @map("created_at")
+  updatedAt  DateTime   @updatedAt @map("updated_at")
+
+  caller   User @relation("InitiatedCalls", fields: [callerId], references: [id], onDelete: Cascade)
+  receiver User @relation("ReceivedCalls", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@index([callerId])
+  @@index([receiverId])
+  @@index([status])
+  @@map("call_sessions")
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  userId    String           @map("user_id")
+  actorId   String?          @map("actor_id")
+  type      NotificationType
+  title     String
+  body      String
+  data      Json?            @map("data")
+  isRead    Boolean          @default(false) @map("is_read")
+  readAt    DateTime?        @map("read_at")
+  createdAt DateTime         @default(now()) @map("created_at")
+
+  user  User  @relation("NotificationsReceived", fields: [userId], references: [id], onDelete: Cascade)
+  actor User? @relation("NotificationsTriggered", fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([userId, isRead])
+  @@index([userId, createdAt])
+  @@map("notifications")
+}
+

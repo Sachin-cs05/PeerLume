@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import type {
   FriendConnectionDto,
   FriendRequestDto,
@@ -25,8 +27,10 @@ import { StudentProfileModal } from '../../components/connections/StudentProfile
 import { api } from '../../services/api.js';
 
 export const ConnectionsPage: React.FC = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'friends' | 'requests' | 'saved' | 'blocked'>('friends');
   const [requestsSubTab, setRequestsSubTab] = useState<'incoming' | 'outgoing'>('incoming');
+
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -297,20 +301,19 @@ export const ConnectionsPage: React.FC = () => {
                           </div>
                         </div>
 
-                        {/* Future Chat Entry Point */}
+                        {/* Chat Entry Point */}
                         <div className="relative group/chat">
                           <button
-                            disabled
-                            className="p-2 rounded-xl bg-slate-800/80 border border-slate-700/60 text-slate-400 cursor-not-allowed opacity-80"
-                            title="Chat (Coming in Phase 4)"
+                            type="button"
+                            onClick={() => navigate(`/chat?userId=${item.student.id}`)}
+                            className="p-2 rounded-xl bg-slate-800 hover:bg-brand-600 border border-slate-700/60 hover:border-brand-500 text-slate-300 hover:text-white transition-all shadow-sm"
+                            title="Message student"
                           >
-                            <MessageSquare className="w-4 h-4 text-brand-400" />
+                            <MessageSquare className="w-4 h-4 text-brand-400 group-hover/chat:text-white" />
                           </button>
-                          <span className="absolute right-0 top-full mt-1 hidden group-hover/chat:block z-30 px-2 py-1 rounded bg-slate-800 text-[10px] font-semibold text-brand-300 border border-slate-700 whitespace-nowrap shadow-lg">
-                            Chat (Coming in Phase 4)
-                          </span>
                         </div>
                       </div>
+
 
                       {/* Skills Preview */}
                       <div className="space-y-2 mb-4 text-xs">

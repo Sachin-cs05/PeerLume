@@ -1,6 +1,8 @@
 import { prisma } from '../config/prisma.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { HTTP_STATUS } from '@peerlume/shared';
+import { createNotification } from './notification.service.js';
+
 import type {
   ConnectionStatus,
   FriendRequestDto,
@@ -212,6 +214,20 @@ export async function sendFriendRequest(
     },
   });
 
+  try {
+    const sender = await prisma.user.findUnique({ where: { id: senderId }, select: { fullName: true } });
+    await createNotification({
+      userId: receiverId,
+      actorId: senderId,
+      type: 'FRIEND_REQUEST_RECEIVED',
+      title: 'New Connection Request',
+      body: `${sender?.fullName || 'A student'} sent you a connection request`,
+      data: { requestId: newRequest.id },
+    });
+  } catch {
+    // Non-blocking notification
+  }
+
   return {
     status: 'REQUEST_SENT',
     connectionRequestId: newRequest.id,
@@ -327,7 +343,22 @@ export async function acceptFriendRequest(requestId: string, userId: string): Pr
       update: {},
     }),
   ]);
+
+  try {
+    const accepter = await prisma.user.findUnique({ where: { id: userId }, select: { fullName: true } });
+    await createNotification({
+      userId: request.senderId,
+      actorId: userId,
+      type: 'FRIEND_REQUEST_ACCEPTED',
+      title: 'Connection Request Accepted',
+      body: `${accepter?.fullName || 'A student'} accepted your connection request`,
+      data: { friendId: userId },
+    });
+  } catch {
+    // Non-blocking notification
+  }
 }
+
 
 export async function declineFriendRequest(requestId: string, userId: string): Promise<void> {
   const request = await prisma.friendRequest.findUnique({
