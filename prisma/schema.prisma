@@ -1,4 +1,4 @@
-// PeerLume Prisma Schema - Phase 2: Authentication & Student Profiles
+// PeerLume Prisma Schema - Phase 3: Friends, Connections & Smart Learning Partner Matching
 // "Learn Together. Grow Together."
 
 generator client {
@@ -29,6 +29,16 @@ model User {
   refreshSessions          RefreshSession[]
   emailVerificationTokens  EmailVerificationToken[]
   passwordResetTokens      PasswordResetToken[]
+
+  // Phase 3: Friends, Requests, Blocks, and Saved Partners
+  sentFriendRequests     FriendRequest[] @relation("SentRequests")
+  receivedFriendRequests FriendRequest[] @relation("ReceivedRequests")
+  friendshipsAsUser1     Friendship[]    @relation("Friendships1")
+  friendshipsAsUser2     Friendship[]    @relation("Friendships2")
+  blocksInitiated        UserBlock[]     @relation("BlocksInitiated")
+  blocksReceived         UserBlock[]     @relation("BlocksReceived")
+  savedPartners          SavedPartner[]  @relation("SavedPartnersOwner")
+  savedByStudents        SavedPartner[]  @relation("SavedPartnersTarget")
 
   @@map("users")
 }
@@ -173,4 +183,78 @@ model PasswordResetToken {
 
   @@index([userId])
   @@map("password_reset_tokens")
+}
+
+// -----------------------------------------------------------------------------
+// Phase 3: Friends, Connections & Blocking Models
+// -----------------------------------------------------------------------------
+
+enum FriendRequestStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+model FriendRequest {
+  id         String              @id @default(uuid())
+  senderId   String              @map("sender_id")
+  receiverId String              @map("receiver_id")
+  status     FriendRequestStatus @default(PENDING)
+  createdAt  DateTime            @default(now()) @map("created_at")
+  updatedAt  DateTime            @updatedAt @map("updated_at")
+
+  sender   User @relation("SentRequests", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver User @relation("ReceivedRequests", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@unique([senderId, receiverId])
+  @@index([senderId])
+  @@index([receiverId])
+  @@index([status])
+  @@map("friend_requests")
+}
+
+model Friendship {
+  id        String   @id @default(uuid())
+  user1Id   String   @map("user1_id")
+  user2Id   String   @map("user2_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user1 User @relation("Friendships1", fields: [user1Id], references: [id], onDelete: Cascade)
+  user2 User @relation("Friendships2", fields: [user2Id], references: [id], onDelete: Cascade)
+
+  @@unique([user1Id, user2Id])
+  @@index([user1Id])
+  @@index([user2Id])
+  @@map("friendships")
+}
+
+model UserBlock {
+  id        String   @id @default(uuid())
+  blockerId String   @map("blocker_id")
+  blockedId String   @map("blocked_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  blocker User @relation("BlocksInitiated", fields: [blockerId], references: [id], onDelete: Cascade)
+  blocked User @relation("BlocksReceived", fields: [blockedId], references: [id], onDelete: Cascade)
+
+  @@unique([blockerId, blockedId])
+  @@index([blockerId])
+  @@index([blockedId])
+  @@map("user_blocks")
+}
+
+model SavedPartner {
+  id             String   @id @default(uuid())
+  userId         String   @map("user_id")
+  savedStudentId String   @map("saved_student_id")
+  notes          String?  @map("notes")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  user         User @relation("SavedPartnersOwner", fields: [userId], references: [id], onDelete: Cascade)
+  savedStudent User @relation("SavedPartnersTarget", fields: [savedStudentId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, savedStudentId])
+  @@index([userId])
+  @@index([savedStudentId])
+  @@map("saved_partners")
 }

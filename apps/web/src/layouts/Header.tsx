@@ -31,7 +31,7 @@ export const Header: React.FC = () => {
                 PeerLume
               </span>
               <span className="hidden sm:inline-block ml-2 text-[10px] font-semibold text-emerald-400 tracking-wider uppercase px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
-                Phase 2
+                Phase 3
               </span>
             </div>
           </Link>
@@ -49,20 +49,28 @@ export const Header: React.FC = () => {
                 </Link>
 
                 <Link
+                  to="/discover"
+                  className="flex items-center gap-2 text-sm text-slate-300 hover:text-white transition-colors"
+                >
+                  <Compass className="w-4 h-4 text-teal-400" />
+                  <span>Discover Partners</span>
+                </Link>
+
+                <Link
+                  to="/connections"
+                  className="flex items-center gap-2 text-sm text-slate-300 hover:text-white transition-colors"
+                >
+                  <Users className="w-4 h-4 text-brand-400" />
+                  <span>Connections</span>
+                </Link>
+
+                <Link
                   to="/profile"
                   className="flex items-center gap-2 text-sm text-slate-300 hover:text-white transition-colors"
                 >
-                  <User className="w-4 h-4 text-teal-400" />
+                  <User className="w-4 h-4 text-purple-400" />
                   <span>My Profile</span>
                 </Link>
-
-                <div className="flex items-center gap-2 text-sm text-slate-400 group cursor-default">
-                  <Users className="w-4 h-4 text-slate-500" />
-                  <span>Circles</span>
-                  <Badge variant="neutral" size="sm" className="opacity-70">
-                    Phase 3
-                  </Badge>
-                </div>
               </>
             ) : (
               <>
@@ -161,6 +169,20 @@ export const Header: React.FC = () => {
                 className="flex items-center justify-between py-2 text-sm font-medium text-slate-300"
               >
                 <span>Dashboard</span>
+              </Link>
+              <Link
+                to="/discover"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-between py-2 text-sm font-medium text-slate-300"
+              >
+                <span>Discover Partners</span>
+              </Link>
+              <Link
+                to="/connections"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-between py-2 text-sm font-medium text-slate-300"
+              >
+                <span>Connections</span>
               </Link>
               <Link
                 to="/profile"

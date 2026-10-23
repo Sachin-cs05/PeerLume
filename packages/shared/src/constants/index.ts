@@ -21,6 +21,19 @@ export const API_ENDPOINTS = {
     TEACHING_SKILLS: '/api/profile/teaching-skills',
     LEARNING_GOALS: '/api/profile/learning-goals',
   },
+  STUDENTS: '/api/students',
+  DISCOVERY: {
+    PARTNERS: '/api/discovery/partners',
+    MATCH_DETAILS: '/api/discovery/partners/match-details',
+  },
+  CONNECTIONS: {
+    ROOT: '/api/connections',
+    REQUESTS: '/api/connections/requests',
+    REQUESTS_INCOMING: '/api/connections/requests/incoming',
+    REQUESTS_OUTGOING: '/api/connections/requests/outgoing',
+  },
+  BLOCKS: '/api/blocks',
+  SAVED_PARTNERS: '/api/saved-partners',
 } as const;
 
 export const HTTP_STATUS = {

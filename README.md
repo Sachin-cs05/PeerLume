@@ -221,6 +221,68 @@ npm run build
 
 ---
 
+---
+
+## 🤝 Phase 3: Friends, Connections & Smart Learning Partner Matching
+
+Phase 3 introduces real database-backed student discovery and relationship management without admin gatekeeping:
+
+### 1. Smart Learning Partner Matching Algorithm
+
+Students can discover compatible learning partners using a transparent, explainable scoring function based on actual profile records:
+
+$$\text{MatchScore} = \text{TeachToLearn} (50\%) + \text{Reciprocal} (25\%) + \text{SharedGoals} (15\%) + \text{Language} (10\%) + \text{AcademicBonus} (5\text{ pts})$$
+
+- **Teach-to-Learn Compatibility (50 pts):** Evaluates if candidate teaches one or more skills the current student configured in their learning goals.
+- **Reciprocal Skill Compatibility (25 pts):** Evaluates if candidate wants to learn skills the current student can teach.
+- **Shared Learning Goals (15 pts):** Identifies overlapping learning goals where both peers want to master the same subject together.
+- **Language Compatibility (10 pts):** Checks for compatible spoken languages.
+- **Academic Context (+5 pts):** Optional context bonus for peers sharing campus (+3) and branch (+2).
+- **Truthful Explanations:** Only data-backed reasons are rendered (e.g. *"Can mentor you in React"*, *"Interested in Python from you"*, *"Shares 2 common goals"*).
+
+### 2. Autonomous Connections & Friends Management
+
+- **Send / Cancel Requests:** Outgoing pending requests with prevention of self-connections and duplicates.
+- **Incoming Requests:** Accept or decline connection requests.
+- **Opposite-Direction Auto-Acceptance:** If student A requests student B while B already sent a request to A, the request is automatically accepted without duplicate records.
+- **Canonical Friendship Rows:** Stored as `[min(user1, user2), max(user1, user2)]` ensuring strict database-level uniqueness.
+- **Remove Connection:** Safe unfriending without altering either student's account or profile.
+- **Future Chat Entry Point:** Clear non-deceptive indicator (`Chat Coming in Phase 4`).
+
+### 3. Mutual Blocking & Privacy Enforcement
+
+- **Self-Service Blocking:** Block and unblock any student with an optional reason.
+- **Cascade Cleanup:** Blocking removes any active friendship, deletes pending requests in both directions, and purges saved partner bookmarks.
+- **Total Exclusion:** Blocked students are excluded from search, recommendations, and connection actions on the backend.
+
+### 4. Saved Learning Partners
+
+- Private student bookmarks allowing students to save discovered peers with personal notes.
+
+### 5. Phase 3 API Endpoints
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/discovery/partners` | Get smart-matched learning partner recommendations with scores |
+| `GET` | `/api/students` | Search student directory with pagination and skill filters |
+| `GET` | `/api/students/:studentId` | Get permitted public student profile details |
+| `POST` | `/api/connections/requests` | Send connection request to another student |
+| `GET` | `/api/connections/requests/incoming` | List incoming connection requests |
+| `GET` | `/api/connections/requests/outgoing` | List outgoing pending connection requests |
+| `POST` | `/api/connections/requests/:requestId/accept` | Accept an incoming connection request |
+| `POST` | `/api/connections/requests/:requestId/decline` | Decline an incoming connection request |
+| `DELETE`| `/api/connections/requests/:requestId` | Cancel an outgoing connection request |
+| `GET` | `/api/connections` | View accepted friends list with search |
+| `DELETE`| `/api/connections/:connectionId` | Remove an accepted friend connection |
+| `POST` | `/api/blocks/:studentId` | Block a student |
+| `DELETE`| `/api/blocks/:studentId` | Unblock a student |
+| `GET` | `/api/blocks` | List students blocked by current user |
+| `POST` | `/api/saved-partners/:studentId` | Save learning partner to private bookmarks |
+| `DELETE`| `/api/saved-partners/:studentId` | Remove student from private bookmarks |
+| `GET` | `/api/saved-partners` | List saved learning partners |
+
+---
+
 ## 🗺️ Phase Roadmap
 
 - [x] **Phase 1: Project Foundation**
@@ -237,8 +299,17 @@ npm run build
   - Public profile preview mode for students to inspect their peer visibility.
   - Protected student dashboard placeholder and route guards (`ProtectedRoute`, `GuestRoute`).
   - Automated integration test suite covering registration, validation, login, sessions, and route guards.
-- [ ] **Phase 3: Real-Time Collaboration & Circles** *(Planned next)*
-  - Peer study circles (Learn with Friends).
-  - Skill and subject-based partner matching algorithms (Discover Partners).
-  - Synchronous peer study rooms.
-  - Synchronized code collaboration editor.
+- [x] **Phase 3: Friends, Connections & Smart Learning Partner Matching**
+  - Canonical friendship and bidirectional friend request system.
+  - Self-service mutual blocking with connection invalidation cascade.
+  - Saved learning partners bookmarking system.
+  - Explainable, weighted matching algorithm (Teach-to-Learn, Reciprocal, Goals, Language).
+  - Discover Learning Partners page (`/discover`) with smart matching & student directory.
+  - Friends & Connections page (`/connections`) with tabs for Friends, Requests, Saved, and Blocked.
+  - Public student profile preview modal (`StudentProfileModal`).
+  - Comprehensive automated tests (26/26 tests passing).
+- [ ] **Phase 4: Real-Time Communication & Study Circles** *(Planned next)*
+  - Real-time peer-to-peer chat and messaging.
+  - Audio and video study calling.
+  - Scheduled study sessions.
+  - Knowledge-sharing workspace and collaborative code editor.

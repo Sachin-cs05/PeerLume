@@ -10,6 +10,8 @@ import { VerifyEmailPage } from '../pages/auth/VerifyEmailPage.js';
 import { DashboardPage } from '../pages/dashboard/DashboardPage.js';
 import { ProfileViewPage } from '../pages/profile/ProfileViewPage.js';
 import { ProfileEditPage } from '../pages/profile/ProfileEditPage.js';
+import { DiscoverPage } from '../pages/discovery/DiscoverPage.js';
+import { ConnectionsPage } from '../pages/connections/ConnectionsPage.js';
 import { ProtectedRoute } from '../components/guards/ProtectedRoute.js';
 import { GuestRoute } from '../components/guards/GuestRoute.js';
 
@@ -66,6 +68,22 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <DashboardPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'discover',
+        element: (
+          <ProtectedRoute>
+            <DiscoverPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'connections',
+        element: (
+          <ProtectedRoute>
+            <ConnectionsPage />
           </ProtectedRoute>
         ),
       },

@@ -175,3 +175,98 @@ export interface UpdateLearningGoalsInput {
   }[];
 }
 
+// -----------------------------------------------------------------------------
+// Phase 3: Connections, Matching & Discovery Types
+// -----------------------------------------------------------------------------
+
+export type ConnectionStatus =
+  | 'NONE'
+  | 'FRIENDS'
+  | 'REQUEST_SENT'
+  | 'REQUEST_RECEIVED'
+  | 'BLOCKED';
+
+export interface StudentSearchItem {
+  id: string;
+  fullName: string;
+  avatarUrl?: string | null;
+  college: string;
+  degree: string;
+  branch: string;
+  semester: string;
+  bio?: string | null;
+  languages: string[];
+  preferredLearningMode: PreferredLearningMode;
+  visibility: ProfileVisibility;
+  teachingSkills: { name: string; proficiency: SkillProficiency }[];
+  learningGoals: { name: string; priority: GoalPriority }[];
+  connectionStatus: ConnectionStatus;
+  connectionRequestId?: string;
+  connectionId?: string;
+}
+
+export interface MatchExplanation {
+  type: 'TEACH_TO_LEARN' | 'RECIPROCAL' | 'SHARED_GOAL' | 'LANGUAGE' | 'ACADEMIC';
+  text: string;
+  skills?: string[];
+}
+
+export interface PartnerRecommendation {
+  student: StudentSearchItem;
+  matchScore: number; // 0 to 100
+  scoreBreakdown: {
+    teachToLearn: number; // Max 50
+    reciprocal: number;   // Max 25
+    sharedGoals: number;  // Max 15
+    language: number;     // Max 10
+  };
+  explanations: MatchExplanation[];
+  isSaved?: boolean;
+}
+
+export interface FriendRequestDto {
+  id: string;
+  senderId: string;
+  receiverId: string;
+  status: 'PENDING' | 'ACCEPTED' | 'DECLINED';
+  sender: StudentSearchItem;
+  receiver: StudentSearchItem;
+  createdAt: string;
+}
+
+export interface FriendConnectionDto {
+  id: string;
+  friendId: string;
+  student: StudentSearchItem;
+  connectedAt: string;
+}
+
+export interface UserBlockDto {
+  id: string;
+  blockedId: string;
+  blockedStudent: {
+    id: string;
+    fullName: string;
+    avatarUrl?: string | null;
+    college?: string;
+  };
+  reason?: string | null;
+  createdAt: string;
+}
+
+export interface SavedPartnerDto {
+  id: string;
+  savedStudentId: string;
+  student: StudentSearchItem;
+  notes?: string | null;
+  createdAt: string;
+}
+
+export interface PaginatedResult<T> {
+  items: T[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+}
+

@@ -11,6 +11,13 @@ import type {
   SkillDto,
   SkillProficiency,
   GoalPriority,
+  StudentSearchItem,
+  PartnerRecommendation,
+  FriendRequestDto,
+  FriendConnectionDto,
+  UserBlockDto,
+  SavedPartnerDto,
+  PaginatedResult,
 } from '@peerlume/shared';
 
 export const API_BASE_URL =
@@ -167,4 +174,154 @@ export const apiService = {
       });
     },
   },
+
+  // Phase 3: Connections & Friends
+  connections: {
+    async sendRequest(receiverId: string, message?: string): Promise<ApiResult<{ status: string; message: string }>> {
+      return apiRequest<{ status: string; message: string }>('/connections/requests', {
+        method: 'POST',
+        body: JSON.stringify({ receiverId, message }),
+      });
+    },
+
+    async getIncomingRequests(): Promise<ApiResult<FriendRequestDto[]>> {
+      return apiRequest<FriendRequestDto[]>('/connections/requests/incoming');
+    },
+
+    async getOutgoingRequests(): Promise<ApiResult<FriendRequestDto[]>> {
+      return apiRequest<FriendRequestDto[]>('/connections/requests/outgoing');
+    },
+
+    async acceptRequest(requestId: string): Promise<ApiResult<null>> {
+      return apiRequest<null>(`/connections/requests/${requestId}/accept`, {
+        method: 'POST',
+      });
+    },
+
+    async declineRequest(requestId: string): Promise<ApiResult<null>> {
+      return apiRequest<null>(`/connections/requests/${requestId}/decline`, {
+        method: 'POST',
+      });
+    },
+
+    async cancelRequest(requestId: string): Promise<ApiResult<null>> {
+      return apiRequest<null>(`/connections/requests/${requestId}`, {
+        method: 'DELETE',
+      });
+    },
+
+    async getFriends(search?: string): Promise<ApiResult<FriendConnectionDto[]>> {
+      const query = search ? `?search=${encodeURIComponent(search)}` : '';
+      return apiRequest<FriendConnectionDto[]>(`/connections${query}`);
+    },
+
+    async removeFriend(connectionId: string): Promise<ApiResult<null>> {
+      return apiRequest<null>(`/connections/${connectionId}`, {
+        method: 'DELETE',
+      });
+    },
+  },
+
+  // Phase 3: Discovery & Learning Partner Matching
+  discovery: {
+    async getRecommendedPartners(filters?: {
+      q?: string;
+      skill?: string;
+      college?: string;
+      branch?: string;
+      semester?: string;
+      language?: string;
+      preferredMode?: string;
+      page?: number;
+      limit?: number;
+    }): Promise<ApiResult<PaginatedResult<PartnerRecommendation>>> {
+      const params = new URLSearchParams();
+      if (filters?.q) params.set('q', filters.q);
+      if (filters?.skill) params.set('skill', filters.skill);
+      if (filters?.college) params.set('college', filters.college);
+      if (filters?.branch) params.set('branch', filters.branch);
+      if (filters?.semester) params.set('semester', filters.semester);
+      if (filters?.language) params.set('language', filters.language);
+      if (filters?.preferredMode) params.set('preferredMode', filters.preferredMode);
+      if (filters?.page) params.set('page', filters.page.toString());
+      if (filters?.limit) params.set('limit', filters.limit.toString());
+
+      const qs = params.toString() ? `?${params.toString()}` : '';
+      return apiRequest<PaginatedResult<PartnerRecommendation>>(`/discovery/partners${qs}`);
+    },
+  },
+
+  // Phase 3: Student Search & Profiles
+  students: {
+    async search(filters?: {
+      q?: string;
+      college?: string;
+      branch?: string;
+      semester?: string;
+      teachingSkill?: string;
+      learningGoal?: string;
+      page?: number;
+      limit?: number;
+    }): Promise<ApiResult<PaginatedResult<StudentSearchItem>>> {
+      const params = new URLSearchParams();
+      if (filters?.q) params.set('q', filters.q);
+      if (filters?.college) params.set('college', filters.college);
+      if (filters?.branch) params.set('branch', filters.branch);
+      if (filters?.semester) params.set('semester', filters.semester);
+      if (filters?.teachingSkill) params.set('teachingSkill', filters.teachingSkill);
+      if (filters?.learningGoal) params.set('learningGoal', filters.learningGoal);
+      if (filters?.page) params.set('page', filters.page.toString());
+      if (filters?.limit) params.set('limit', filters.limit.toString());
+
+      const qs = params.toString() ? `?${params.toString()}` : '';
+      return apiRequest<PaginatedResult<StudentSearchItem>>(`/students${qs}`);
+    },
+
+    async getPublicDetails(studentId: string): Promise<ApiResult<StudentSearchItem>> {
+      return apiRequest<StudentSearchItem>(`/students/${studentId}`);
+    },
+  },
+
+  // Phase 3: User Blocking
+  blocks: {
+    async blockStudent(studentId: string, reason?: string): Promise<ApiResult<null>> {
+      return apiRequest<null>(`/blocks/${studentId}`, {
+        method: 'POST',
+        body: JSON.stringify({ reason }),
+      });
+    },
+
+    async unblockStudent(studentId: string): Promise<ApiResult<null>> {
+      return apiRequest<null>(`/blocks/${studentId}`, {
+        method: 'DELETE',
+      });
+    },
+
+    async getBlockedStudents(): Promise<ApiResult<UserBlockDto[]>> {
+      return apiRequest<UserBlockDto[]>('/blocks');
+    },
+  },
+
+  // Phase 3: Saved Partners
+  savedPartners: {
+    async savePartner(studentId: string, notes?: string): Promise<ApiResult<null>> {
+      return apiRequest<null>(`/saved-partners/${studentId}`, {
+        method: 'POST',
+        body: JSON.stringify({ notes }),
+      });
+    },
+
+    async removeSavedPartner(studentId: string): Promise<ApiResult<null>> {
+      return apiRequest<null>(`/saved-partners/${studentId}`, {
+        method: 'DELETE',
+      });
+    },
+
+    async getSavedPartners(): Promise<ApiResult<SavedPartnerDto[]>> {
+      return apiRequest<SavedPartnerDto[]>('/saved-partners');
+    },
+  },
 };
+
+export const api = apiService;
+

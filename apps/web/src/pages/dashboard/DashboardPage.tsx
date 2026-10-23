@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  User,
   Sparkles,
   Target,
   Mail,
@@ -38,7 +37,7 @@ export const DashboardPage: React.FC = () => {
         <div>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-300 text-xs font-semibold mb-2">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Student Dashboard • Phase 2</span>
+            <span>Student Dashboard • Phase 3</span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
             Welcome, {user?.fullName || 'Student'}!
@@ -49,14 +48,14 @@ export const DashboardPage: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-3">
-          <Link to="/profile">
-            <Button variant="secondary" size="sm" leftIcon={<User className="w-4 h-4" />}>
-              View Full Profile
+          <Link to="/discover">
+            <Button variant="primary" size="sm" leftIcon={<Compass className="w-4 h-4" />}>
+              Find Partners
             </Button>
           </Link>
-          <Link to="/profile/edit">
-            <Button variant="primary" size="sm">
-              Edit Skills
+          <Link to="/connections">
+            <Button variant="secondary" size="sm" leftIcon={<Users className="w-4 h-4" />}>
+              Connections
             </Button>
           </Link>
         </div>
@@ -142,33 +141,43 @@ export const DashboardPage: React.FC = () => {
       </Card>
 
       {/* Upcoming Peer Features Status */}
+      {/* Peer Collaboration Hub */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-bold text-white">Peer Pathways Roadmap</h3>
-          <span className="text-xs text-slate-400">Scheduled for Future Phases</span>
+          <h3 className="text-lg font-bold text-white">Peer Collaboration Hub</h3>
+          <span className="text-xs text-emerald-400 font-semibold flex items-center gap-1">
+            <Sparkles className="w-3.5 h-3.5" /> Phase 3 Live
+          </span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card className="border-slate-800 bg-slate-900/60 p-6 space-y-4">
+          <Card className="border-slate-800 bg-slate-900/60 p-6 space-y-4 hover:border-slate-700 transition-colors">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2.5">
                 <div className="w-10 h-10 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400">
                   <Users className="w-5 h-5" />
                 </div>
-                <h4 className="font-bold text-white text-base">Learn with Friends</h4>
+                <h4 className="font-bold text-white text-base">Friends & Connections</h4>
               </div>
-              <Badge variant="brand" size="sm">Coming in Phase 3</Badge>
+              <Badge variant="brand" size="sm">Active</Badge>
             </div>
             <p className="text-xs text-slate-300 leading-relaxed">
-              Create and manage private circles with your trusted friends. Schedule synchronized study sessions, share notes, and collaborate on code.
+              Manage your network of student peers, review incoming and outgoing requests, save bookmarks, and manage connections.
             </p>
-            <div className="pt-2 text-xs text-slate-500 flex items-center gap-2">
-              <ShieldCheck className="w-3.5 h-3.5 text-slate-400" />
-              <span>Direct student governance without admin gatekeepers.</span>
+            <div className="pt-2 flex items-center justify-between">
+              <span className="text-xs text-slate-500 flex items-center gap-1.5">
+                <ShieldCheck className="w-3.5 h-3.5 text-slate-400" />
+                Peer-governed relationships
+              </span>
+              <Link to="/connections">
+                <Button variant="outline" size="sm">
+                  View Connections
+                </Button>
+              </Link>
             </div>
           </Card>
 
-          <Card className="border-slate-800 bg-slate-900/60 p-6 space-y-4">
+          <Card className="border-slate-800 bg-slate-900/60 p-6 space-y-4 hover:border-slate-700 transition-colors">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2.5">
                 <div className="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400">
@@ -176,14 +185,21 @@ export const DashboardPage: React.FC = () => {
                 </div>
                 <h4 className="font-bold text-white text-base">Discover Learning Partners</h4>
               </div>
-              <Badge variant="success" size="sm">Coming in Phase 3</Badge>
+              <Badge variant="success" size="sm">Smart Match</Badge>
             </div>
             <p className="text-xs text-slate-300 leading-relaxed">
-              Peer matching algorithm will connect your teaching skills and learning goals with compatible peers across your college and subject domains.
+              Find students whose teaching skills match what you want to learn, with transparent scoring and reciprocal skill matching.
             </p>
-            <div className="pt-2 text-xs text-slate-500 flex items-center gap-2">
-              <Target className="w-3.5 h-3.5 text-teal-400" />
-              <span>Matches based on your configured teaching and learning goals.</span>
+            <div className="pt-2 flex items-center justify-between">
+              <span className="text-xs text-slate-500 flex items-center gap-1.5">
+                <Target className="w-3.5 h-3.5 text-teal-400" />
+                Configurable weighted matching
+              </span>
+              <Link to="/discover">
+                <Button variant="primary" size="sm">
+                  Find Partners
+                </Button>
+              </Link>
             </div>
           </Card>
         </div>
