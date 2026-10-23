@@ -13,6 +13,7 @@ import { notificationRoutes } from './notification.routes.js';
 import { sessionRoutes } from './session.routes.js';
 import { resourceRoutes } from './resource.routes.js';
 import { dashboardRoutes } from './dashboard.routes.js';
+import { codeWorkspaceRouter } from './codeWorkspace.routes.js';
 
 const router = Router();
 
@@ -31,6 +32,7 @@ router.use('/notifications', notificationRoutes);
 router.use('/sessions', sessionRoutes);
 router.use('/resources', resourceRoutes);
 router.use('/dashboard', dashboardRoutes);
+router.use('/code-workspaces', codeWorkspaceRouter);
 
 export const apiRoutes = router;
 

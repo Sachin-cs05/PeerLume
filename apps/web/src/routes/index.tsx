@@ -16,6 +16,8 @@ import { ChatPage } from '../pages/ChatPage.js';
 import { SessionsPage } from '../pages/sessions/SessionsPage.js';
 import { SessionDetailPage } from '../pages/sessions/SessionDetailPage.js';
 import { WorkspacePage } from '../pages/workspace/WorkspacePage.js';
+import { CodeWorkspacesPage } from '../pages/code/CodeWorkspacesPage.js';
+import { CodeEditorPage } from '../pages/code/CodeEditorPage.js';
 import { ProtectedRoute } from '../components/guards/ProtectedRoute.js';
 import { GuestRoute } from '../components/guards/GuestRoute.js';
 
@@ -120,6 +122,22 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <WorkspacePage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'code',
+        element: (
+          <ProtectedRoute>
+            <CodeWorkspacesPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'code/:workspaceId',
+        element: (
+          <ProtectedRoute>
+            <CodeEditorPage />
           </ProtectedRoute>
         ),
       },

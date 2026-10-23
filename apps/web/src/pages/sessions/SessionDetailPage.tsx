@@ -23,6 +23,7 @@ import {
   Check,
   X,
   Target,
+  Code2,
 } from 'lucide-react';
 
 export const SessionDetailPage: React.FC = () => {
@@ -295,6 +296,14 @@ export const SessionDetailPage: React.FC = () => {
               <Link to={session.meetingUrl || `/chat?sessionTopic=${encodeURIComponent(session.topic)}`}>
                 <Button variant="primary" size="sm" leftIcon={<Video className="w-4 h-4" />}>
                   Join Video / Audio Call
+                </Button>
+              </Link>
+            )}
+
+            {session.status === 'ACCEPTED' && (
+              <Link to="/code">
+                <Button variant="outline" size="sm" leftIcon={<Code2 className="w-4 h-4 text-indigo-400" />}>
+                  Code Workspace
                 </Button>
               </Link>
             )}

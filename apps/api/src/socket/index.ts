@@ -354,6 +354,172 @@ export function initSocketIO(httpServer: HttpServer): SocketIOServer {
     });
 
     // -------------------------------------------------------------------------
+    // Phase 6: Collaborative Code Editor Real-Time Synchronization
+    // -------------------------------------------------------------------------
+    socket.on(SOCKET_EVENTS.CODE_JOIN, async (data: { workspaceId: string; documentId: string }, ack?: (res: any) => void) => {
+      try {
+        const { workspaceId, documentId } = data || {};
+        if (!workspaceId || !documentId) {
+          ack?.({ success: false, error: 'Workspace ID and Document ID required' });
+          return;
+        }
+
+        // Verify user is an authorized participant
+        const participant = await prisma.codeWorkspaceParticipant.findUnique({
+          where: {
+            workspaceId_userId: { workspaceId, userId },
+          },
+          include: {
+            workspace: { select: { creatorId: true } },
+          },
+        });
+
+        if (!participant) {
+          ack?.({ success: false, error: 'Unauthorized: You are not a collaborator in this workspace' });
+          return;
+        }
+
+        // Verify mutual block policy with workspace creator
+        if (participant.workspace.creatorId !== userId) {
+          const isBlocked = await prisma.userBlock.findFirst({
+            where: {
+              OR: [
+                { blockerId: userId, blockedId: participant.workspace.creatorId },
+                { blockerId: participant.workspace.creatorId, blockedId: userId },
+              ],
+            },
+          });
+          if (isBlocked) {
+            ack?.({ success: false, error: 'Access denied: Block policy violation' });
+            return;
+          }
+        }
+
+        const room = `code:${workspaceId}:${documentId}`;
+        socket.join(room);
+
+        // Fetch or initialize Y.Doc from memory/DB
+        const { codeSyncService } = await import('../services/codeSync.service.js');
+        const Y = await import('yjs');
+        const doc = await codeSyncService.getOrCreateDoc(workspaceId, documentId);
+
+        const docRecord = await prisma.codeDocument.findUnique({
+          where: { id: documentId },
+        });
+
+        const yText = doc.getText('monaco');
+        const stateUpdate = Y.encodeStateAsUpdate(doc);
+
+        socket.emit(SOCKET_EVENTS.CODE_SYNC_INIT, {
+          workspaceId,
+          documentId,
+          state: Array.from(stateUpdate),
+          content: yText.toString(),
+          language: docRecord?.language || 'typescript',
+          version: docRecord?.version || 1,
+          role: participant.role,
+        });
+
+        ack?.({ success: true, role: participant.role });
+        logger.info(`User ${userId} joined code room ${room} with role ${participant.role}`);
+      } catch (err: any) {
+        logger.error('Error handling code:workspace-join:', err);
+        ack?.({ success: false, error: err?.message || 'Failed to join workspace' });
+      }
+    });
+
+    socket.on(SOCKET_EVENTS.CODE_DOC_UPDATE, async (payload: { workspaceId: string; documentId: string; update: number[] }) => {
+      try {
+        if (!payload?.workspaceId || !payload?.documentId || !payload?.update) return;
+
+        // Check participant role
+        const participant = await prisma.codeWorkspaceParticipant.findUnique({
+          where: {
+            workspaceId_userId: { workspaceId: payload.workspaceId, userId },
+          },
+        });
+
+        if (!participant || participant.role === 'VIEWER') {
+          socket.emit(SOCKET_EVENTS.CODE_ERROR, {
+            documentId: payload.documentId,
+            message: 'Unauthorized: Viewers cannot make edits to code',
+          });
+          return;
+        }
+
+        const { codeSyncService } = await import('../services/codeSync.service.js');
+        const updateBytes = new Uint8Array(payload.update);
+        await codeSyncService.applyUpdate(
+          userId,
+          payload.workspaceId,
+          payload.documentId,
+          updateBytes,
+          participant.role
+        );
+
+        // Broadcast incremental CRDT update to other participants in this document room
+        const room = `code:${payload.workspaceId}:${payload.documentId}`;
+        socket.to(room).emit(SOCKET_EVENTS.CODE_DOC_UPDATE, payload);
+      } catch (err) {
+        logger.error('Error handling code:doc-update:', err);
+      }
+    });
+
+    socket.on(SOCKET_EVENTS.CODE_AWARENESS_UPDATE, (payload: { workspaceId: string; documentId: string; update: number[] }) => {
+      if (!payload?.workspaceId || !payload?.documentId || !payload?.update) return;
+      const room = `code:${payload.workspaceId}:${payload.documentId}`;
+      socket.to(room).emit(SOCKET_EVENTS.CODE_AWARENESS_UPDATE, payload);
+    });
+
+    socket.on(SOCKET_EVENTS.CODE_SAVE, async (payload: { workspaceId: string; documentId: string; description?: string }, ack?: (res: any) => void) => {
+      try {
+        if (!payload?.workspaceId || !payload?.documentId) {
+          ack?.({ success: false, error: 'Workspace ID and Document ID required' });
+          return;
+        }
+
+        const participant = await prisma.codeWorkspaceParticipant.findUnique({
+          where: {
+            workspaceId_userId: { workspaceId: payload.workspaceId, userId },
+          },
+        });
+
+        if (!participant || participant.role === 'VIEWER') {
+          ack?.({ success: false, error: 'Unauthorized: Viewers cannot save code' });
+          return;
+        }
+
+        const { codeSyncService } = await import('../services/codeSync.service.js');
+        const result = await codeSyncService.saveDocumentNow(
+          userId,
+          payload.workspaceId,
+          payload.documentId,
+          payload.description
+        );
+
+        const room = `code:${payload.workspaceId}:${payload.documentId}`;
+        io?.to(room).emit(SOCKET_EVENTS.CODE_SAVED, {
+          documentId: payload.documentId,
+          version: result.version,
+          savedAt: result.savedAt,
+        });
+
+        ack?.({ success: true, version: result.version, savedAt: result.savedAt });
+      } catch (err: any) {
+        logger.error('Error handling code:save:', err);
+        ack?.({ success: false, error: err?.message || 'Failed to save code' });
+      }
+    });
+
+    socket.on(SOCKET_EVENTS.CODE_LEAVE, (data: { workspaceId: string; documentId: string }) => {
+      if (data?.workspaceId && data?.documentId) {
+        const room = `code:${data.workspaceId}:${data.documentId}`;
+        socket.leave(room);
+        logger.info(`User ${userId} left code room ${room}`);
+      }
+    });
+
+    // -------------------------------------------------------------------------
     // Disconnection Handling
     // -------------------------------------------------------------------------
     socket.on('disconnect', () => {

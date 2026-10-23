@@ -568,4 +568,129 @@ export interface DashboardSummaryDto {
   recentResources: LearningResourceDto[];
 }
 
+// -----------------------------------------------------------------------------
+// Phase 6: Collaborative Code Workspace Types
+// -----------------------------------------------------------------------------
+
+export type WorkspaceRole = 'OWNER' | 'EDITOR' | 'VIEWER';
+
+export interface CodeWorkspaceParticipantDto {
+  id: string;
+  userId: string;
+  fullName: string;
+  avatarUrl?: string | null;
+  role: WorkspaceRole;
+  joinedAt: string;
+}
+
+export interface CodeDocumentDto {
+  id: string;
+  workspaceId: string;
+  title: string;
+  language: string;
+  content: string;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DocumentRevisionDto {
+  id: string;
+  workspaceId: string;
+  documentId: string;
+  content: string;
+  language: string;
+  description?: string | null;
+  createdById: string;
+  creatorName: string;
+  createdAt: string;
+}
+
+export interface CodeWorkspaceDto {
+  id: string;
+  title: string;
+  description?: string | null;
+  sessionId?: string | null;
+  sessionTitle?: string | null;
+  creatorId: string;
+  creatorName: string;
+  participants: CodeWorkspaceParticipantDto[];
+  documents: CodeDocumentDto[];
+  currentRole?: WorkspaceRole;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateCodeWorkspaceInput {
+  title: string;
+  description?: string;
+  sessionId?: string;
+  initialLanguage?: string;
+  initialContent?: string;
+  initialDocumentTitle?: string;
+  collaboratorIds?: string[];
+}
+
+export interface UpdateCodeWorkspaceInput {
+  title?: string;
+  description?: string;
+}
+
+export interface AddWorkspaceParticipantInput {
+  userId: string;
+  role?: WorkspaceRole;
+}
+
+export interface UpdateWorkspaceParticipantRoleInput {
+  role: WorkspaceRole;
+}
+
+export interface CreateCodeDocumentInput {
+  title: string;
+  language: string;
+  content?: string;
+}
+
+export interface UpdateCodeDocumentInput {
+  title?: string;
+  language?: string;
+}
+
+export interface SaveCodeDocumentInput {
+  content: string;
+  description?: string;
+}
+
+export interface CodeAwarenessUser {
+  userId: string;
+  name: string;
+  color: string;
+  avatar?: string | null;
+  cursor?: { line: number; column: number } | null;
+  selection?: { startLine: number; startColumn: number; endLine: number; endColumn: number } | null;
+}
+
+export interface CodeSyncInitPayload {
+  workspaceId: string;
+  documentId: string;
+  state: number[];
+  content: string;
+  language: string;
+  version: number;
+  role: WorkspaceRole;
+}
+
+export interface CodeDocUpdatePayload {
+  workspaceId: string;
+  documentId: string;
+  update: number[];
+}
+
+export interface CodeAwarenessUpdatePayload {
+  workspaceId: string;
+  documentId: string;
+  update: number[];
+}
+
+
 

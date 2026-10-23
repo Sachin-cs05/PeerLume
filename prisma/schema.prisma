@@ -57,6 +57,11 @@ model User {
   receivedResources     LearningResource[]    @relation("ReceivedResources")
   sessionReminders      SessionReminder[]     @relation("SessionReminders")
 
+  // Phase 6: Collaborative Code Workspaces
+  createdCodeWorkspaces        CodeWorkspace[]            @relation("CreatedCodeWorkspaces")
+  codeWorkspaceParticipations CodeWorkspaceParticipant[] @relation("CodeWorkspaceParticipants")
+  createdDocumentRevisions     DocumentRevision[]         @relation("DocumentRevisionsCreated")
+
   @@map("users")
 }
 
@@ -464,6 +469,7 @@ model LearningSession {
   rescheduleProposals RescheduleProposal[]
   resources           LearningResource[]
   reminders           SessionReminder[]
+  codeWorkspaces      CodeWorkspace[]      @relation("SessionWorkspaces")
 
   @@index([organizerId])
   @@index([startTime, endTime])
@@ -553,5 +559,89 @@ model SessionReminder {
   @@index([sessionId])
   @@map("session_reminders")
 }
+
+// -----------------------------------------------------------------------------
+// Phase 6: Real-Time Collaborative Code Editor Models
+// -----------------------------------------------------------------------------
+
+enum WorkspaceRole {
+  OWNER
+  EDITOR
+  VIEWER
+}
+
+model CodeWorkspace {
+  id          String   @id @default(uuid())
+  title       String
+  description String?  @db.Text
+  sessionId   String?  @map("session_id")
+  creatorId   String   @map("creator_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  creator      User                       @relation("CreatedCodeWorkspaces", fields: [creatorId], references: [id], onDelete: Cascade)
+  session      LearningSession?           @relation("SessionWorkspaces", fields: [sessionId], references: [id], onDelete: SetNull)
+  participants CodeWorkspaceParticipant[]
+  documents    CodeDocument[]
+  revisions    DocumentRevision[]
+
+  @@index([creatorId])
+  @@index([sessionId])
+  @@map("code_workspaces")
+}
+
+model CodeWorkspaceParticipant {
+  id          String        @id @default(uuid())
+  workspaceId String        @map("workspace_id")
+  userId      String        @map("user_id")
+  role        WorkspaceRole @default(EDITOR)
+  joinedAt    DateTime      @default(now()) @map("joined_at")
+
+  workspace CodeWorkspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  user      User          @relation("CodeWorkspaceParticipants", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, userId])
+  @@index([userId])
+  @@index([workspaceId])
+  @@map("code_workspace_participants")
+}
+
+model CodeDocument {
+  id          String   @id @default(uuid())
+  workspaceId String   @map("workspace_id")
+  title       String
+  language    String   @default("typescript")
+  content     String   @default("") @db.Text
+  yjsState    Bytes?   @map("yjs_state")
+  version     Int      @default(1)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  workspace CodeWorkspace      @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  revisions DocumentRevision[]
+
+  @@index([workspaceId])
+  @@map("code_documents")
+}
+
+model DocumentRevision {
+  id          String   @id @default(uuid())
+  workspaceId String   @map("workspace_id")
+  documentId  String   @map("document_id")
+  content     String   @db.Text
+  language    String
+  description String?
+  createdById String   @map("created_by_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  workspace CodeWorkspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  document  CodeDocument  @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  createdBy User          @relation("DocumentRevisionsCreated", fields: [createdById], references: [id], onDelete: Cascade)
+
+  @@index([documentId, createdAt])
+  @@index([workspaceId])
+  @@map("document_revisions")
+}
+
 
 

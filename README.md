@@ -437,9 +437,112 @@ $$\text{MatchScore} = \text{TeachToLearn} (50\%) + \text{Reciprocal} (25\%) + \t
   - Idempotent multi-window session reminders (60m and 15m) with DB-level deduplication.
   - Notes editor with auto-save, code snippets with whitespace preservation, and safe link sharing.
   - Secure file storage abstraction with UUID keys, MIME verification, path traversal prevention, and streaming downloads.
+---
+
+## 💻 Phase 6: Real-Time Collaborative Code Editor
+
+### 1. Collaborative Code Editor & Yjs CRDT Synchronization
+- **Monaco Editor Integration:** Embedded VS Code editing experience with syntax highlighting, custom dark theme (`peerlume-dark`), line numbers, indentation handling, bracket pair colorization, and word wrapping.
+- **Yjs CRDT Synchronization:** Genuine conflict-free concurrent editing via Yjs shared types (`doc.getText('monaco')`) bound directly to Monaco models via `y-monaco`. Incremental updates propagate in near real time without full document replacements.
+- **State Convergence & Reconnection:** State vectors and initial synchronizations (`Y.encodeStateAsUpdate`) allow peers and reconnecting clients to seamlessly converge to the identical state.
+- **Collaborative Awareness & Presence:** Real-time peer cursors, selection highlights, and presence avatars rendered with distinct peer colors and user identities.
+
+### 2. Workspace Roles, Permissions & Security
+- **Strict Role Hierarchy:**
+  - `OWNER`: Manages workspace settings, invites collaborators, modifies participant roles, creates documents, and deletes workspace.
+  - `EDITOR`: Real-time editing, document tab creation, and saving checkpoints.
+  - `VIEWER`: Read-only code inspection in Monaco editor. Update events and save requests are rejected at both API and Socket.IO layer (403 Forbidden).
+- **Abuse Prevention & Privacy:** Mutual block enforcement prevents blocked users from being invited, subscribing to document synchronization rooms, or viewing workspace code.
+
+### 3. PostgreSQL Document Persistence & Revision History
+- **Incremental & Debounced Persistence:** Debounced in-memory flushing (3s) and manual save checkpoints persist both plain text and binary Yjs CRDT snapshots to PostgreSQL.
+- **Graceful Shutdown:** All active collaborative documents in memory are cleanly flushed to PostgreSQL before server exit.
+- **Revision History Checkpoints:** Timestamped snapshot history tracking author, language, and descriptions with deliberate one-click restoration as a new revision.
+
+### 4. Code Execution Sandbox Boundary
+- **Truthful Security Architecture:** Arbitrary code execution inside Node.js or the server host is strictly disabled to prevent remote code execution or host resource escalation.
+- **Starter Templates & Reset:** Built-in starter templates for TypeScript, JavaScript, Python, Java, C++, HTML, CSS, JSON, and SQL with one-click reset with confirmation.
+
+### 5. Phase 6 API Endpoints & Real-Time Events
+
+#### REST Endpoints (`/api/code-workspaces`)
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/code-workspaces` | Create collaborative code workspace with starter document |
+| `GET` | `/api/code-workspaces` | List accessible workspaces for the current student |
+| `GET` | `/api/code-workspaces/:id` | Fetch workspace details, participants, documents, and active role |
+| `PATCH`| `/api/code-workspaces/:id` | Rename workspace or update description (owner only) |
+| `DELETE`| `/api/code-workspaces/:id` | Delete workspace and all associated documents (owner only) |
+| `POST` | `/api/code-workspaces/:id/participants` | Invite peer collaborator with role (owner only) |
+| `PATCH`| `/api/code-workspaces/:id/participants/:pId` | Update participant role between EDITOR and VIEWER (owner only) |
+| `DELETE`| `/api/code-workspaces/:id/participants/:pId` | Remove collaborator or leave workspace |
+| `POST` | `/api/code-workspaces/:id/documents` | Create new document tab in workspace (editor/owner) |
+| `PATCH`| `/api/code-workspaces/:id/documents/:docId` | Rename document tab or change language (editor/owner) |
+| `DELETE`| `/api/code-workspaces/:id/documents/:docId` | Delete document tab (cannot delete the only remaining file) |
+| `POST` | `/api/code-workspaces/:id/documents/:docId/save` | Explicitly save code and create versioned snapshot |
+| `GET` | `/api/code-workspaces/:id/documents/:docId/revisions` | View revision history for document |
+| `POST` | `/api/code-workspaces/:id/documents/:docId/revisions/:revId/restore` | Restore document to a prior checkpoint |
+
+#### Socket.IO Real-Time Collaborative Events
+- `code:workspace-join` — Authenticated room join with permission verification and initial CRDT sync.
+- `code:sync-init` — Delivers full initial document state vector and plain text fallback.
+- `code:doc-update` — Propagates incremental binary CRDT edits to room peers.
+- `code:awareness-update` — Propagates remote cursor positions and selection bounds.
+- `code:save` / `code:saved` — Requests manual save and broadcasts updated version to all participants.
+- `code:workspace-leave` — Cleans up presence and room membership.
+
+---
+
+## 🗺️ Phase Roadmap
+
+- [x] **Phase 1: Project Foundation**
+  - Monorepo structure (`@peerlume/shared`, `@peerlume/api`, `@peerlume/web`).
+  - Express API setup, Zod environment validation, graceful shutdown, health telemetry probe.
+  - PostgreSQL Prisma schema foundation.
+  - React + Vite + Tailwind CSS landing page with live telemetry and peer learning showcase.
+- [x] **Phase 2: Authentication & Student Profiles**
+  - Student registration with full academic background details and terms acceptance.
+  - Argon2id password hashing and secure HttpOnly cookie session management.
+  - Password recovery (forgot/reset password) with single-use hashed tokens and session revocation.
+  - Student email verification with token hashing and rate-limited resend flow.
+  - Persistent Student Profile system with editable fields, teaching skills, and learning goals.
+  - Public profile preview mode for students to inspect their peer visibility.
+  - Protected student dashboard placeholder and route guards (`ProtectedRoute`, `GuestRoute`).
+  - Automated integration test suite covering registration, validation, login, sessions, and route guards.
+- [x] **Phase 3: Friends, Connections & Smart Learning Partner Matching**
+  - Canonical friendship and bidirectional friend request system.
+  - Self-service mutual blocking with connection invalidation cascade.
+  - Saved learning partners bookmarking system.
+  - Explainable, weighted matching algorithm (Teach-to-Learn, Reciprocal, Goals, Language).
+  - Discover Learning Partners page (`/discover`) with smart matching & student directory.
+  - Friends & Connections page (`/connections`) with tabs for Friends, Requests, Saved, and Blocked.
+  - Public student profile preview modal (`StudentProfileModal`).
+  - Comprehensive automated tests (26/26 tests passing).
+- [x] **Phase 4: Real-Time Chat, Voice/Video Calls & Persistent Notifications**
+  - Persistent one-on-one private messaging with code snippet syntax formatting, link sharing, and typing indicators.
+  - Genuine WebRTC voice and video calls with Socket.IO signaling, STUN/TURN configuration, and screen sharing.
+  - Multi-tab presence management and user-specific room authorization.
+  - Persistent notification system with unread counters for messages, connections, and missed calls.
+  - Strict privacy enforcement: blocking halts messaging, calling, and notifications.
+  - 44/44 backend unit and integration tests passing.
+- [x] **Phase 5: Session Scheduling, Knowledge-Sharing Workspace & Learning Dashboard**
+  - Learning session lifecycle management (`PENDING`, `ACCEPTED`, `DECLINED`, `RESCHEDULE_REQUESTED`, `CANCELLED`, `COMPLETED`).
+  - UTC timestamps with preserved IANA time zones and bidirectional reschedule negotiation.
+  - Overlap availability conflict detection on client and server.
+  - Idempotent multi-window session reminders (60m and 15m) with DB-level deduplication.
+  - Notes editor with auto-save, code snippets with whitespace preservation, and safe link sharing.
+  - Secure file storage abstraction with UUID keys, MIME verification, path traversal prevention, and streaming downloads.
   - Transparent learning dashboard with real metrics for study hours, session totals, and chronological activity.
   - 60/60 automated tests passing across all suites.
-- [ ] **Phase 6: Collaborative Code Editor** *(Awaiting explicit user instruction)*
-  - Real-time collaborative code editor with language syntax highlighting.
-  - Shared coding sessions between learning partners.
+- [x] **Phase 6: Real-Time Collaborative Code Editor**
+  - Monaco code editor integration with syntax highlighting for 9 major programming languages.
+  - Real-time concurrent document synchronization using Yjs CRDTs over authenticated Socket.IO.
+  - Collaborative awareness tracking remote cursors, selections, and presence avatars.
+  - Explicit workspace role hierarchy (`OWNER`, `EDITOR`, `VIEWER`) enforced on both REST and WebSocket layers.
+  - PostgreSQL document persistence with debounced autosaving and versioned revision restoration.
+  - Isolated execution boundary with starter templates and zero arbitrary server-side code execution.
+  - 77/77 automated tests passing across all suites.
+- [ ] **Phase 7: Interactive Study Room & Shared Whiteboard** *(Awaiting explicit user instruction)*
+  - Group audio/video study circles.
+  - Interactive shared canvas/whiteboard for visual problem solving.
 

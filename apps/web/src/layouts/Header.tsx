@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Sparkles, Menu, X, Users, Compass, BookOpen, User, LogOut, LayoutDashboard, MessageSquare, Calendar } from 'lucide-react';
+import { Sparkles, Menu, X, Users, Compass, BookOpen, User, LogOut, LayoutDashboard, MessageSquare, Calendar, Code2 } from 'lucide-react';
 import { Badge } from '../components/ui/Badge.js';
 import { Button } from '../components/ui/Button.js';
 import { useAuth } from '../context/AuthContext.js';
@@ -31,8 +31,8 @@ export const Header: React.FC = () => {
               <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-200 to-brand-300 bg-clip-text text-transparent">
                 PeerLume
               </span>
-              <span className="hidden sm:inline-block ml-2 text-[10px] font-semibold text-emerald-400 tracking-wider uppercase px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
-                Phase 5
+              <span className="hidden sm:inline-block ml-2 text-[10px] font-semibold text-indigo-400 tracking-wider uppercase px-2 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20">
+                Phase 6
               </span>
             </div>
           </Link>
@@ -71,6 +71,14 @@ export const Header: React.FC = () => {
                 >
                   <BookOpen className="w-4 h-4 text-amber-400" />
                   <span>Workspace</span>
+                </Link>
+
+                <Link
+                  to="/code"
+                  className="flex items-center gap-2 text-sm text-slate-300 hover:text-white transition-colors"
+                >
+                  <Code2 className="w-4 h-4 text-indigo-400" />
+                  <span>Code</span>
                 </Link>
 
                 <Link
@@ -217,6 +225,13 @@ export const Header: React.FC = () => {
                 className="flex items-center justify-between py-2 text-sm font-medium text-slate-300"
               >
                 <span>Study Workspace</span>
+              </Link>
+              <Link
+                to="/code"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-between py-2 text-sm font-medium text-slate-300"
+              >
+                <span>Code Editor</span>
               </Link>
               <Link
                 to="/connections"

@@ -31,6 +31,12 @@ async function startServer(): Promise<void> {
   const shutdown = async (signal: string) => {
     logger.info(`Received ${signal}. Gracefully shutting down ${APP_NAME} API server...`);
     stopReminderScheduler();
+    try {
+      const { codeSyncService } = await import('./services/codeSync.service.js');
+      await codeSyncService.flushAll();
+    } catch (flushErr) {
+      logger.error('Error flushing collaborative documents on shutdown:', flushErr);
+    }
 
     if (server) {
       server.close(async () => {

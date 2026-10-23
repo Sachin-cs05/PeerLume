@@ -26,6 +26,16 @@ import type {
   CreateResourceInput,
   UpdateResourceInput,
   DashboardSummaryDto,
+  CodeWorkspaceDto,
+  CodeWorkspaceParticipantDto,
+  CodeDocumentDto,
+  DocumentRevisionDto,
+  CreateCodeWorkspaceInput,
+  UpdateCodeWorkspaceInput,
+  AddWorkspaceParticipantInput,
+  CreateCodeDocumentInput,
+  UpdateCodeDocumentInput,
+  WorkspaceRole,
 } from '@peerlume/shared';
 
 export const API_BASE_URL =
@@ -569,6 +579,94 @@ export const apiService = {
   dashboard: {
     async getSummary(): Promise<ApiResult<DashboardSummaryDto>> {
       return apiRequest<DashboardSummaryDto>('/dashboard/summary');
+    },
+  },
+
+  // Phase 6: Real-Time Collaborative Code Workspaces
+  codeWorkspaces: {
+    async list(): Promise<ApiResult<CodeWorkspaceDto[]>> {
+      return apiRequest<CodeWorkspaceDto[]>('/code-workspaces');
+    },
+
+    async get(workspaceId: string): Promise<ApiResult<CodeWorkspaceDto>> {
+      return apiRequest<CodeWorkspaceDto>(`/code-workspaces/${workspaceId}`);
+    },
+
+    async create(input: CreateCodeWorkspaceInput): Promise<ApiResult<CodeWorkspaceDto>> {
+      return apiRequest<CodeWorkspaceDto>('/code-workspaces', {
+        method: 'POST',
+        body: JSON.stringify(input),
+      });
+    },
+
+    async update(workspaceId: string, input: UpdateCodeWorkspaceInput): Promise<ApiResult<CodeWorkspaceDto>> {
+      return apiRequest<CodeWorkspaceDto>(`/code-workspaces/${workspaceId}`, {
+        method: 'PATCH',
+        body: JSON.stringify(input),
+      });
+    },
+
+    async delete(workspaceId: string): Promise<ApiResult<null>> {
+      return apiRequest<null>(`/code-workspaces/${workspaceId}`, {
+        method: 'DELETE',
+      });
+    },
+
+    async addParticipant(workspaceId: string, input: AddWorkspaceParticipantInput): Promise<ApiResult<CodeWorkspaceParticipantDto>> {
+      return apiRequest<CodeWorkspaceParticipantDto>(`/code-workspaces/${workspaceId}/participants`, {
+        method: 'POST',
+        body: JSON.stringify(input),
+      });
+    },
+
+    async updateParticipantRole(workspaceId: string, participantId: string, role: WorkspaceRole): Promise<ApiResult<CodeWorkspaceParticipantDto>> {
+      return apiRequest<CodeWorkspaceParticipantDto>(`/code-workspaces/${workspaceId}/participants/${participantId}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ role }),
+      });
+    },
+
+    async removeParticipant(workspaceId: string, participantId: string): Promise<ApiResult<null>> {
+      return apiRequest<null>(`/code-workspaces/${workspaceId}/participants/${participantId}`, {
+        method: 'DELETE',
+      });
+    },
+
+    async createDocument(workspaceId: string, input: CreateCodeDocumentInput): Promise<ApiResult<CodeDocumentDto>> {
+      return apiRequest<CodeDocumentDto>(`/code-workspaces/${workspaceId}/documents`, {
+        method: 'POST',
+        body: JSON.stringify(input),
+      });
+    },
+
+    async updateDocument(workspaceId: string, documentId: string, input: UpdateCodeDocumentInput): Promise<ApiResult<CodeDocumentDto>> {
+      return apiRequest<CodeDocumentDto>(`/code-workspaces/${workspaceId}/documents/${documentId}`, {
+        method: 'PATCH',
+        body: JSON.stringify(input),
+      });
+    },
+
+    async deleteDocument(workspaceId: string, documentId: string): Promise<ApiResult<null>> {
+      return apiRequest<null>(`/code-workspaces/${workspaceId}/documents/${documentId}`, {
+        method: 'DELETE',
+      });
+    },
+
+    async saveDocument(workspaceId: string, documentId: string, description?: string): Promise<ApiResult<{ version: number; savedAt: string }>> {
+      return apiRequest<{ version: number; savedAt: string }>(`/code-workspaces/${workspaceId}/documents/${documentId}/save`, {
+        method: 'POST',
+        body: JSON.stringify({ description }),
+      });
+    },
+
+    async listRevisions(workspaceId: string, documentId: string): Promise<ApiResult<DocumentRevisionDto[]>> {
+      return apiRequest<DocumentRevisionDto[]>(`/code-workspaces/${workspaceId}/documents/${documentId}/revisions`);
+    },
+
+    async restoreRevision(workspaceId: string, documentId: string, revisionId: string): Promise<ApiResult<CodeDocumentDto>> {
+      return apiRequest<CodeDocumentDto>(`/code-workspaces/${workspaceId}/documents/${documentId}/revisions/${revisionId}/restore`, {
+        method: 'POST',
+      });
     },
   },
 };

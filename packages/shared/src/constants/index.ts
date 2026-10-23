@@ -76,6 +76,21 @@ export const API_ENDPOINTS = {
     SUMMARY: '/api/dashboard/summary',
     ACTIVITY: '/api/dashboard/activity',
   },
+  CODE_WORKSPACES: {
+    ROOT: '/api/code-workspaces',
+    BY_ID: (id: string) => `/api/code-workspaces/${id}`,
+    PARTICIPANTS: (id: string) => `/api/code-workspaces/${id}/participants`,
+    PARTICIPANT_BY_ID: (id: string, participantId: string) =>
+      `/api/code-workspaces/${id}/participants/${participantId}`,
+    DOCUMENTS: (id: string) => `/api/code-workspaces/${id}/documents`,
+    DOCUMENT_BY_ID: (id: string, docId: string) =>
+      `/api/code-workspaces/${id}/documents/${docId}`,
+    REVISIONS: (id: string, docId: string) =>
+      `/api/code-workspaces/${id}/documents/${docId}/revisions`,
+    RESTORE_REVISION: (id: string, docId: string, revId: string) =>
+      `/api/code-workspaces/${id}/documents/${docId}/revisions/${revId}/restore`,
+    BY_SESSION: (sessionId: string) => `/api/code-workspaces/session/${sessionId}`,
+  },
 } as const;
 
 
@@ -109,7 +124,169 @@ export const SOCKET_EVENTS = {
   
   // Notifications
   NOTIFICATION_NEW: 'notification:new',
+
+  // Phase 6: Collaborative Code Editor
+  CODE_JOIN: 'code:workspace-join',
+  CODE_LEAVE: 'code:workspace-leave',
+  CODE_SYNC_INIT: 'code:sync-init',
+  CODE_DOC_UPDATE: 'code:doc-update',
+  CODE_AWARENESS_UPDATE: 'code:awareness-update',
+  CODE_SAVE: 'code:save',
+  CODE_SAVED: 'code:saved',
+  CODE_ERROR: 'code:error',
 } as const;
+
+export const SUPPORTED_LANGUAGES = [
+  { id: 'typescript', name: 'TypeScript', extension: 'ts' },
+  { id: 'javascript', name: 'JavaScript', extension: 'js' },
+  { id: 'python', name: 'Python', extension: 'py' },
+  { id: 'java', name: 'Java', extension: 'java' },
+  { id: 'cpp', name: 'C++', extension: 'cpp' },
+  { id: 'html', name: 'HTML', extension: 'html' },
+  { id: 'css', name: 'CSS', extension: 'css' },
+  { id: 'json', name: 'JSON', extension: 'json' },
+  { id: 'sql', name: 'SQL', extension: 'sql' },
+] as const;
+
+export const STARTER_TEMPLATES: Record<string, string> = {
+  typescript: `// PeerLume Collaborative TypeScript Workspace
+// Learn Together. Grow Together.
+
+interface Student {
+  name: string;
+  role: string;
+  goals: string[];
+}
+
+function greetStudent(student: Student): string {
+  return \`Welcome to PeerLume, \${student.name}! Ready to master \${student.goals.join(', ')}?\`;
+}
+
+const learner: Student = {
+  name: "Peer Learner",
+  role: "Collaborative Coder",
+  goals: ["TypeScript", "Full-Stack Development"]
+};
+
+console.log(greetStudent(learner));
+`,
+  javascript: `// PeerLume Collaborative JavaScript Workspace
+// Learn Together. Grow Together.
+
+function calculatePeerSynergy(peerA, peerB) {
+  const commonSkills = peerA.skills.filter(s => peerB.skills.includes(s));
+  return {
+    synergyScore: Math.round((commonSkills.length / Math.max(peerA.skills.length, peerB.skills.length)) * 100),
+    shared: commonSkills
+  };
+}
+
+const alice = { name: "Alice", skills: ["JavaScript", "React", "Node.js"] };
+const bob = { name: "Bob", skills: ["Python", "JavaScript", "React"] };
+
+console.log("Synergy:", calculatePeerSynergy(alice, bob));
+`,
+  python: `# PeerLume Collaborative Python Workspace
+# Learn Together. Grow Together.
+
+class LearningSession:
+    def __init__(self, topic: str, duration_mins: int):
+        self.topic = topic
+        self.duration_mins = duration_mins
+        self.participants = []
+
+    def add_peer(self, peer_name: str):
+        self.participants.append(peer_name)
+        print(f"🎉 {peer_name} joined the {self.topic} session!")
+
+session = LearningSession("Algorithms & Data Structures", 60)
+session.add_peer("Alex")
+session.add_peer("Sam")
+`,
+  java: `// PeerLume Collaborative Java Workspace
+// Learn Together. Grow Together.
+
+public class Main {
+    public static void main(String[] args) {
+        String greeting = "Welcome to PeerLume!";
+        System.out.println(greeting);
+        System.out.println("Learn Together. Grow Together.");
+    }
+}
+`,
+  cpp: `// PeerLume Collaborative C++ Workspace
+// Learn Together. Grow Together.
+
+#include <iostream>
+#include <vector>
+#include <string>
+
+int main() {
+    std::cout << "PeerLume C++ Collaborative Workspace" << std::endl;
+    std::cout << "Learn Together. Grow Together." << std::endl;
+    return 0;
+}
+`,
+  html: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PeerLume Collaborative Page</title>
+  <style>
+    body { font-family: sans-serif; background: #0f172a; color: #f8fafc; padding: 2rem; }
+    h1 { color: #6366f1; }
+  </style>
+</head>
+<body>
+  <h1>PeerLume</h1>
+  <p>Learn Together. Grow Together.</p>
+</body>
+</html>
+`,
+  css: `/* PeerLume Collaborative CSS Workspace */
+
+:root {
+  --primary-color: #6366f1;
+  --bg-dark: #0f172a;
+  --text-main: #f8fafc;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+}
+`,
+  json: `{
+  "platform": "PeerLume",
+  "tagline": "Learn Together. Grow Together.",
+  "module": "Phase 6: Real-Time Collaborative Code Editor",
+  "features": [
+    "Monaco Editor",
+    "Yjs CRDT Document Synchronization",
+    "Live Presence & Remote Cursors",
+    "Workspace Roles & Permissions",
+    "PostgreSQL Document Revisions"
+  ]
+}
+`,
+  sql: `-- PeerLume Collaborative SQL Workspace
+-- Learn Together. Grow Together.
+
+SELECT 
+    p.user_id,
+    p.college,
+    p.branch,
+    COUNT(s.id) AS completed_sessions
+FROM student_profiles p
+LEFT JOIN session_participants sp ON sp.user_id = p.user_id
+LEFT JOIN learning_sessions s ON s.id = sp.session_id AND s.status = 'COMPLETED'
+GROUP BY p.user_id, p.college, p.branch
+ORDER BY completed_sessions DESC;
+`,
+};
 
 export const HTTP_STATUS = {
   OK: 200,
