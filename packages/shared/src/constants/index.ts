@@ -52,7 +52,32 @@ export const API_ENDPOINTS = {
     READ: (notificationId: string) => `/api/notifications/${notificationId}/read`,
     READ_ALL: '/api/notifications/read-all',
   },
+  SESSIONS: {
+    ROOT: '/api/sessions',
+    BY_ID: (sessionId: string) => `/api/sessions/${sessionId}`,
+    ACCEPT: (sessionId: string) => `/api/sessions/${sessionId}/accept`,
+    DECLINE: (sessionId: string) => `/api/sessions/${sessionId}/decline`,
+    RESCHEDULE: (sessionId: string) => `/api/sessions/${sessionId}/reschedule`,
+    RESPOND_RESCHEDULE: (sessionId: string, proposalId: string) =>
+      `/api/sessions/${sessionId}/reschedule/${proposalId}`,
+    CANCEL: (sessionId: string) => `/api/sessions/${sessionId}/cancel`,
+    COMPLETE: (sessionId: string) => `/api/sessions/${sessionId}/complete`,
+    AVAILABILITY: '/api/sessions/availability',
+    CALENDAR: '/api/sessions/calendar',
+  },
+  RESOURCES: {
+    ROOT: '/api/resources',
+    BY_ID: (resourceId: string) => `/api/resources/${resourceId}`,
+    UPLOAD: '/api/resources/upload',
+    DOWNLOAD: (resourceId: string) => `/api/resources/${resourceId}/download`,
+    BY_SESSION: (sessionId: string) => `/api/sessions/${sessionId}/resources`,
+  },
+  DASHBOARD: {
+    SUMMARY: '/api/dashboard/summary',
+    ACTIVITY: '/api/dashboard/activity',
+  },
 } as const;
+
 
 export const SOCKET_EVENTS = {
   CONNECT: 'connect',

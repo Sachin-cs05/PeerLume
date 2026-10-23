@@ -18,6 +18,14 @@ import type {
   UserBlockDto,
   SavedPartnerDto,
   PaginatedResult,
+  LearningSessionDto,
+  CreateSessionInput,
+  ProposeRescheduleInput,
+  AvailabilityConflict,
+  LearningResourceDto,
+  CreateResourceInput,
+  UpdateResourceInput,
+  DashboardSummaryDto,
 } from '@peerlume/shared';
 
 export const API_BASE_URL =
@@ -39,7 +47,7 @@ export async function apiRequest<T>(
     const response = await fetch(url, {
       credentials: 'include', // Ensures HttpOnly cookies are transmitted
       headers: {
-        'Content-Type': 'application/json',
+        ...(options?.body instanceof FormData ? {} : { 'Content-Type': 'application/json' }),
         ...options?.headers,
       },
       ...options,
@@ -415,6 +423,152 @@ export const apiService = {
       return apiRequest<{ count: number }>('/notifications/read-all', {
         method: 'POST',
       });
+    },
+  },
+
+  // Phase 5: Session Scheduling & Calendar
+  sessions: {
+    async create(input: CreateSessionInput): Promise<ApiResult<LearningSessionDto>> {
+      return apiRequest<LearningSessionDto>('/sessions', {
+        method: 'POST',
+        body: JSON.stringify(input),
+      });
+    },
+
+    async list(params?: { status?: string; period?: 'upcoming' | 'past' }): Promise<ApiResult<LearningSessionDto[]>> {
+      const q = new URLSearchParams();
+      if (params?.status) q.set('status', params.status);
+      if (params?.period) q.set('period', params.period);
+      const queryStr = q.toString() ? `?${q.toString()}` : '';
+      return apiRequest<LearningSessionDto[]>(`/sessions${queryStr}`);
+    },
+
+    async get(sessionId: string): Promise<ApiResult<LearningSessionDto>> {
+      return apiRequest<LearningSessionDto>(`/sessions/${sessionId}`);
+    },
+
+    async accept(sessionId: string): Promise<ApiResult<LearningSessionDto>> {
+      return apiRequest<LearningSessionDto>(`/sessions/${sessionId}/accept`, {
+        method: 'POST',
+      });
+    },
+
+    async decline(sessionId: string, reason?: string): Promise<ApiResult<LearningSessionDto>> {
+      return apiRequest<LearningSessionDto>(`/sessions/${sessionId}/decline`, {
+        method: 'POST',
+        body: JSON.stringify({ reason }),
+      });
+    },
+
+    async proposeReschedule(sessionId: string, input: ProposeRescheduleInput): Promise<ApiResult<any>> {
+      return apiRequest<any>(`/sessions/${sessionId}/reschedule`, {
+        method: 'POST',
+        body: JSON.stringify(input),
+      });
+    },
+
+    async respondReschedule(sessionId: string, proposalId: string, action: 'ACCEPT' | 'REJECT'): Promise<ApiResult<LearningSessionDto>> {
+      return apiRequest<LearningSessionDto>(`/sessions/${sessionId}/reschedule/${proposalId}`, {
+        method: 'POST',
+        body: JSON.stringify({ action }),
+      });
+    },
+
+    async cancel(sessionId: string, reason?: string): Promise<ApiResult<LearningSessionDto>> {
+      return apiRequest<LearningSessionDto>(`/sessions/${sessionId}/cancel`, {
+        method: 'POST',
+        body: JSON.stringify({ reason }),
+      });
+    },
+
+    async complete(sessionId: string): Promise<ApiResult<LearningSessionDto>> {
+      return apiRequest<LearningSessionDto>(`/sessions/${sessionId}/complete`, {
+        method: 'POST',
+      });
+    },
+
+    async checkAvailability(startTime: string, endTime: string, excludeSessionId?: string): Promise<ApiResult<AvailabilityConflict>> {
+      const q = new URLSearchParams({ startTime, endTime });
+      if (excludeSessionId) q.set('excludeSessionId', excludeSessionId);
+      return apiRequest<AvailabilityConflict>(`/sessions/availability?${q.toString()}`);
+    },
+
+    async getCalendar(month?: number, year?: number): Promise<ApiResult<LearningSessionDto[]>> {
+      const q = new URLSearchParams();
+      if (month !== undefined) q.set('month', month.toString());
+      if (year !== undefined) q.set('year', year.toString());
+      const queryStr = q.toString() ? `?${q.toString()}` : '';
+      return apiRequest<LearningSessionDto[]>(`/sessions/calendar${queryStr}`);
+    },
+  },
+
+  // Phase 5: Knowledge-Sharing Workspace & Files
+  resources: {
+    async create(input: CreateResourceInput, file?: File): Promise<ApiResult<LearningResourceDto>> {
+      if (file) {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('type', input.type);
+        formData.append('title', input.title);
+        if (input.description) formData.append('description', input.description);
+        if (input.content) formData.append('content', input.content);
+        if (input.url) formData.append('url', input.url);
+        if (input.language) formData.append('language', input.language);
+        if (input.sessionId) formData.append('sessionId', input.sessionId);
+        if (input.targetUserId) formData.append('targetUserId', input.targetUserId);
+        if (input.isPrivate !== undefined) formData.append('isPrivate', String(input.isPrivate));
+
+        return apiRequest<LearningResourceDto>('/resources', {
+          method: 'POST',
+          body: formData,
+        });
+      }
+
+      return apiRequest<LearningResourceDto>('/resources', {
+        method: 'POST',
+        body: JSON.stringify(input),
+      });
+    },
+
+    async list(filters?: { type?: string; notesOnly?: boolean; sessionId?: string }): Promise<ApiResult<LearningResourceDto[]>> {
+      const q = new URLSearchParams();
+      if (filters?.type) q.set('type', filters.type);
+      if (filters?.notesOnly) q.set('notesOnly', 'true');
+      if (filters?.sessionId) q.set('sessionId', filters.sessionId);
+      const queryStr = q.toString() ? `?${q.toString()}` : '';
+      return apiRequest<LearningResourceDto[]>(`/resources${queryStr}`);
+    },
+
+    async get(resourceId: string): Promise<ApiResult<LearningResourceDto>> {
+      return apiRequest<LearningResourceDto>(`/resources/${resourceId}`);
+    },
+
+    async getSessionResources(sessionId: string): Promise<ApiResult<LearningResourceDto[]>> {
+      return apiRequest<LearningResourceDto[]>(`/resources/session/${sessionId}`);
+    },
+
+    async update(resourceId: string, input: UpdateResourceInput): Promise<ApiResult<LearningResourceDto>> {
+      return apiRequest<LearningResourceDto>(`/resources/${resourceId}`, {
+        method: 'PATCH',
+        body: JSON.stringify(input),
+      });
+    },
+
+    async delete(resourceId: string): Promise<ApiResult<null>> {
+      return apiRequest<null>(`/resources/${resourceId}`, {
+        method: 'DELETE',
+      });
+    },
+
+    getDownloadUrl(resourceId: string): string {
+      return `${API_BASE_URL}/resources/${resourceId}/download`;
+    },
+  },
+
+  // Phase 5: Learning Dashboard
+  dashboard: {
+    async getSummary(): Promise<ApiResult<DashboardSummaryDto>> {
+      return apiRequest<DashboardSummaryDto>('/dashboard/summary');
     },
   },
 };

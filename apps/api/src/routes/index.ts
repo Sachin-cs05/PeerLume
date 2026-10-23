@@ -10,6 +10,9 @@ import { studentRoutes } from './student.routes.js';
 import { conversationRoutes } from './conversation.routes.js';
 import { callRoutes } from './call.routes.js';
 import { notificationRoutes } from './notification.routes.js';
+import { sessionRoutes } from './session.routes.js';
+import { resourceRoutes } from './resource.routes.js';
+import { dashboardRoutes } from './dashboard.routes.js';
 
 const router = Router();
 
@@ -25,6 +28,9 @@ router.use('/students', studentRoutes);
 router.use('/conversations', conversationRoutes);
 router.use('/calls', callRoutes);
 router.use('/notifications', notificationRoutes);
+router.use('/sessions', sessionRoutes);
+router.use('/resources', resourceRoutes);
+router.use('/dashboard', dashboardRoutes);
 
 export const apiRoutes = router;
 

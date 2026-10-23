@@ -5,6 +5,7 @@ import { prisma } from './config/prisma.js';
 import { logger } from './utils/logger.js';
 import { APP_NAME, APP_TAGLINE } from '@peerlume/shared';
 import { initSocketIO } from './socket/index.js';
+import { startReminderScheduler, stopReminderScheduler } from './services/reminder.service.js';
 
 let server: Server;
 
@@ -13,6 +14,9 @@ async function startServer(): Promise<void> {
 
   // Initialize Socket.IO real-time engine
   initSocketIO(server);
+
+  // Initialize background session reminder scheduler
+  startReminderScheduler();
 
   server.listen(env.PORT, () => {
     logger.info(`✨ ${APP_NAME} API Server started successfully!`);
@@ -26,6 +30,7 @@ async function startServer(): Promise<void> {
 
   const shutdown = async (signal: string) => {
     logger.info(`Received ${signal}. Gracefully shutting down ${APP_NAME} API server...`);
+    stopReminderScheduler();
 
     if (server) {
       server.close(async () => {

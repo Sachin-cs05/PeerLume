@@ -49,6 +49,14 @@ model User {
   notificationsReceived  Notification[]  @relation("NotificationsReceived")
   notificationsTriggered Notification[]  @relation("NotificationsTriggered")
 
+  // Phase 5: Sessions, Resources, Notes & Reminders
+  organizedSessions     LearningSession[]     @relation("OrganizedSessions")
+  sessionParticipations SessionParticipant[]  @relation("SessionParticipations")
+  rescheduleProposals   RescheduleProposal[]  @relation("RescheduleProposals")
+  createdResources      LearningResource[]    @relation("CreatedResources")
+  receivedResources     LearningResource[]    @relation("ReceivedResources")
+  sessionReminders      SessionReminder[]     @relation("SessionReminders")
+
   @@map("users")
 }
 
@@ -301,6 +309,13 @@ enum NotificationType {
   NEW_MESSAGE
   CALL_INCOMING
   CALL_MISSED
+  SESSION_INVITATION_RECEIVED
+  SESSION_INVITATION_ACCEPTED
+  SESSION_INVITATION_DECLINED
+  SESSION_RESCHEDULE_PROPOSED
+  SESSION_RESCHEDULE_RESOLVED
+  SESSION_CANCELLED
+  SESSION_REMINDER
 }
 
 model Conversation {
@@ -382,4 +397,161 @@ model Notification {
   @@index([userId, createdAt])
   @@map("notifications")
 }
+
+// -----------------------------------------------------------------------------
+// Phase 5: Sessions, Calendars, Resources & Reminders
+// -----------------------------------------------------------------------------
+
+enum SessionMode {
+  ONLINE
+  IN_PERSON
+}
+
+enum SessionStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  RESCHEDULE_REQUESTED
+  CANCELLED
+  COMPLETED
+}
+
+enum ParticipantRole {
+  ORGANIZER
+  INVITEE
+}
+
+enum ParticipantStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+enum RescheduleStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum ResourceType {
+  NOTE
+  LINK
+  CODE
+  DOCUMENT
+}
+
+model LearningSession {
+  id           String        @id @default(uuid())
+  organizerId  String        @map("organizer_id")
+  title        String
+  topic        String
+  description  String?       @db.Text
+  objectives   String?       @db.Text
+  startTime    DateTime      @map("start_time") // UTC
+  endTime      DateTime      @map("end_time")   // UTC
+  timeZone     String        @default("UTC") @map("time_zone")
+  mode         SessionMode   @default(ONLINE)
+  location     String?       @map("location")
+  meetingUrl   String?       @map("meeting_url")
+  status       SessionStatus @default(PENDING)
+  cancelReason String?       @map("cancel_reason")
+  notes        String?       @db.Text
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+
+  organizer           User                 @relation("OrganizedSessions", fields: [organizerId], references: [id], onDelete: Cascade)
+  participants        SessionParticipant[]
+  rescheduleProposals RescheduleProposal[]
+  resources           LearningResource[]
+  reminders           SessionReminder[]
+
+  @@index([organizerId])
+  @@index([startTime, endTime])
+  @@index([status])
+  @@map("learning_sessions")
+}
+
+model SessionParticipant {
+  id             String            @id @default(uuid())
+  sessionId      String            @map("session_id")
+  userId         String            @map("user_id")
+  role           ParticipantRole   @default(INVITEE)
+  status         ParticipantStatus @default(PENDING)
+  declinedReason String?           @map("declined_reason")
+  createdAt      DateTime          @default(now()) @map("created_at")
+  updatedAt      DateTime          @updatedAt @map("updated_at")
+
+  session LearningSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  user    User            @relation("SessionParticipations", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, userId])
+  @@index([userId, status])
+  @@index([sessionId])
+  @@map("session_participants")
+}
+
+model RescheduleProposal {
+  id                String           @id @default(uuid())
+  sessionId         String           @map("session_id")
+  proposerId        String           @map("proposer_id")
+  proposedStartTime DateTime         @map("proposed_start_time")
+  proposedEndTime   DateTime         @map("proposed_end_time")
+  proposedTimeZone  String           @map("proposed_time_zone")
+  reason            String?          @map("reason")
+  status            RescheduleStatus @default(PENDING)
+  createdAt         DateTime         @default(now()) @map("created_at")
+  updatedAt         DateTime         @updatedAt @map("updated_at")
+
+  session  LearningSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  proposer User            @relation("RescheduleProposals", fields: [proposerId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@map("reschedule_proposals")
+}
+
+model LearningResource {
+  id           String       @id @default(uuid())
+  creatorId    String       @map("creator_id")
+  sessionId    String?      @map("session_id")
+  targetUserId String?      @map("target_user_id")
+  type         ResourceType @default(NOTE)
+  title        String
+  description  String?      @db.Text
+  content      String?      @db.Text
+  url          String?
+  language     String?
+  fileKey      String?      @map("file_key")
+  fileName     String?      @map("file_name")
+  fileSize     Int?         @map("file_size")
+  mimeType     String?      @map("mime_type")
+  isPrivate    Boolean      @default(false) @map("is_private")
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+
+  creator    User             @relation("CreatedResources", fields: [creatorId], references: [id], onDelete: Cascade)
+  session    LearningSession? @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  targetUser User?            @relation("ReceivedResources", fields: [targetUserId], references: [id], onDelete: SetNull)
+
+  @@index([creatorId])
+  @@index([sessionId])
+  @@index([targetUserId])
+  @@map("learning_resources")
+}
+
+model SessionReminder {
+  id            String   @id @default(uuid())
+  sessionId     String   @map("session_id")
+  userId        String   @map("user_id")
+  minutesBefore Int      @map("minutes_before")
+  sentAt        DateTime @default(now()) @map("sent_at")
+
+  session LearningSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  user    User            @relation("SessionReminders", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, userId, minutesBefore])
+  @@index([userId])
+  @@index([sessionId])
+  @@map("session_reminders")
+}
+
 

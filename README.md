@@ -333,6 +333,71 @@ $$\text{MatchScore} = \text{TeachToLearn} (50\%) + \text{Reciprocal} (25\%) + \t
 
 ---
 
+## 📅 Phase 5: Session Scheduling, Knowledge-Sharing Workspace & Learning Dashboard
+
+### 1. Learning Session Scheduling & Reschedule Workflow
+- **Session Lifecycle & Management:** Full state machine (`PENDING`, `ACCEPTED`, `DECLINED`, `RESCHEDULE_REQUESTED`, `CANCELLED`, `COMPLETED`).
+- **Flexible Modes:** Online sessions with seamless Phase 4 real-time call integration, or in-person sessions with privacy-conscious location fields visible only to confirmed participants.
+- **Strict Timezone Handling:** Timestamps are stored uniformly in UTC `TIMESTAMP(3)` alongside preserved IANA timezone strings (`timeZone`), preventing date drift or daylight savings distortion.
+- **Availability Conflict Detection:** Proactive server-side and client-side overlapping session checks preventing double-booking across participants.
+- **Multi-Party Reschedule Negotiation:** Either organizer or invitee can propose new dates/times. The existing accepted schedule remains authoritative until all participants accept or reject the proposal.
+- **Automated Notifications & Reminders:** Real-time and persistent alerts on invitations, acceptance, declines, cancellations, and reschedules. Built-in idempotent reminder runner (60m and 15m intervals) with database-level uniqueness (`[sessionId, userId, minutesBefore]`).
+
+### 2. Knowledge-Sharing Workspace & Safe File Sharing
+- **Notes Editor:** Interactive rich text notes with title, markdown styling, auto-save status feedback, and strict student ownership permissions.
+- **Safe Link Sharing:** URL format validation with strict scheme checks (accepts only `http:` and `https:`, rejects dangerous protocols like `javascript:`).
+- **Code Snippets:** Syntax highlighting for multiple languages, whitespace preservation, and zero server-side code execution.
+- **Secure File Storage:** Private document upload/download abstraction with:
+  - Cryptographic UUID storage keys (original filenames sanitized and saved in metadata).
+  - Server-side MIME type and extension validation (PDF, DOCX, TXT, MD, images up to 15MB).
+  - Path-traversal defense (`path.basename` isolation within `uploads/workspace`).
+  - Participant-authorized streaming downloads with `Content-Disposition` attachment headers.
+  - Session privacy: session-attached resources are restricted to valid participants; private resources are accessible only by the creator.
+
+### 3. Transparent Learning Dashboard
+- **Real Database Aggregates:** Zero fabricated metrics or hardcoded progress percentages.
+- **Key Metrics:**
+  - **Study Hours:** Accurately calculated strictly from duration of sessions with `COMPLETED` status.
+  - **Upcoming & Past Sessions:** Active accepted and pending invitations.
+  - **Skills & Goals:** Live overview of user's teaching skills and learning objectives.
+  - **Chronological Activity Feed:** Unified timeline of recent sessions, invitations, and workspace contributions.
+
+### 4. Phase 5 API Endpoints
+
+#### Learning Sessions (`/api/sessions`)
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/sessions` | Create a new learning session and send invitations |
+| `GET` | `/api/sessions` | List sessions with filters (`scope=upcoming\|past\|invitations\|all`, `status`) |
+| `GET` | `/api/sessions/:id` | Get detailed session information, participants, and reschedule proposals |
+| `PATCH`| `/api/sessions/:id` | Update session details (organizer only) |
+| `POST` | `/api/sessions/:id/accept` | Accept a pending session invitation |
+| `POST` | `/api/sessions/:id/decline` | Decline a pending session invitation |
+| `POST` | `/api/sessions/:id/reschedule` | Propose a new session date/time, or accept/reject an existing proposal |
+| `POST` | `/api/sessions/:id/cancel` | Cancel a scheduled session |
+| `POST` | `/api/sessions/:id/complete` | Mark an accepted session as completed |
+| `GET` | `/api/sessions/availability` | Check date/time availability and detect overlapping session conflicts |
+| `GET` | `/api/calendar/sessions` | Fetch sessions within a specific date range for calendar views |
+
+#### Knowledge-Sharing Workspace (`/api/resources`)
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/resources` | List accessible workspace resources (notes, links, code, documents) |
+| `POST` | `/api/resources` | Create a new resource or upload a document (multipart/form-data) |
+| `GET` | `/api/resources/:id` | Retrieve resource details with participant access control |
+| `PATCH`| `/api/resources/:id` | Update note content, link, or code snippet (creator only) |
+| `DELETE`| `/api/resources/:id` | Delete resource and associated stored file (creator only) |
+| `GET` | `/api/resources/:id/download` | Securely download attached document file |
+| `GET` | `/api/sessions/:sessionId/resources` | Fetch resources specifically attached to a session |
+
+#### Learning Dashboard (`/api/dashboard`)
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/dashboard/summary` | Retrieve personalized learning metrics, session counts, and study hours |
+| `GET` | `/api/dashboard/activity` | Retrieve chronological timeline of student learning activities |
+
+---
+
 ## 🗺️ Phase Roadmap
 
 - [x] **Phase 1: Project Foundation**
@@ -365,8 +430,16 @@ $$\text{MatchScore} = \text{TeachToLearn} (50\%) + \text{Reciprocal} (25\%) + \t
   - Persistent notification system with unread counters for messages, connections, and missed calls.
   - Strict privacy enforcement: blocking halts messaging, calling, and notifications.
   - 44/44 backend unit and integration tests passing.
-- [ ] **Phase 5: Collaborative Study Circles & Knowledge Workspace** *(Awaiting explicit user instruction)*
-  - Scheduled study sessions and group learning rooms.
-  - Real-time collaborative code editor and shared whiteboard.
-  - Learning resources repository.
+- [x] **Phase 5: Session Scheduling, Knowledge-Sharing Workspace & Learning Dashboard**
+  - Learning session lifecycle management (`PENDING`, `ACCEPTED`, `DECLINED`, `RESCHEDULE_REQUESTED`, `CANCELLED`, `COMPLETED`).
+  - UTC timestamps with preserved IANA time zones and bidirectional reschedule negotiation.
+  - Overlap availability conflict detection on client and server.
+  - Idempotent multi-window session reminders (60m and 15m) with DB-level deduplication.
+  - Notes editor with auto-save, code snippets with whitespace preservation, and safe link sharing.
+  - Secure file storage abstraction with UUID keys, MIME verification, path traversal prevention, and streaming downloads.
+  - Transparent learning dashboard with real metrics for study hours, session totals, and chronological activity.
+  - 60/60 automated tests passing across all suites.
+- [ ] **Phase 6: Collaborative Code Editor** *(Awaiting explicit user instruction)*
+  - Real-time collaborative code editor with language syntax highlighting.
+  - Shared coding sessions between learning partners.
 

@@ -374,7 +374,14 @@ export type NotificationType =
   | 'FRIEND_REQUEST_ACCEPTED'
   | 'NEW_MESSAGE'
   | 'CALL_INCOMING'
-  | 'CALL_MISSED';
+  | 'CALL_MISSED'
+  | 'SESSION_INVITATION_RECEIVED'
+  | 'SESSION_INVITATION_ACCEPTED'
+  | 'SESSION_INVITATION_DECLINED'
+  | 'SESSION_RESCHEDULE_PROPOSED'
+  | 'SESSION_RESCHEDULE_RESOLVED'
+  | 'SESSION_CANCELLED'
+  | 'SESSION_REMINDER';
 
 export interface NotificationDto {
   id: string;
@@ -396,4 +403,169 @@ export interface IceServerConfig {
   username?: string;
   credential?: string;
 }
+
+// -----------------------------------------------------------------------------
+// Phase 5: Sessions, Calendar, Workspace & Dashboard Types
+// -----------------------------------------------------------------------------
+
+export type SessionMode = 'ONLINE' | 'IN_PERSON';
+export type SessionStatus =
+  | 'PENDING'
+  | 'ACCEPTED'
+  | 'DECLINED'
+  | 'RESCHEDULE_REQUESTED'
+  | 'CANCELLED'
+  | 'COMPLETED';
+
+export type ParticipantRole = 'ORGANIZER' | 'INVITEE';
+export type ParticipantStatus = 'PENDING' | 'ACCEPTED' | 'DECLINED';
+export type RescheduleStatus = 'PENDING' | 'ACCEPTED' | 'REJECTED';
+export type ResourceType = 'NOTE' | 'LINK' | 'CODE' | 'DOCUMENT';
+
+export interface SessionParticipantDto {
+  id: string;
+  userId: string;
+  fullName: string;
+  avatarUrl?: string | null;
+  college?: string | null;
+  role: ParticipantRole;
+  status: ParticipantStatus;
+  declinedReason?: string | null;
+}
+
+export interface RescheduleProposalDto {
+  id: string;
+  sessionId: string;
+  proposerId: string;
+  proposerName: string;
+  proposedStartTime: string;
+  proposedEndTime: string;
+  proposedTimeZone: string;
+  reason?: string | null;
+  status: RescheduleStatus;
+  createdAt: string;
+}
+
+export interface LearningSessionDto {
+  id: string;
+  organizerId: string;
+  organizerName: string;
+  organizerAvatar?: string | null;
+  title: string;
+  topic: string;
+  description?: string | null;
+  objectives?: string | null;
+  startTime: string; // UTC ISO
+  endTime: string;   // UTC ISO
+  timeZone: string;
+  mode: SessionMode;
+  location?: string | null;
+  meetingUrl?: string | null;
+  status: SessionStatus;
+  cancelReason?: string | null;
+  notes?: string | null;
+  participants: SessionParticipantDto[];
+  rescheduleProposals?: RescheduleProposalDto[];
+  resourcesCount?: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateSessionInput {
+  title: string;
+  topic: string;
+  description?: string;
+  objectives?: string;
+  startTime: string; // UTC ISO
+  endTime: string;   // UTC ISO
+  timeZone?: string;
+  mode?: SessionMode;
+  location?: string;
+  inviteeIds: string[];
+  notes?: string;
+}
+
+export interface ProposeRescheduleInput {
+  proposedStartTime: string;
+  proposedEndTime: string;
+  proposedTimeZone?: string;
+  reason?: string;
+}
+
+export interface AvailabilityConflict {
+  hasConflict: boolean;
+  conflictingSessions: {
+    id: string;
+    title: string;
+    startTime: string;
+    endTime: string;
+  }[];
+}
+
+export interface LearningResourceDto {
+  id: string;
+  creatorId: string;
+  creatorName: string;
+  creatorAvatar?: string | null;
+  sessionId?: string | null;
+  sessionTitle?: string | null;
+  targetUserId?: string | null;
+  type: ResourceType;
+  title: string;
+  description?: string | null;
+  content?: string | null;
+  url?: string | null;
+  language?: string | null;
+  fileKey?: string | null;
+  fileName?: string | null;
+  fileSize?: number | null;
+  mimeType?: string | null;
+  isPrivate: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateResourceInput {
+  sessionId?: string;
+  targetUserId?: string;
+  type: ResourceType;
+  title: string;
+  description?: string;
+  content?: string;
+  url?: string;
+  language?: string;
+  isPrivate?: boolean;
+}
+
+export interface UpdateResourceInput {
+  title?: string;
+  description?: string;
+  content?: string;
+  url?: string;
+  language?: string;
+  isPrivate?: boolean;
+}
+
+export interface ActivityItemDto {
+  id: string;
+  type: 'SESSION' | 'RESOURCE' | 'CONNECTION' | 'GOAL';
+  title: string;
+  description?: string;
+  timestamp: string;
+}
+
+export interface DashboardSummaryDto {
+  upcomingSessionsCount: number;
+  pendingInvitationsCount: number;
+  completedSessionsCount: number;
+  totalStudyHours: number;
+  learningGoalsCount: number;
+  teachingSkillsCount: number;
+  sharedResourcesCount: number;
+  recentActivity: ActivityItemDto[];
+  upcomingSessions: LearningSessionDto[];
+  pendingInvitations: LearningSessionDto[];
+  recentResources: LearningResourceDto[];
+}
+
 

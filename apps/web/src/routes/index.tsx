@@ -13,6 +13,9 @@ import { ProfileEditPage } from '../pages/profile/ProfileEditPage.js';
 import { DiscoverPage } from '../pages/discovery/DiscoverPage.js';
 import { ConnectionsPage } from '../pages/connections/ConnectionsPage.js';
 import { ChatPage } from '../pages/ChatPage.js';
+import { SessionsPage } from '../pages/sessions/SessionsPage.js';
+import { SessionDetailPage } from '../pages/sessions/SessionDetailPage.js';
+import { WorkspacePage } from '../pages/workspace/WorkspacePage.js';
 import { ProtectedRoute } from '../components/guards/ProtectedRoute.js';
 import { GuestRoute } from '../components/guards/GuestRoute.js';
 
@@ -93,6 +96,30 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <ChatPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'sessions',
+        element: (
+          <ProtectedRoute>
+            <SessionsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'sessions/:sessionId',
+        element: (
+          <ProtectedRoute>
+            <SessionDetailPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'workspace',
+        element: (
+          <ProtectedRoute>
+            <WorkspacePage />
           </ProtectedRoute>
         ),
       },
