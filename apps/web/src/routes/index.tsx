@@ -1,3 +1,4 @@
+import React, { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import { RootLayout } from '../layouts/RootLayout.js';
 import { LandingPage } from '../pages/LandingPage.js';
@@ -7,21 +8,36 @@ import { RegisterPage } from '../pages/auth/RegisterPage.js';
 import { ForgotPasswordPage } from '../pages/auth/ForgotPasswordPage.js';
 import { ResetPasswordPage } from '../pages/auth/ResetPasswordPage.js';
 import { VerifyEmailPage } from '../pages/auth/VerifyEmailPage.js';
-import { DashboardPage } from '../pages/dashboard/DashboardPage.js';
-import { ProfileViewPage } from '../pages/profile/ProfileViewPage.js';
-import { ProfileEditPage } from '../pages/profile/ProfileEditPage.js';
-import { DiscoverPage } from '../pages/discovery/DiscoverPage.js';
-import { ConnectionsPage } from '../pages/connections/ConnectionsPage.js';
-import { ChatPage } from '../pages/ChatPage.js';
-import { SessionsPage } from '../pages/sessions/SessionsPage.js';
-import { SessionDetailPage } from '../pages/sessions/SessionDetailPage.js';
-import { WorkspacePage } from '../pages/workspace/WorkspacePage.js';
-import { CodeWorkspacesPage } from '../pages/code/CodeWorkspacesPage.js';
-import { CodeEditorPage } from '../pages/code/CodeEditorPage.js';
-import { StudyRoomsPage } from '../pages/study-rooms/StudyRoomsPage.js';
-import { StudyRoomPage } from '../pages/study-rooms/StudyRoomPage.js';
 import { ProtectedRoute } from '../components/guards/ProtectedRoute.js';
 import { GuestRoute } from '../components/guards/GuestRoute.js';
+import { Spinner } from '../components/ui/Spinner.js';
+
+// Lazy-load heavier student workflow pages
+const DashboardPage = lazy(() => import('../pages/dashboard/DashboardPage.js').then((m) => ({ default: m.DashboardPage })));
+const ProfileViewPage = lazy(() => import('../pages/profile/ProfileViewPage.js').then((m) => ({ default: m.ProfileViewPage })));
+const ProfileEditPage = lazy(() => import('../pages/profile/ProfileEditPage.js').then((m) => ({ default: m.ProfileEditPage })));
+const DiscoverPage = lazy(() => import('../pages/discovery/DiscoverPage.js').then((m) => ({ default: m.DiscoverPage })));
+const ConnectionsPage = lazy(() => import('../pages/connections/ConnectionsPage.js').then((m) => ({ default: m.ConnectionsPage })));
+const ChatPage = lazy(() => import('../pages/ChatPage.js').then((m) => ({ default: m.ChatPage })));
+const SessionsPage = lazy(() => import('../pages/sessions/SessionsPage.js').then((m) => ({ default: m.SessionsPage })));
+const SessionDetailPage = lazy(() => import('../pages/sessions/SessionDetailPage.js').then((m) => ({ default: m.SessionDetailPage })));
+const WorkspacePage = lazy(() => import('../pages/workspace/WorkspacePage.js').then((m) => ({ default: m.WorkspacePage })));
+const CodeWorkspacesPage = lazy(() => import('../pages/code/CodeWorkspacesPage.js').then((m) => ({ default: m.CodeWorkspacesPage })));
+const CodeEditorPage = lazy(() => import('../pages/code/CodeEditorPage.js').then((m) => ({ default: m.CodeEditorPage })));
+const StudyRoomsPage = lazy(() => import('../pages/study-rooms/StudyRoomsPage.js').then((m) => ({ default: m.StudyRoomsPage })));
+const StudyRoomPage = lazy(() => import('../pages/study-rooms/StudyRoomPage.js').then((m) => ({ default: m.StudyRoomPage })));
+
+const PageSuspense: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <Suspense
+    fallback={
+      <div className="flex items-center justify-center min-h-[60vh] py-16" aria-busy="true" aria-label="Loading page content">
+        <Spinner size="lg" label="Loading..." />
+      </div>
+    }
+  >
+    {children}
+  </Suspense>
+);
 
 export const router = createBrowserRouter([
   {
@@ -70,12 +86,14 @@ export const router = createBrowserRouter([
         path: 'verify-email',
         element: <VerifyEmailPage />,
       },
-      // Protected Student routes
+      // Protected Student routes (lazy-loaded with PageSuspense)
       {
         path: 'dashboard',
         element: (
           <ProtectedRoute>
-            <DashboardPage />
+            <PageSuspense>
+              <DashboardPage />
+            </PageSuspense>
           </ProtectedRoute>
         ),
       },
@@ -83,7 +101,9 @@ export const router = createBrowserRouter([
         path: 'discover',
         element: (
           <ProtectedRoute>
-            <DiscoverPage />
+            <PageSuspense>
+              <DiscoverPage />
+            </PageSuspense>
           </ProtectedRoute>
         ),
       },
@@ -91,7 +111,9 @@ export const router = createBrowserRouter([
         path: 'connections',
         element: (
           <ProtectedRoute>
-            <ConnectionsPage />
+            <PageSuspense>
+              <ConnectionsPage />
+            </PageSuspense>
           </ProtectedRoute>
         ),
       },
@@ -99,7 +121,9 @@ export const router = createBrowserRouter([
         path: 'chat',
         element: (
           <ProtectedRoute>
-            <ChatPage />
+            <PageSuspense>
+              <ChatPage />
+            </PageSuspense>
           </ProtectedRoute>
         ),
       },
@@ -107,7 +131,9 @@ export const router = createBrowserRouter([
         path: 'sessions',
         element: (
           <ProtectedRoute>
-            <SessionsPage />
+            <PageSuspense>
+              <SessionsPage />
+            </PageSuspense>
           </ProtectedRoute>
         ),
       },
@@ -115,7 +141,9 @@ export const router = createBrowserRouter([
         path: 'sessions/:sessionId',
         element: (
           <ProtectedRoute>
-            <SessionDetailPage />
+            <PageSuspense>
+              <SessionDetailPage />
+            </PageSuspense>
           </ProtectedRoute>
         ),
       },
@@ -123,7 +151,9 @@ export const router = createBrowserRouter([
         path: 'workspace',
         element: (
           <ProtectedRoute>
-            <WorkspacePage />
+            <PageSuspense>
+              <WorkspacePage />
+            </PageSuspense>
           </ProtectedRoute>
         ),
       },
@@ -131,7 +161,9 @@ export const router = createBrowserRouter([
         path: 'code',
         element: (
           <ProtectedRoute>
-            <CodeWorkspacesPage />
+            <PageSuspense>
+              <CodeWorkspacesPage />
+            </PageSuspense>
           </ProtectedRoute>
         ),
       },
@@ -139,7 +171,9 @@ export const router = createBrowserRouter([
         path: 'code/:workspaceId',
         element: (
           <ProtectedRoute>
-            <CodeEditorPage />
+            <PageSuspense>
+              <CodeEditorPage />
+            </PageSuspense>
           </ProtectedRoute>
         ),
       },
@@ -147,7 +181,9 @@ export const router = createBrowserRouter([
         path: 'study-rooms',
         element: (
           <ProtectedRoute>
-            <StudyRoomsPage />
+            <PageSuspense>
+              <StudyRoomsPage />
+            </PageSuspense>
           </ProtectedRoute>
         ),
       },
@@ -155,7 +191,9 @@ export const router = createBrowserRouter([
         path: 'study-rooms/:roomId',
         element: (
           <ProtectedRoute>
-            <StudyRoomPage />
+            <PageSuspense>
+              <StudyRoomPage />
+            </PageSuspense>
           </ProtectedRoute>
         ),
       },
@@ -163,7 +201,9 @@ export const router = createBrowserRouter([
         path: 'profile',
         element: (
           <ProtectedRoute>
-            <ProfileViewPage />
+            <PageSuspense>
+              <ProfileViewPage />
+            </PageSuspense>
           </ProtectedRoute>
         ),
       },
@@ -171,7 +211,9 @@ export const router = createBrowserRouter([
         path: 'profile/edit',
         element: (
           <ProtectedRoute>
-            <ProfileEditPage />
+            <PageSuspense>
+              <ProfileEditPage />
+            </PageSuspense>
           </ProtectedRoute>
         ),
       },
@@ -179,7 +221,6 @@ export const router = createBrowserRouter([
         path: '*',
         element: <NotFoundPage />,
       },
-
     ],
   },
 ]);

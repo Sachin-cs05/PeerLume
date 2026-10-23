@@ -6,6 +6,7 @@ import { env } from './config/env.js';
 import { requestLogger } from './middleware/requestLogger.js';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { errorHandler } from './middleware/errorHandler.js';
+import { globalApiLimiter } from './middleware/rateLimiter.js';
 import { apiRoutes } from './routes/index.js';
 
 export function createApp(): Express {
@@ -45,6 +46,9 @@ export function createApp(): Express {
 
   // Request Logging
   app.use(requestLogger);
+
+  // Global Rate Limiting for DoS prevention
+  app.use('/api', globalApiLimiter);
 
   // Base API routes
   app.use('/api', apiRoutes);
