@@ -1,0 +1,61 @@
+import type { Server } from 'node:http';
+import { app } from './app.js';
+import { env } from './config/env.js';
+import { prisma } from './config/prisma.js';
+import { logger } from './utils/logger.js';
+import { APP_NAME, APP_TAGLINE } from '@peerlume/shared';
+
+let server: Server;
+
+async function startServer(): Promise<void> {
+  server = app.listen(env.PORT, () => {
+    logger.info(`✨ ${APP_NAME} API Server started successfully!`);
+    logger.info(`🎯 Tagline: "${APP_TAGLINE}"`);
+    logger.info(`🚀 Listening on http://localhost:${env.PORT}`);
+    logger.info(`📡 Environment: ${env.NODE_ENV}`);
+    logger.info(`🩺 Health check: http://localhost:${env.PORT}/api/health`);
+  });
+
+  const shutdown = async (signal: string) => {
+    logger.info(`Received ${signal}. Gracefully shutting down ${APP_NAME} API server...`);
+
+    if (server) {
+      server.close(async () => {
+        logger.info('HTTP server closed.');
+        try {
+          await prisma.$disconnect();
+          logger.info('Database client disconnected.');
+        } catch (dbErr) {
+          logger.error('Error during database disconnection:', dbErr);
+        }
+        process.exit(0);
+      });
+
+      // Force shutdown if cleanup takes too long
+      setTimeout(() => {
+        logger.error('Shutdown timed out. Forcing process exit.');
+        process.exit(1);
+      }, 10000).unref();
+    } else {
+      process.exit(0);
+    }
+  };
+
+  process.on('SIGTERM', () => shutdown('SIGTERM'));
+  process.on('SIGINT', () => shutdown('SIGINT'));
+
+  process.on('uncaughtException', (error) => {
+    logger.error('Uncaught Exception:', error);
+    process.exit(1);
+  });
+
+  process.on('unhandledRejection', (reason) => {
+    logger.error('Unhandled Promise Rejection:', reason);
+    process.exit(1);
+  });
+}
+
+startServer().catch((error) => {
+  logger.error('Failed to start server:', error);
+  process.exit(1);
+});

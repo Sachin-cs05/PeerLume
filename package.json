@@ -1,0 +1,39 @@
+{
+  "name": "peerlume-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "PeerLume — A production-minded, scalable peer-to-peer learning platform for students. Learn Together. Grow Together.",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -n \"API,WEB\" -c \"blue,green\" \"npm run dev:api\" \"npm run dev:web\"",
+    "dev:api": "npm run dev --workspace=@peerlume/api",
+    "dev:web": "npm run dev --workspace=@peerlume/web",
+    "build": "npm run build:shared && npm run build:api && npm run build:web",
+    "build:shared": "npm run build --workspace=@peerlume/shared",
+    "build:api": "npm run build --workspace=@peerlume/api",
+    "build:web": "npm run build --workspace=@peerlume/web",
+    "typecheck": "npm run typecheck --workspace=@peerlume/shared && npm run typecheck --workspace=@peerlume/api && npm run typecheck --workspace=@peerlume/web",
+    "lint": "eslint .",
+    "test": "npm run test --workspace=@peerlume/api",
+    "prisma:generate": "prisma generate",
+    "prisma:validate": "prisma validate",
+    "prisma:migrate": "prisma migrate dev"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.20.0",
+    "@types/node": "^22.13.4",
+    "@typescript-eslint/eslint-plugin": "^8.24.1",
+    "@typescript-eslint/parser": "^8.24.1",
+    "concurrently": "^9.1.2",
+    "eslint": "^9.20.1",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-react": "^7.37.4",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "prettier": "^3.5.1",
+    "prisma": "^6.4.1",
+    "typescript": "^5.7.2"
+  }
+}

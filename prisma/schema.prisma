@@ -1,0 +1,24 @@
+// PeerLume Prisma Schema - Phase 1: Foundation
+// "Learn Together. Grow Together."
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Foundational User model for student accounts.
+// Future phases will extend this model with skills, learning goals, sessions, and connections.
+// Note: PeerLume has NO Admin role or Admin dashboard; all users are peer students.
+model User {
+  id          String   @id @default(uuid())
+  email       String   @unique
+  displayName String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("users")
+}
