@@ -10,78 +10,91 @@ export async function checkAndDispatchReminders(): Promise<{ dispatchedCount: nu
   const now = new Date();
   let dispatchedCount = 0;
 
-  for (const minutesBefore of REMINDER_INTERVALS_MINUTES) {
-    const windowStart = new Date(now.getTime() + (minutesBefore - 5) * 60 * 1000);
-    const windowEnd = new Date(now.getTime() + (minutesBefore + 5) * 60 * 1000);
+  try {
+    for (const minutesBefore of REMINDER_INTERVALS_MINUTES) {
+      const windowStart = new Date(now.getTime() + (minutesBefore - 5) * 60 * 1000);
+      const windowEnd = new Date(now.getTime() + (minutesBefore + 5) * 60 * 1000);
 
-    // Find accepted upcoming sessions occurring around this reminder window
-    const upcomingSessions = await prisma.learningSession.findMany({
-      where: {
-        status: 'ACCEPTED',
-        startTime: {
-          gte: windowStart,
-          lte: windowEnd,
-        },
-      },
-      include: {
-        participants: {
-          where: { status: 'ACCEPTED' },
-          include: {
-            user: { select: { id: true, fullName: true, email: true } },
+      // Find accepted upcoming sessions occurring around this reminder window
+      const upcomingSessions = await prisma.learningSession.findMany({
+        where: {
+          status: 'ACCEPTED',
+          startTime: {
+            gte: windowStart,
+            lte: windowEnd,
           },
         },
-      },
-    });
+        include: {
+          participants: {
+            where: { status: 'ACCEPTED' },
+            include: {
+              user: { select: { id: true, fullName: true, email: true } },
+            },
+          },
+        },
+      });
 
-    for (const session of upcomingSessions) {
-      for (const participant of session.participants) {
-        try {
-          // Idempotency: Attempt to record the reminder in DB
-          const alreadySent = await prisma.sessionReminder.findUnique({
-            where: {
-              sessionId_userId_minutesBefore: {
+      for (const session of upcomingSessions) {
+        for (const participant of session.participants) {
+          try {
+            // Idempotency: Attempt to record the reminder in DB
+            const alreadySent = await prisma.sessionReminder.findUnique({
+              where: {
+                sessionId_userId_minutesBefore: {
+                  sessionId: session.id,
+                  userId: participant.userId,
+                  minutesBefore,
+                },
+              },
+            });
+
+            if (alreadySent) {
+              continue;
+            }
+
+            // Create reminder record
+            await prisma.sessionReminder.create({
+              data: {
                 sessionId: session.id,
                 userId: participant.userId,
                 minutesBefore,
               },
-            },
-          });
+            });
 
-          if (alreadySent) {
-            continue;
-          }
-
-          // Create reminder record
-          await prisma.sessionReminder.create({
-            data: {
-              sessionId: session.id,
+            // Dispatch persistent notification
+            await createNotification({
               userId: participant.userId,
-              minutesBefore,
-            },
-          });
+              actorId: session.organizerId,
+              type: 'SESSION_REMINDER',
+              title: `Study Session in ${minutesBefore} minutes`,
+              body: `"${session.title}" (${session.topic}) starts in ${minutesBefore} minutes. Get ready!`,
+              data: {
+                sessionId: session.id,
+                startTime: session.startTime.toISOString(),
+                mode: session.mode,
+              },
+            });
 
-          // Dispatch persistent notification
-          await createNotification({
-            userId: participant.userId,
-            actorId: session.organizerId,
-            type: 'SESSION_REMINDER',
-            title: `Study Session in ${minutesBefore} minutes`,
-            body: `"${session.title}" (${session.topic}) starts in ${minutesBefore} minutes. Get ready!`,
-            data: {
-              sessionId: session.id,
-              startTime: session.startTime.toISOString(),
-              mode: session.mode,
-            },
-          });
-
-          dispatchedCount++;
-        } catch (err: any) {
-          logger.error(
-            `Failed to send session reminder to user ${participant.userId} for session ${session.id}:`,
-            err.message
-          );
+            dispatchedCount++;
+          } catch (err: any) {
+            logger.error(
+              `Failed to send session reminder to user ${participant.userId} for session ${session.id}:`,
+              err.message
+            );
+          }
         }
       }
+    }
+  } catch (err: any) {
+    const isConnError =
+      err?.name === 'PrismaClientInitializationError' ||
+      err?.message?.includes("Can't reach database server") ||
+      err?.code === 'P1001';
+
+    if (isConnError) {
+      logger.warn('⚠️ Session reminder scheduler: database is currently unreachable. Will retry on next interval.');
+    } else {
+      logger.error('Error during session reminder check:', err?.message || err);
     }
   }
 
@@ -93,14 +106,14 @@ export function startReminderScheduler(pollIntervalMs = 60000): void {
 
   logger.info('⏰ Session Reminder Scheduler started (checking every 60s)');
   
-  // Run initial check
+  // Run initial check safely
   checkAndDispatchReminders().catch((err) => {
-    logger.error('Error during initial session reminder dispatch:', err);
+    logger.warn(`Reminder check skipped: ${err?.message || 'Database unavailable'}`);
   });
 
   reminderTimer = setInterval(() => {
     checkAndDispatchReminders().catch((err) => {
-      logger.error('Error during scheduled session reminder dispatch:', err);
+      logger.warn(`Scheduled reminder check skipped: ${err?.message || 'Database unavailable'}`);
     });
   }, pollIntervalMs);
 }

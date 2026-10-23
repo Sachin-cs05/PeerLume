@@ -1,7 +1,7 @@
 import { createServer, type Server } from 'node:http';
 import { app } from './app.js';
 import { env } from './config/env.js';
-import { prisma } from './config/prisma.js';
+import { prisma, checkDatabaseConnection } from './config/prisma.js';
 import { logger } from './utils/logger.js';
 import { APP_NAME, APP_TAGLINE } from '@peerlume/shared';
 import { initSocketIO } from './socket/index.js';
@@ -18,13 +18,26 @@ async function startServer(): Promise<void> {
   // Initialize background session reminder scheduler
   startReminderScheduler();
 
-  server.listen(env.PORT, () => {
+  server.listen(env.PORT, async () => {
     logger.info(`✨ ${APP_NAME} API Server started successfully!`);
     logger.info(`🎯 Tagline: "${APP_TAGLINE}"`);
     logger.info(`🚀 Listening on http://localhost:${env.PORT}`);
     logger.info(`📡 Environment: ${env.NODE_ENV}`);
     logger.info(`🩺 Health check: http://localhost:${env.PORT}/api/health`);
     logger.info(`⚡ Real-Time Socket.IO: Ready for Chat, Presence & WebRTC Calls`);
+
+    // Proactively verify database connection on startup
+    try {
+      const dbStatus = await checkDatabaseConnection();
+      if (dbStatus.status === 'connected') {
+        logger.info(`🗄️ PostgreSQL database connected (latency: ${dbStatus.latencyMs}ms)`);
+      } else {
+        logger.warn(`⚠️ PostgreSQL database is not reachable at localhost:5432 (${dbStatus.message})`);
+        logger.warn(`💡 Tip: Start PostgreSQL service or update DATABASE_URL in .env if using a remote/cloud database.`);
+      }
+    } catch (err: any) {
+      logger.warn(`⚠️ Database check failed: ${err?.message || err}`);
+    }
   });
 
 
