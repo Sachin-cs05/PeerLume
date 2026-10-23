@@ -8,6 +8,7 @@ import { CalendarView } from '../../components/sessions/CalendarView.js';
 import { RescheduleDialog } from '../../components/sessions/RescheduleDialog.js';
 import { Button } from '../../components/ui/Button.js';
 import { Alert } from '../../components/ui/Alert.js';
+import { EmptyState } from '../../components/ui/EmptyState.js';
 import {
   Calendar,
   Plus,
@@ -24,8 +25,9 @@ export const SessionsPage: React.FC = () => {
   const currentTab = searchParams.get('tab') || 'upcoming';
   const initialPartnerId = searchParams.get('partnerId') || undefined;
 
+  const validTabs: Array<'upcoming' | 'calendar' | 'invitations' | 'past'> = ['upcoming', 'calendar', 'invitations', 'past'];
   const [activeTab, setActiveTab] = useState<'upcoming' | 'calendar' | 'invitations' | 'past'>(
-    (currentTab as any) || 'upcoming'
+    validTabs.includes(currentTab as 'upcoming') ? (currentTab as 'upcoming' | 'calendar' | 'invitations' | 'past') : 'upcoming'
   );
 
   const [sessions, setSessions] = useState<LearningSessionDto[]>([]);
@@ -41,8 +43,8 @@ export const SessionsPage: React.FC = () => {
     setIsExporting(true);
     try {
       await apiService.calendarExport.downloadCalendarIcs();
-    } catch (err: any) {
-      alert(err.message || 'Failed to export calendar');
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : 'Failed to export calendar');
     } finally {
       setIsExporting(false);
     }
@@ -58,8 +60,8 @@ export const SessionsPage: React.FC = () => {
       } else if (res.error) {
         setError(res.error);
       }
-    } catch (err: any) {
-      setError(err.message || 'Failed to load sessions');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to load sessions');
     } finally {
       setLoading(false);
     }
@@ -142,7 +144,7 @@ export const SessionsPage: React.FC = () => {
         <div>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-300 text-xs font-semibold mb-2">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Session Scheduling • Phase 5</span>
+            <span>Study Sessions</span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
             Learning Sessions
@@ -250,25 +252,16 @@ export const SessionsPage: React.FC = () => {
         />
       ) : activeTab === 'upcoming' ? (
         upcomingSessions.length === 0 ? (
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-12 text-center space-y-4">
-            <div className="w-16 h-16 mx-auto rounded-3xl bg-brand-500/10 border border-brand-500/20 text-brand-400 flex items-center justify-center">
-              <Calendar className="w-8 h-8" />
-            </div>
-            <div className="max-w-md mx-auto space-y-1">
-              <h3 className="text-lg font-bold text-white">No upcoming sessions</h3>
-              <p className="text-xs text-slate-400">
-                You have no active upcoming sessions. Schedule a session with one of your connected learning partners!
-              </p>
-            </div>
-            <Button
-              variant="primary"
-              size="sm"
-              leftIcon={<Plus className="w-4 h-4" />}
-              onClick={() => setIsCreateModalOpen(true)}
-            >
-              Schedule a Session
-            </Button>
-          </div>
+          <EmptyState
+            icon={<Calendar className="w-8 h-8" />}
+            title="No upcoming sessions"
+            description="You have no active upcoming sessions. Schedule a session with one of your connected learning partners!"
+            action={{
+              label: 'Schedule a Session',
+              icon: <Plus className="w-4 h-4" />,
+              onClick: () => setIsCreateModalOpen(true),
+            }}
+          />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {upcomingSessions.map((session) => (
@@ -286,15 +279,11 @@ export const SessionsPage: React.FC = () => {
         )
       ) : activeTab === 'invitations' ? (
         pendingInvitations.length === 0 ? (
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-12 text-center space-y-3">
-            <div className="w-16 h-16 mx-auto rounded-3xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center">
-              <Mail className="w-8 h-8" />
-            </div>
-            <h3 className="text-lg font-bold text-white">No pending invitations</h3>
-            <p className="text-xs text-slate-400 max-w-sm mx-auto">
-              You are all caught up! When partners invite you to learning sessions, they will appear here.
-            </p>
-          </div>
+          <EmptyState
+            icon={<Mail className="w-8 h-8" />}
+            title="No pending invitations"
+            description="You are all caught up! When partners invite you to learning sessions, they will appear here."
+          />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {pendingInvitations.map((session) => (
@@ -312,15 +301,11 @@ export const SessionsPage: React.FC = () => {
       ) : (
         /* Past Sessions Tab */
         pastSessions.length === 0 ? (
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-12 text-center space-y-3">
-            <div className="w-16 h-16 mx-auto rounded-3xl bg-slate-800 text-slate-400 flex items-center justify-center">
-              <History className="w-8 h-8" />
-            </div>
-            <h3 className="text-lg font-bold text-white">No session history yet</h3>
-            <p className="text-xs text-slate-400">
-              Completed and past study sessions will be recorded here.
-            </p>
-          </div>
+          <EmptyState
+            icon={<History className="w-8 h-8" />}
+            title="No session history yet"
+            description="Completed and past study sessions will be recorded here."
+          />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {pastSessions.map((session) => (

@@ -6,6 +6,7 @@ import { NoteEditor } from '../../components/workspace/NoteEditor.js';
 import { FileUpload } from '../../components/workspace/FileUpload.js';
 import { Button } from '../../components/ui/Button.js';
 import { Alert } from '../../components/ui/Alert.js';
+import { EmptyState } from '../../components/ui/EmptyState.js';
 import {
   FileText,
   Link as LinkIcon,
@@ -59,8 +60,8 @@ export const WorkspacePage: React.FC = () => {
       } else if (res.error) {
         setError(res.error);
       }
-    } catch (err: any) {
-      setError(err.message || 'Failed to load workspace resources');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to load workspace resources');
     } finally {
       setLoading(false);
     }
@@ -154,7 +155,7 @@ export const WorkspacePage: React.FC = () => {
         <div>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-300 text-xs font-semibold mb-2">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Knowledge-Sharing Workspace • Phase 5</span>
+            <span>Knowledge-Sharing Workspace</span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
             Study Workspace
@@ -253,16 +254,18 @@ export const WorkspacePage: React.FC = () => {
 
       {/* Type Tabs */}
       <div className="flex items-center gap-2 border-b border-slate-800 pb-px overflow-x-auto">
-        {[
-          { id: 'ALL', label: 'All Types' },
-          { id: 'NOTE', label: 'Notes', icon: <FileText className="w-4 h-4" /> },
-          { id: 'CODE', label: 'Code Snippets', icon: <Code className="w-4 h-4" /> },
-          { id: 'LINK', label: 'External Links', icon: <LinkIcon className="w-4 h-4" /> },
-          { id: 'DOCUMENT', label: 'Documents', icon: <Upload className="w-4 h-4" /> },
-        ].map((tab) => (
+        {(
+          [
+            { id: 'ALL', label: 'All Types' },
+            { id: 'NOTE', label: 'Notes', icon: <FileText className="w-4 h-4" /> },
+            { id: 'CODE', label: 'Code Snippets', icon: <Code className="w-4 h-4" /> },
+            { id: 'LINK', label: 'External Links', icon: <LinkIcon className="w-4 h-4" /> },
+            { id: 'DOCUMENT', label: 'Documents', icon: <Upload className="w-4 h-4" /> },
+          ] as Array<{ id: 'ALL' | 'NOTE' | 'CODE' | 'LINK' | 'DOCUMENT'; label: string; icon?: React.ReactNode }>
+        ).map((tab) => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id as any)}
+            onClick={() => setActiveTab(tab.id)}
             className={`flex items-center gap-2 px-4 py-3 text-sm font-semibold border-b-2 transition-colors whitespace-nowrap ${
               activeTab === tab.id
                 ? 'border-brand-500 text-brand-400'
@@ -281,28 +284,23 @@ export const WorkspacePage: React.FC = () => {
           Loading workspace resources...
         </div>
       ) : filteredResources.length === 0 ? (
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-12 text-center space-y-4">
-          <div className="w-16 h-16 mx-auto rounded-3xl bg-brand-500/10 border border-brand-500/20 text-brand-400 flex items-center justify-center">
-            <FileText className="w-8 h-8" />
-          </div>
-          <div className="max-w-md mx-auto space-y-1">
-            <h3 className="text-lg font-bold text-white">No resources found</h3>
-            <p className="text-xs text-slate-400">
-              Your workspace is currently empty. Start taking notes or share code snippets with friends!
-            </p>
-          </div>
-          <Button
-            variant="primary"
-            size="sm"
-            leftIcon={<Plus className="w-4 h-4" />}
-            onClick={() => {
+        <EmptyState
+          icon={<FileText className="w-8 h-8" />}
+          title="No resources found"
+          description={
+            searchQuery
+              ? 'No resources matched your search query.'
+              : 'Your workspace is currently empty. Start taking notes or share code snippets with friends!'
+          }
+          action={{
+            label: 'Create Your First Note',
+            icon: <Plus className="w-4 h-4" />,
+            onClick: () => {
               setEditingNote(null);
               setIsNoteEditorOpen(true);
-            }}
-          >
-            Create Your First Note
-          </Button>
-        </div>
+            },
+          }}
+        />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredResources.map((res) => (

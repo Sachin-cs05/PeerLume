@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { apiService } from '../../services/api.js';
+import { EmptyState } from '../../components/ui/EmptyState.js';
 import type { StudyRoomDto, LearningSessionDto, FriendConnectionDto } from '@peerlume/shared';
 import {
   Presentation,
@@ -224,22 +225,20 @@ export const StudyRoomsPage: React.FC = () => {
           ))}
         </div>
       ) : (
-        <div className="text-center py-16 bg-white dark:bg-slate-900 border border-dashed border-slate-200 dark:border-slate-800 rounded-3xl p-8">
-          <div className="w-12 h-12 rounded-2xl bg-brand-50 dark:bg-brand-950/40 text-brand-500 flex items-center justify-center mx-auto mb-3">
-            <Presentation className="w-6 h-6" />
-          </div>
-          <h3 className="text-base font-semibold text-slate-900 dark:text-white">No study rooms found</h3>
-          <p className="text-xs text-slate-500 max-w-sm mx-auto mt-1 mb-4">
-            {search ? 'No rooms match your search query.' : 'Create your first collaborative study room to start working on the whiteboard together.'}
-          </p>
-          <button
-            onClick={openCreateModal}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-brand-500 text-white text-xs font-semibold shadow-sm hover:bg-brand-600 transition-colors"
-          >
-            <Plus className="w-3.5 h-3.5" />
-            <span>Create Study Room</span>
-          </button>
-        </div>
+        <EmptyState
+          icon={<Presentation className="w-8 h-8" />}
+          title="No study rooms found"
+          description={
+            search
+              ? 'No rooms match your search query.'
+              : 'Create your first collaborative study room to start working on the whiteboard together.'
+          }
+          action={{
+            label: 'Create Study Room',
+            icon: <Plus className="w-4 h-4" />,
+            onClick: openCreateModal,
+          }}
+        />
       )}
 
       {/* Create Study Room Modal */}

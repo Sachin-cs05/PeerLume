@@ -16,6 +16,7 @@ import { ConversationItem } from '../components/chat/ConversationItem.js';
 import { ChatMessage } from '../components/chat/ChatMessage.js';
 import { MessageComposer } from '../components/chat/MessageComposer.js';
 import { TypingIndicator } from '../components/chat/TypingIndicator.js';
+import { EmptyState } from '../components/ui/EmptyState.js';
 import { SOCKET_EVENTS } from '@peerlume/shared';
 import type {
   ConversationDto,
@@ -233,8 +234,8 @@ export const ChatPage: React.FC = () => {
       if (res.data) {
         setMessages((prev) => prev.map((m) => (m.clientTempId === tempId ? res.data : m)));
       }
-    } catch (err: any) {
-      setErrorBanner(err.message || 'Failed to send message');
+    } catch (err: unknown) {
+      setErrorBanner(err instanceof Error ? err.message : 'Failed to send message');
       setMessages((prev) => prev.filter((m) => m.clientTempId !== tempId));
     }
   };
@@ -276,12 +277,18 @@ export const ChatPage: React.FC = () => {
               Loading conversations...
             </div>
           ) : filteredConversations.length === 0 ? (
-            <div className="p-8 text-center text-gray-400 space-y-2">
-              <MessageSquare className="w-8 h-8 mx-auto text-gray-300" />
-              <p className="text-xs font-semibold text-gray-700">No conversations yet</p>
-              <p className="text-[11px] text-gray-400">
-                Connect with learning partners to start sharing knowledge!
-              </p>
+            <div className="p-4">
+              <EmptyState
+                icon={<MessageSquare className="w-6 h-6" />}
+                title="No conversations yet"
+                description="Connect with learning partners in Discover to start sharing knowledge!"
+                action={{
+                  label: 'Find Partners',
+                  href: '/discover',
+                  variant: 'outline',
+                }}
+                className="p-6! border-0 shadow-none bg-transparent"
+              />
             </div>
           ) : (
             filteredConversations.map((conv) => (
@@ -433,12 +440,17 @@ export const ChatPage: React.FC = () => {
             />
           </>
         ) : (
-          <div className="flex-1 flex flex-col items-center justify-center p-8 text-center text-gray-400">
-            <MessageSquare className="w-12 h-12 text-gray-300 mb-2" />
-            <h3 className="text-sm font-semibold text-gray-800">No conversation selected</h3>
-            <p className="text-xs text-gray-500 mt-1 max-w-xs">
-              Choose a student from the sidebar or click "Message" on a partner profile to begin chatting.
-            </p>
+          <div className="flex-1 flex items-center justify-center p-8">
+            <EmptyState
+              icon={<MessageSquare className="w-8 h-8" />}
+              title="No conversation selected"
+              description="Choose a student from the sidebar or find a study partner in Discover to begin chatting."
+              action={{
+                label: 'Find Study Partners',
+                href: '/discover',
+              }}
+              className="border-0 shadow-none bg-transparent"
+            />
           </div>
         )}
       </div>

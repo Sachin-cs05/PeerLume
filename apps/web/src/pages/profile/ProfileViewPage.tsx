@@ -321,7 +321,6 @@ export const ProfileViewPage: React.FC = () => {
           <Shield className="w-4 h-4 text-emerald-400" />
           <span>Profile data is self-governed and protected by student privacy controls.</span>
         </div>
-        <span className="text-slate-500">PeerLume Phase 2 Architecture</span>
       </div>
     </div>
   );

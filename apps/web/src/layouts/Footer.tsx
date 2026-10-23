@@ -1,56 +1,57 @@
 import React from 'react';
-import { ShieldAlert, Terminal, Heart } from 'lucide-react';
-import { APP_NAME, APP_TAGLINE, APP_VERSION } from '@peerlume/shared';
+import { Link } from 'react-router-dom';
+import { Sparkles, Heart } from 'lucide-react';
+import { APP_NAME, APP_TAGLINE } from '@peerlume/shared';
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="border-t border-slate-800 bg-slate-950/60 text-slate-400 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
-        <div className="md:col-span-2 space-y-4">
-          <div className="flex items-center gap-2">
-            <span className="text-xl font-bold text-white tracking-tight">{APP_NAME}</span>
-            <span className="text-xs px-2 py-0.5 rounded bg-brand-500/10 text-brand-300 border border-brand-500/20 font-mono">
-              v{APP_VERSION}
+    <footer className="border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/80 text-slate-600 dark:text-slate-400 py-10 px-4 sm:px-6 lg:px-8 transition-colors">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+        {/* Brand & Tagline */}
+        <div className="flex flex-col sm:flex-row items-center gap-3 text-center sm:text-left">
+          <Link to="/" className="flex items-center gap-2 group">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-600 to-indigo-500 p-0.5 flex items-center justify-center shadow-md">
+              <div className="w-full h-full bg-slate-900 rounded-[6px] flex items-center justify-center">
+                <Sparkles className="w-4 h-4 text-brand-400" />
+              </div>
+            </div>
+            <span className="text-lg font-bold text-slate-900 dark:text-white tracking-tight">
+              {APP_NAME}
             </span>
-          </div>
-          <p className="text-sm font-medium text-slate-300 italic">“{APP_TAGLINE}”</p>
-          <p className="text-sm text-slate-400 max-w-md">
-            PeerLume is a decentralized, peer-to-peer student learning network built for true collaboration, knowledge exchange, and student growth.
+          </Link>
+          <span className="hidden sm:inline text-slate-400 dark:text-slate-600">•</span>
+          <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+            {APP_TAGLINE}
           </p>
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs">
-            <ShieldAlert className="w-4 h-4 shrink-0" />
-            <span>Autonomous architecture: No Admin role or Admin dashboard. Students govern their connections.</span>
-          </div>
         </div>
 
-        <div>
-          <h4 className="text-xs font-semibold text-slate-200 uppercase tracking-wider mb-3">Platform Pillars</h4>
-          <ul className="space-y-2 text-sm text-slate-400">
-            <li className="hover:text-slate-200 transition-colors">Learn with Friends</li>
-            <li className="hover:text-slate-200 transition-colors">Discover Learning Partners</li>
-            <li className="hover:text-slate-200 transition-colors">Peer Study Rooms (Phase 3)</li>
-            <li className="hover:text-slate-200 transition-colors">Code Collaboration (Phase 3)</li>
-          </ul>
-        </div>
-
-        <div>
-          <h4 className="text-xs font-semibold text-slate-200 uppercase tracking-wider mb-3">Foundation</h4>
-          <ul className="space-y-2 text-sm text-slate-400">
-            <li className="flex items-center gap-1.5 hover:text-slate-200 transition-colors">
-              <Terminal className="w-3.5 h-3.5 text-brand-400" />
-              <span>Node.js & Express REST API</span>
-            </li>
-            <li className="hover:text-slate-200 transition-colors">PostgreSQL & Prisma ORM</li>
-            <li className="hover:text-slate-200 transition-colors">React & TypeScript Strict</li>
-            <li className="hover:text-slate-200 transition-colors">Tailwind CSS System</li>
-          </ul>
-        </div>
+        {/* Real Links */}
+        <nav className="flex items-center gap-6 text-sm font-medium">
+          <Link
+            to="/dashboard"
+            className="text-slate-600 dark:text-slate-400 hover:text-brand-600 dark:hover:text-white transition-colors"
+          >
+            Dashboard
+          </Link>
+          <Link
+            to="/discover"
+            className="text-slate-600 dark:text-slate-400 hover:text-brand-600 dark:hover:text-white transition-colors"
+          >
+            Discover
+          </Link>
+          <Link
+            to="/profile"
+            className="text-slate-600 dark:text-slate-400 hover:text-brand-600 dark:hover:text-white transition-colors"
+          >
+            Profile
+          </Link>
+        </nav>
       </div>
 
-      <div className="max-w-7xl mx-auto mt-10 pt-6 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-        <p>© {new Date().getFullYear()} PeerLume Platform. Built with care for students worldwide.</p>
+      <div className="max-w-7xl mx-auto mt-8 pt-6 border-t border-slate-200 dark:border-slate-800/80 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 dark:text-slate-500 gap-3">
+        <p>© {new Date().getFullYear()} PeerLume. Built for students.</p>
         <p className="flex items-center gap-1">
-          Designed for peer-driven mastery <Heart className="w-3.5 h-3.5 text-rose-500 inline fill-current" />
+          Learn Together. Grow Together. <Heart className="w-3.5 h-3.5 text-rose-500 inline fill-current" />
         </p>
       </div>
     </footer>

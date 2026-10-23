@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   Sparkles,
   Menu,
@@ -16,8 +16,8 @@ import {
   Search,
   Sun,
   Moon,
+  ChevronDown,
 } from 'lucide-react';
-import { Badge } from '../components/ui/Badge.js';
 import { Button } from '../components/ui/Button.js';
 import { useAuth } from '../context/AuthContext.js';
 import { useTheme } from '../context/ThemeContext.js';
@@ -28,25 +28,61 @@ import { OfflineBanner } from '../components/common/OfflineBanner.js';
 export const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
+  const [studyDropdownOpen, setStudyDropdownOpen] = useState(false);
+  const studyDropdownRef = useRef<HTMLDivElement | null>(null);
+
   const { user, logout } = useAuth();
   const { effectiveTheme, toggleTheme } = useTheme();
   const navigate = useNavigate();
+  const location = useLocation();
 
-  // Global Ctrl+K / Cmd+K search shortcut listener
+  // Close dropdown on outside click or Escape
   useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (studyDropdownRef.current && !studyDropdownRef.current.contains(e.target as Node)) {
+        setStudyDropdownOpen(false);
+      }
+    };
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setStudyDropdownOpen(false);
+      }
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
         setSearchModalOpen((prev) => !prev);
       }
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
   }, []);
+
+  // Close menus on route change
+  useEffect(() => {
+    setStudyDropdownOpen(false);
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
 
   const handleLogout = async () => {
     await logout();
     navigate('/');
+  };
+
+  const isStudyActive = ['/study-rooms', '/sessions', '/code', '/workspace'].some(
+    (path) => location.pathname === path || location.pathname.startsWith(`${path}/`)
+  );
+
+  const getNavLinkClass = (path: string) => {
+    const isActive = location.pathname === path || location.pathname.startsWith(`${path}/`);
+    return `flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-medium transition-all ${
+      isActive
+        ? 'text-brand-600 dark:text-brand-400 bg-brand-500/10 font-semibold'
+        : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60'
+    }`;
   };
 
   return (
@@ -66,97 +102,151 @@ export const Header: React.FC = () => {
                 <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-slate-900 dark:from-white via-slate-700 dark:via-slate-200 to-brand-500 dark:to-brand-300 bg-clip-text text-transparent">
                   PeerLume
                 </span>
-                <span className="hidden sm:inline-block ml-2 text-[10px] font-semibold text-brand-600 dark:text-indigo-400 tracking-wider uppercase px-2 py-0.5 rounded-full bg-brand-500/10 border border-brand-500/20">
-                  Phase 7
-                </span>
               </div>
             </Link>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-5">
-              {user ? (
+            {/* Desktop Navigation (At most 5 items when logged in; clean when logged out) */}
+            <nav className="hidden md:flex items-center gap-2">
+              {user && (
                 <>
-                  <Link
-                    to="/dashboard"
-                    className="flex items-center gap-1.5 text-sm text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-white transition-colors"
-                  >
+                  <Link to="/dashboard" className={getNavLinkClass('/dashboard')}>
                     <LayoutDashboard className="w-4 h-4 text-brand-500" />
                     <span>Dashboard</span>
                   </Link>
 
-                  <Link
-                    to="/study-rooms"
-                    className="flex items-center gap-1.5 text-sm text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-white transition-colors"
-                  >
-                    <Presentation className="w-4 h-4 text-rose-500" />
-                    <span>Study Rooms</span>
-                  </Link>
-
-                  <Link
-                    to="/code"
-                    className="flex items-center gap-1.5 text-sm text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-white transition-colors"
-                  >
-                    <Code2 className="w-4 h-4 text-indigo-500" />
-                    <span>Code</span>
-                  </Link>
-
-                  <Link
-                    to="/sessions"
-                    className="flex items-center gap-1.5 text-sm text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-white transition-colors"
-                  >
-                    <Calendar className="w-4 h-4 text-emerald-500" />
-                    <span>Sessions</span>
-                  </Link>
-
-                  <Link
-                    to="/workspace"
-                    className="flex items-center gap-1.5 text-sm text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-white transition-colors"
-                  >
-                    <BookOpen className="w-4 h-4 text-amber-500" />
-                    <span>Workspace</span>
-                  </Link>
-
-                  <Link
-                    to="/discover"
-                    className="flex items-center gap-1.5 text-sm text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-white transition-colors"
-                  >
+                  <Link to="/discover" className={getNavLinkClass('/discover')}>
                     <Compass className="w-4 h-4 text-teal-500" />
                     <span>Discover</span>
                   </Link>
 
-                  <Link
-                    to="/chat"
-                    className="flex items-center gap-1.5 text-sm text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-white transition-colors"
-                  >
+                  <Link to="/chat" className={getNavLinkClass('/chat')}>
                     <MessageSquare className="w-4 h-4 text-blue-500" />
                     <span>Messages</span>
                   </Link>
 
-                  <Link
-                    to="/connections"
-                    className="flex items-center gap-1.5 text-sm text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-white transition-colors"
-                  >
+                  <Link to="/connections" className={getNavLinkClass('/connections')}>
                     <Users className="w-4 h-4 text-purple-500" />
                     <span>Friends</span>
                   </Link>
-                </>
-              ) : (
-                <>
-                  <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
-                    <Users className="w-4 h-4 text-brand-500" />
-                    <span>Learn with Friends</span>
-                    <Badge variant="brand" size="sm">Live</Badge>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
-                    <Compass className="w-4 h-4 text-teal-500" />
-                    <span>Discover Partners</span>
-                    <Badge variant="brand" size="sm">Live</Badge>
+
+                  {/* Study Dropdown */}
+                  <div className="relative" ref={studyDropdownRef}>
+                    <button
+                      type="button"
+                      onClick={() => setStudyDropdownOpen((prev) => !prev)}
+                      aria-expanded={studyDropdownOpen}
+                      aria-haspopup="true"
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-medium transition-all ${
+                        isStudyActive
+                          ? 'text-brand-600 dark:text-brand-400 bg-brand-500/10 font-semibold'
+                          : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60'
+                      }`}
+                    >
+                      <BookOpen className="w-4 h-4 text-amber-500" />
+                      <span>Study</span>
+                      <ChevronDown
+                        className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                          studyDropdownOpen ? 'rotate-180' : ''
+                        }`}
+                      />
+                    </button>
+
+                    {studyDropdownOpen && (
+                      <div
+                        role="menu"
+                        className="absolute top-full left-0 mt-2 w-64 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-2 shadow-xl z-50 animate-in fade-in zoom-in-95 duration-150 space-y-1"
+                      >
+                        <Link
+                          to="/study-rooms"
+                          role="menuitem"
+                          onClick={() => setStudyDropdownOpen(false)}
+                          className={`flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors group ${
+                            location.pathname.startsWith('/study-rooms') ? 'bg-slate-100 dark:bg-slate-800/60' : ''
+                          }`}
+                        >
+                          <div className="p-2 rounded-lg bg-rose-500/10 text-rose-500 shrink-0 mt-0.5">
+                            <Presentation className="w-4 h-4" />
+                          </div>
+                          <div>
+                            <div className="text-sm font-semibold text-slate-800 dark:text-slate-200 group-hover:text-brand-500">
+                              Study Rooms
+                            </div>
+                            <div className="text-xs text-slate-500 dark:text-slate-400">
+                              Interactive rooms & whiteboard
+                            </div>
+                          </div>
+                        </Link>
+
+                        <Link
+                          to="/sessions"
+                          role="menuitem"
+                          onClick={() => setStudyDropdownOpen(false)}
+                          className={`flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors group ${
+                            location.pathname.startsWith('/sessions') ? 'bg-slate-100 dark:bg-slate-800/60' : ''
+                          }`}
+                        >
+                          <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-500 shrink-0 mt-0.5">
+                            <Calendar className="w-4 h-4" />
+                          </div>
+                          <div>
+                            <div className="text-sm font-semibold text-slate-800 dark:text-slate-200 group-hover:text-brand-500">
+                              Sessions
+                            </div>
+                            <div className="text-xs text-slate-500 dark:text-slate-400">
+                              Scheduled calendar meetings
+                            </div>
+                          </div>
+                        </Link>
+
+                        <Link
+                          to="/code"
+                          role="menuitem"
+                          onClick={() => setStudyDropdownOpen(false)}
+                          className={`flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors group ${
+                            location.pathname.startsWith('/code') ? 'bg-slate-100 dark:bg-slate-800/60' : ''
+                          }`}
+                        >
+                          <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-500 shrink-0 mt-0.5">
+                            <Code2 className="w-4 h-4" />
+                          </div>
+                          <div>
+                            <div className="text-sm font-semibold text-slate-800 dark:text-slate-200 group-hover:text-brand-500">
+                              Code
+                            </div>
+                            <div className="text-xs text-slate-500 dark:text-slate-400">
+                              Real-time collaborative editor
+                            </div>
+                          </div>
+                        </Link>
+
+                        <Link
+                          to="/workspace"
+                          role="menuitem"
+                          onClick={() => setStudyDropdownOpen(false)}
+                          className={`flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors group ${
+                            location.pathname.startsWith('/workspace') ? 'bg-slate-100 dark:bg-slate-800/60' : ''
+                          }`}
+                        >
+                          <div className="p-2 rounded-lg bg-amber-500/10 text-amber-500 shrink-0 mt-0.5">
+                            <BookOpen className="w-4 h-4" />
+                          </div>
+                          <div>
+                            <div className="text-sm font-semibold text-slate-800 dark:text-slate-200 group-hover:text-brand-500">
+                              Workspace
+                            </div>
+                            <div className="text-xs text-slate-500 dark:text-slate-400">
+                              Notes, snippets & resources
+                            </div>
+                          </div>
+                        </Link>
+                      </div>
+                    )}
                   </div>
                 </>
               )}
             </nav>
 
-            {/* Actions: Search, Theme Toggle, Notifications, Profile */}
+            {/* Actions: Search, Theme Toggle, Notifications, Profile / Auth Buttons */}
             <div className="hidden sm:flex items-center gap-2.5">
               {/* Quick Search Button */}
               {user && (
@@ -217,12 +307,12 @@ export const Header: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <Link to="/login">
                     <Button variant="ghost" size="sm">
-                      Sign In
+                      Log in
                     </Button>
                   </Link>
                   <Link to="/register">
                     <Button variant="primary" size="sm">
-                      Join PeerLume
+                      Get started
                     </Button>
                   </Link>
                 </div>
@@ -236,7 +326,11 @@ export const Header: React.FC = () => {
                 className="p-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
                 aria-label="Toggle theme"
               >
-                {effectiveTheme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-600" />}
+                {effectiveTheme === 'dark' ? (
+                  <Sun className="w-4 h-4 text-amber-400" />
+                ) : (
+                  <Moon className="w-4 h-4 text-slate-600" />
+                )}
               </button>
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -249,7 +343,7 @@ export const Header: React.FC = () => {
           </div>
         </div>
 
-        {/* Mobile dropdown */}
+        {/* Mobile menu dropdown */}
         {mobileMenuOpen && (
           <div className="md:hidden border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 pt-2 pb-6 space-y-3">
             {user ? (
@@ -257,6 +351,7 @@ export const Header: React.FC = () => {
                 <div className="py-2 border-b border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-600 dark:text-slate-300">
                   Signed in as <span className="text-slate-900 dark:text-white">{user.fullName}</span>
                 </div>
+
                 <button
                   onClick={() => {
                     setMobileMenuOpen(false);
@@ -267,70 +362,97 @@ export const Header: React.FC = () => {
                   <Search className="w-4 h-4 text-brand-500" />
                   <span>Search PeerLume (Ctrl+K)</span>
                 </button>
-                <Link
-                  to="/dashboard"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-between py-2 text-sm font-medium text-slate-600 dark:text-slate-300"
-                >
-                  <span>Dashboard</span>
-                </Link>
-                <Link
-                  to="/study-rooms"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-between py-2 text-sm font-medium text-slate-600 dark:text-slate-300"
-                >
-                  <span>Study Rooms & Whiteboard</span>
-                </Link>
-                <Link
-                  to="/code"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-between py-2 text-sm font-medium text-slate-600 dark:text-slate-300"
-                >
-                  <span>Code Editor</span>
-                </Link>
-                <Link
-                  to="/sessions"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-between py-2 text-sm font-medium text-slate-600 dark:text-slate-300"
-                >
-                  <span>Sessions & Calendar</span>
-                </Link>
-                <Link
-                  to="/workspace"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-between py-2 text-sm font-medium text-slate-600 dark:text-slate-300"
-                >
-                  <span>Study Workspace</span>
-                </Link>
-                <Link
-                  to="/discover"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-between py-2 text-sm font-medium text-slate-600 dark:text-slate-300"
-                >
-                  <span>Discover Partners</span>
-                </Link>
-                <Link
-                  to="/chat"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-between py-2 text-sm font-medium text-slate-600 dark:text-slate-300"
-                >
-                  <span>Messages</span>
-                </Link>
-                <Link
-                  to="/connections"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-between py-2 text-sm font-medium text-slate-600 dark:text-slate-300"
-                >
-                  <span>Friends</span>
-                </Link>
-                <Link
-                  to="/profile"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-between py-2 text-sm font-medium text-slate-600 dark:text-slate-300"
-                >
-                  <span>My Profile</span>
-                </Link>
-                <div className="pt-2">
+
+                <div className="space-y-1">
+                  <Link
+                    to="/dashboard"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={getNavLinkClass('/dashboard')}
+                  >
+                    <LayoutDashboard className="w-4 h-4 text-brand-500" />
+                    <span>Dashboard</span>
+                  </Link>
+
+                  <Link
+                    to="/discover"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={getNavLinkClass('/discover')}
+                  >
+                    <Compass className="w-4 h-4 text-teal-500" />
+                    <span>Discover</span>
+                  </Link>
+
+                  <Link
+                    to="/chat"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={getNavLinkClass('/chat')}
+                  >
+                    <MessageSquare className="w-4 h-4 text-blue-500" />
+                    <span>Messages</span>
+                  </Link>
+
+                  <Link
+                    to="/connections"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={getNavLinkClass('/connections')}
+                  >
+                    <Users className="w-4 h-4 text-purple-500" />
+                    <span>Friends</span>
+                  </Link>
+                </div>
+
+                {/* Mobile Study Section */}
+                <div className="pt-2 border-t border-slate-200 dark:border-slate-800 space-y-1">
+                  <div className="px-3 py-1 text-xs font-bold text-slate-400 uppercase tracking-wider">
+                    Study
+                  </div>
+
+                  <Link
+                    to="/study-rooms"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={getNavLinkClass('/study-rooms')}
+                  >
+                    <Presentation className="w-4 h-4 text-rose-500" />
+                    <span>Study Rooms</span>
+                  </Link>
+
+                  <Link
+                    to="/sessions"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={getNavLinkClass('/sessions')}
+                  >
+                    <Calendar className="w-4 h-4 text-emerald-500" />
+                    <span>Sessions</span>
+                  </Link>
+
+                  <Link
+                    to="/code"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={getNavLinkClass('/code')}
+                  >
+                    <Code2 className="w-4 h-4 text-indigo-500" />
+                    <span>Code</span>
+                  </Link>
+
+                  <Link
+                    to="/workspace"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={getNavLinkClass('/workspace')}
+                  >
+                    <BookOpen className="w-4 h-4 text-amber-500" />
+                    <span>Workspace</span>
+                  </Link>
+                </div>
+
+                <div className="pt-2 border-t border-slate-200 dark:border-slate-800 space-y-2">
+                  <Link
+                    to="/profile"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={getNavLinkClass('/profile')}
+                  >
+                    <span>My Profile</span>
+                  </Link>
+
                   <Button
                     variant="outline"
                     size="sm"
@@ -346,22 +468,26 @@ export const Header: React.FC = () => {
                 </div>
               </>
             ) : (
-              <>
+              <div className="space-y-2 pt-2">
                 <Link
                   to="/login"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block py-2 text-sm font-medium text-slate-600 dark:text-slate-300"
+                  className="block w-full"
                 >
-                  Sign In
+                  <Button variant="ghost" size="md" className="w-full">
+                    Log in
+                  </Button>
                 </Link>
                 <Link
                   to="/register"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block py-2 text-sm font-medium text-brand-500"
+                  className="block w-full"
                 >
-                  Create Student Account
+                  <Button variant="primary" size="md" className="w-full">
+                    Get started
+                  </Button>
                 </Link>
-              </>
+              </div>
             )}
           </div>
         )}

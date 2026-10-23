@@ -13,6 +13,7 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import { Button } from '../../components/ui/Button.js';
+import { EmptyState } from '../../components/ui/EmptyState.js';
 import { StudentCard } from '../../components/discovery/StudentCard.js';
 import { api } from '../../services/api.js';
 
@@ -328,32 +329,27 @@ export const DiscoverPage: React.FC = () => {
           </div>
         ) : (viewMode === 'recommended' && recommendations.length === 0) ||
           (viewMode === 'directory' && directoryStudents.length === 0) ? (
-          <div className="p-12 rounded-3xl bg-slate-900/40 border border-slate-800/80 text-center space-y-4 max-w-md mx-auto">
-            <div className="w-12 h-12 rounded-2xl bg-slate-800 text-slate-400 flex items-center justify-center mx-auto">
-              <Compass className="w-6 h-6 text-brand-400" />
-            </div>
-            <div>
-              <h3 className="text-base font-bold text-white">No Learning Partners Found</h3>
-              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                {hasActiveFilters
-                  ? 'Try broadening your skill keywords, campus filters, or clearing specific constraints to see more students.'
-                  : 'Update your teaching skills and learning goals in your profile to discover compatible peers!'}
-              </p>
-            </div>
-            {hasActiveFilters ? (
-              <Button variant="outline" size="sm" onClick={handleResetFilters}>
-                Clear Active Filters
-              </Button>
-            ) : (
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={() => (window.location.href = '/profile/edit')}
-              >
-                Add Your Skills & Goals
-              </Button>
-            )}
-          </div>
+          <EmptyState
+            icon={<Compass className="w-8 h-8" />}
+            title="No Learning Partners Found"
+            description={
+              hasActiveFilters
+                ? 'Try broadening your skill keywords, campus filters, or clearing specific constraints to see more students.'
+                : 'Update your teaching skills and learning goals in your profile to discover compatible peers!'
+            }
+            action={
+              hasActiveFilters
+                ? {
+                    label: 'Clear Active Filters',
+                    variant: 'outline',
+                    onClick: handleResetFilters,
+                  }
+                : {
+                    label: 'Add Your Skills & Goals',
+                    href: '/profile/edit',
+                  }
+            }
+          />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {viewMode === 'recommended'

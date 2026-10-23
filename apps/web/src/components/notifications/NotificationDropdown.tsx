@@ -4,7 +4,8 @@ import { Bell, CheckCheck, MessageSquare, UserPlus, PhoneCall } from 'lucide-rea
 import { useNavigate } from 'react-router-dom';
 import { useSocket } from '../../context/SocketContext.js';
 import { apiService } from '../../services/api.js';
-import type { NotificationDto } from '@peerLume/shared';
+import { EmptyState } from '../ui/EmptyState.js';
+import type { NotificationDto } from '@peerlume/shared';
 
 export const NotificationDropdown: React.FC = () => {
   const { unreadNotificationsCount, setUnreadNotificationsCount } = useSocket();
@@ -130,12 +131,13 @@ export const NotificationDropdown: React.FC = () => {
             {loading ? (
               <div className="p-6 text-center text-xs text-gray-400">Loading notifications...</div>
             ) : notifications.length === 0 ? (
-              <div className="p-8 text-center text-gray-400 space-y-1">
-                <Bell className="w-8 h-8 mx-auto text-gray-300" />
-                <p className="text-xs font-medium text-gray-600">No notifications yet</p>
-                <p className="text-[11px] text-gray-400">
-                  You'll be alerted when connections request or message you.
-                </p>
+              <div className="p-4">
+                <EmptyState
+                  icon={<Bell className="w-6 h-6" />}
+                  title="No notifications yet"
+                  description="You'll be alerted when partners connect or message you."
+                  className="p-6! border-0 shadow-none bg-transparent"
+                />
               </div>
             ) : (
               notifications.map((n) => (

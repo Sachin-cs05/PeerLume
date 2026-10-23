@@ -15,7 +15,7 @@ export const NotFoundPage: React.FC = () => {
           <span className="text-xs uppercase font-bold tracking-widest text-brand-400">Error 404</span>
           <h1 className="text-2xl font-bold text-white">Page Not Found</h1>
           <p className="text-sm text-slate-400">
-            The page or study resource you are looking for does not exist or has not been deployed in this phase.
+            The page or study resource you are looking for does not exist.
           </p>
         </div>
         <div className="pt-2">

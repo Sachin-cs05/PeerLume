@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
+import { EmptyState } from '../../components/ui/EmptyState.js';
 import {
   Code2,
   Plus,
@@ -130,13 +131,13 @@ export const CodeWorkspacesPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 py-10 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto space-y-8">
+      <div className="max-w-7xl mx-auto space-y-8">
         {/* Page Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-6">
           <div>
             <div className="flex items-center gap-2 text-indigo-400 font-semibold text-sm mb-1">
               <Sparkles className="w-4 h-4" />
-              <span>Phase 6: Real-Time Coding</span>
+              <span>Collaborative Code Editor</span>
             </div>
             <h1 className="text-3xl font-extrabold text-white">Collaborative Code Workspaces</h1>
             <p className="text-slate-400 text-sm mt-1">
@@ -196,24 +197,20 @@ export const CodeWorkspacesPage: React.FC = () => {
             <p className="text-sm font-medium">Loading your coding workspaces...</p>
           </div>
         ) : filteredWorkspaces.length === 0 ? (
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-12 text-center space-y-4">
-            <div className="w-16 h-16 rounded-2xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center mx-auto shadow-inner">
-              <Code2 className="w-8 h-8" />
-            </div>
-            <h3 className="text-lg font-bold text-white">No Workspaces Found</h3>
-            <p className="text-sm text-slate-400 max-w-md mx-auto">
-              {searchQuery
+          <EmptyState
+            icon={<Code2 className="w-8 h-8" />}
+            title="No Workspaces Found"
+            description={
+              searchQuery
                 ? 'No workspaces matched your search criteria.'
-                : 'You have not created or joined any collaborative code workspaces yet.'}
-            </p>
-            <button
-              onClick={handleOpenCreateModal}
-              className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-semibold inline-flex items-center gap-2 transition-colors"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Create First Workspace</span>
-            </button>
-          </div>
+                : 'You have not created or joined any collaborative code workspaces yet.'
+            }
+            action={{
+              label: 'Create First Workspace',
+              icon: <Plus className="w-4 h-4" />,
+              onClick: handleOpenCreateModal,
+            }}
+          />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {filteredWorkspaces.map((ws) => {

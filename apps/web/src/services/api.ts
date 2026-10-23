@@ -205,7 +205,7 @@ export const apiService = {
     },
   },
 
-  // Phase 3: Connections & Friends
+  // Connections & Friends
   connections: {
     async sendRequest(receiverId: string, message?: string): Promise<ApiResult<{ status: string; message: string }>> {
       return apiRequest<{ status: string; message: string }>('/connections/requests', {
@@ -252,7 +252,7 @@ export const apiService = {
     },
   },
 
-  // Phase 3: Discovery & Learning Partner Matching
+  // Discovery & Learning Partner Matching
   discovery: {
     async getRecommendedPartners(filters?: {
       q?: string;
@@ -281,7 +281,7 @@ export const apiService = {
     },
   },
 
-  // Phase 3: Student Search & Profiles
+  // Student Search & Profiles
   students: {
     async search(filters?: {
       q?: string;
@@ -312,7 +312,7 @@ export const apiService = {
     },
   },
 
-  // Phase 3: User Blocking
+  // User Blocking
   blocks: {
     async blockStudent(studentId: string, reason?: string): Promise<ApiResult<null>> {
       return apiRequest<null>(`/blocks/${studentId}`, {
@@ -332,7 +332,7 @@ export const apiService = {
     },
   },
 
-  // Phase 3: Saved Partners
+  // Saved Partners
   savedPartners: {
     async savePartner(studentId: string, notes?: string): Promise<ApiResult<null>> {
       return apiRequest<null>(`/saved-partners/${studentId}`, {
@@ -352,7 +352,7 @@ export const apiService = {
     },
   },
 
-  // Phase 4: Chat Conversations & Messaging
+  // Chat Conversations & Messaging
   conversations: {
     async list(): Promise<ApiResult<any[]>> {
       return apiRequest<any[]>('/conversations');
@@ -390,7 +390,7 @@ export const apiService = {
     },
   },
 
-  // Phase 4: Audio & Video Calling
+  // Audio & Video Calling
   calls: {
     async initiate(receiverId: string, type: 'AUDIO' | 'VIDEO' = 'VIDEO'): Promise<ApiResult<any>> {
       return apiRequest<any>('/calls', {
@@ -421,7 +421,7 @@ export const apiService = {
     },
   },
 
-  // Phase 4: Notifications
+  // Notifications
   notifications: {
     async list(page = 1, pageSize = 20, unreadOnly = false): Promise<ApiResult<any>> {
       const params = new URLSearchParams();
@@ -448,7 +448,7 @@ export const apiService = {
     },
   },
 
-  // Phase 5: Session Scheduling & Calendar
+  // Session Scheduling & Calendar
   sessions: {
     async create(input: CreateSessionInput): Promise<ApiResult<LearningSessionDto>> {
       return apiRequest<LearningSessionDto>('/sessions', {
@@ -524,7 +524,7 @@ export const apiService = {
     },
   },
 
-  // Phase 5: Knowledge-Sharing Workspace & Files
+  // Knowledge-Sharing Workspace & Files
   resources: {
     async create(input: CreateResourceInput, file?: File): Promise<ApiResult<LearningResourceDto>> {
       if (file) {
@@ -587,14 +587,14 @@ export const apiService = {
     },
   },
 
-  // Phase 5: Learning Dashboard
+  // Learning Dashboard
   dashboard: {
     async getSummary(): Promise<ApiResult<DashboardSummaryDto>> {
       return apiRequest<DashboardSummaryDto>('/dashboard/summary');
     },
   },
 
-  // Phase 6: Real-Time Collaborative Code Workspaces
+  // Collaborative Code Workspaces
   codeWorkspaces: {
     async list(): Promise<ApiResult<CodeWorkspaceDto[]>> {
       return apiRequest<CodeWorkspaceDto[]>('/code-workspaces');
@@ -682,7 +682,7 @@ export const apiService = {
     },
   },
 
-  // Phase 7: Interactive Study Rooms & Collaborative Whiteboard
+  // Study Rooms & Collaborative Whiteboard
   studyRooms: {
     async list(params?: { sessionId?: string; activeOnly?: boolean; page?: number; limit?: number }): Promise<ApiResult<{ rooms: StudyRoomDto[]; total: number; page: number; limit: number }>> {
       const q = new URLSearchParams();
@@ -772,7 +772,7 @@ export const apiService = {
     },
   },
 
-  // Phase 7: Global Search
+  // Global Search
   search: {
     async query(q: string, type: SearchEntityType = 'all', limit: number = 20): Promise<ApiResult<GlobalSearchResponse>> {
       const params = new URLSearchParams({ q, type, limit: String(limit) });
@@ -780,7 +780,7 @@ export const apiService = {
     },
   },
 
-  // Phase 7: User Preferences
+  // User Preferences
   preferences: {
     async get(): Promise<ApiResult<UserPreferencesDto>> {
       return apiRequest<UserPreferencesDto>('/preferences');
@@ -794,7 +794,7 @@ export const apiService = {
     },
   },
 
-  // Phase 7: Calendar Export
+  // Calendar Export
   calendarExport: {
     getSessionExportUrl(sessionId: string): string {
       return `${API_BASE_URL}/sessions/${sessionId}/export.ics`;

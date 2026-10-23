@@ -23,6 +23,7 @@ import {
   RefreshCw,
 } from 'lucide-react';
 import { Button } from '../../components/ui/Button.js';
+import { EmptyState } from '../../components/ui/EmptyState.js';
 import { StudentProfileModal } from '../../components/connections/StudentProfileModal.js';
 import { api } from '../../services/api.js';
 
@@ -256,24 +257,15 @@ export const ConnectionsPage: React.FC = () => {
                 ))}
               </div>
             ) : friends.length === 0 ? (
-              <div className="p-12 rounded-3xl bg-slate-900/40 border border-slate-800 text-center space-y-4 max-w-md mx-auto">
-                <div className="w-12 h-12 rounded-2xl bg-slate-800 text-slate-400 flex items-center justify-center mx-auto">
-                  <Users className="w-6 h-6 text-brand-400" />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-white">No Friends Connected Yet</h3>
-                  <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                    You haven’t connected with any learning partners yet. Head over to Discovery to find students with mutual skills!
-                  </p>
-                </div>
-                <Button
-                  variant="primary"
-                  size="sm"
-                  onClick={() => (window.location.href = '/discover')}
-                >
-                  Explore Learning Partners
-                </Button>
-              </div>
+              <EmptyState
+                icon={<Users className="w-8 h-8" />}
+                title="No friends yet"
+                description="Find a study partner in Discover with mutual skills and learning goals."
+                action={{
+                  label: 'Find Study Partners',
+                  href: '/discover',
+                }}
+              />
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {friends.map((item) => (
@@ -414,9 +406,16 @@ export const ConnectionsPage: React.FC = () => {
 
             {requestsSubTab === 'incoming' ? (
               incomingRequests.length === 0 ? (
-                <div className="p-8 rounded-2xl bg-slate-900/40 border border-slate-800 text-center text-slate-400 text-xs">
-                  No incoming requests at the moment.
-                </div>
+                <EmptyState
+                  icon={<UserPlus className="w-8 h-8" />}
+                  title="No incoming requests"
+                  description="You have no pending requests. Connect with study partners in Discover to start collaborating."
+                  action={{
+                    label: 'Explore Partners',
+                    href: '/discover',
+                    variant: 'outline',
+                  }}
+                />
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {incomingRequests.map((req) => (
@@ -476,9 +475,16 @@ export const ConnectionsPage: React.FC = () => {
                 </div>
               )
             ) : outgoingRequests.length === 0 ? (
-              <div className="p-8 rounded-2xl bg-slate-900/40 border border-slate-800 text-center text-slate-400 text-xs">
-                No outgoing connection requests pending.
-              </div>
+              <EmptyState
+                icon={<UserPlus className="w-8 h-8" />}
+                title="No outgoing requests"
+                description="You haven't sent any friend requests yet. Discover students by skill or campus to connect."
+                action={{
+                  label: 'Discover Partners',
+                  href: '/discover',
+                  variant: 'outline',
+                }}
+              />
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {outgoingRequests.map((req) => (
@@ -519,13 +525,15 @@ export const ConnectionsPage: React.FC = () => {
         {activeTab === 'saved' && (
           <div className="space-y-6">
             {savedPartners.length === 0 ? (
-              <div className="p-12 rounded-3xl bg-slate-900/40 border border-slate-800 text-center space-y-3 max-w-md mx-auto">
-                <Bookmark className="w-8 h-8 text-brand-400 mx-auto" />
-                <h3 className="text-base font-bold text-white">No Saved Learning Partners</h3>
-                <p className="text-xs text-slate-400">
-                  Bookmark students on the Discover page to save them for quick reference later.
-                </p>
-              </div>
+              <EmptyState
+                icon={<Bookmark className="w-8 h-8" />}
+                title="No saved learning partners"
+                description="Bookmark students on the Discover page to save them for quick reference later."
+                action={{
+                  label: 'Discover Students',
+                  href: '/discover',
+                }}
+              />
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {savedPartners.map((item) => (
@@ -584,9 +592,11 @@ export const ConnectionsPage: React.FC = () => {
         {activeTab === 'blocked' && (
           <div className="space-y-6">
             {blockedStudents.length === 0 ? (
-              <div className="p-8 rounded-2xl bg-slate-900/40 border border-slate-800 text-center text-slate-400 text-xs">
-                You have not blocked any students.
-              </div>
+              <EmptyState
+                icon={<ShieldAlert className="w-8 h-8" />}
+                title="No blocked students"
+                description="You haven't blocked anyone. Students you block will not be able to connect or message you."
+              />
             ) : (
               <div className="max-w-2xl space-y-3">
                 {blockedStudents.map((item) => (
