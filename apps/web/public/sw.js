@@ -1,5 +1,5 @@
 /* eslint-disable */
-// PeerLume Progressive Web App Service Worker
+// PeerLearn Progressive Web App Service Worker
 // "Learn Together. Grow Together."
 
 const CACHE_NAME = 'peerlume-static-v1';

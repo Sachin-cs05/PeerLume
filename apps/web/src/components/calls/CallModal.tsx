@@ -57,19 +57,19 @@ export const CallModal: React.FC = () => {
   }, [remoteStream]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-gray-950/90 backdrop-blur-md animate-in fade-in duration-300">
-      <div className="relative w-full max-w-4xl h-[85vh] max-h-[750px] bg-gray-900 rounded-3xl overflow-hidden shadow-2xl flex flex-col border border-gray-800">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/85 backdrop-blur-xs animate-fade-in">
+      <div className="relative w-full max-w-4xl h-[85vh] max-h-[720px] bg-[#09090B] rounded-xl overflow-hidden shadow-2xl flex flex-col border border-border">
         {/* Header Bar */}
-        <div className="absolute top-0 inset-x-0 z-20 flex items-center justify-between p-4 bg-gradient-to-b from-black/80 to-transparent">
+        <div className="absolute top-0 inset-x-0 z-20 flex items-center justify-between p-4 bg-gradient-to-b from-black/90 to-transparent">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm">
+            <div className="w-8 h-8 rounded-full bg-neutral-800 border border-neutral-700 flex items-center justify-center text-white font-bold text-xs">
               {partnerName.slice(0, 2).toUpperCase()}
             </div>
             <div>
-              <h4 className="text-white font-semibold text-sm leading-tight">
+              <h4 className="text-white font-semibold text-xs sm:text-sm leading-tight">
                 {partnerName}
               </h4>
-              <div className="flex items-center gap-1.5 text-xs text-gray-300">
+              <div className="flex items-center gap-1.5 text-[11px] text-neutral-400">
                 <Wifi className="w-3 h-3 text-emerald-400" />
                 <span className="capitalize">{connectionState}</span>
                 <span>•</span>
@@ -80,7 +80,7 @@ export const CallModal: React.FC = () => {
 
           {/* Screen Share Badge */}
           {isScreenSharing && (
-            <span className="bg-blue-500/80 text-white text-xs px-2.5 py-1 rounded-full font-medium backdrop-blur-sm">
+            <span className="bg-white text-black text-[11px] px-2.5 py-1 rounded-full font-semibold">
               Sharing Screen
             </span>
           )}
@@ -88,8 +88,8 @@ export const CallModal: React.FC = () => {
 
         {/* Permission Error Banner */}
         {permissionError && (
-          <div className="absolute top-16 inset-x-4 z-20 bg-amber-500/90 text-white px-4 py-2.5 rounded-xl text-xs flex items-center gap-2 shadow-lg backdrop-blur-sm">
-            <AlertCircle className="w-4 h-4 shrink-0" />
+          <div className="absolute top-16 inset-x-4 z-20 bg-neutral-900 border border-rose-500/40 text-rose-300 px-4 py-2 rounded-lg text-xs flex items-center gap-2 shadow-lg">
+            <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
             <span>{permissionError}</span>
           </div>
         )}
@@ -108,13 +108,13 @@ export const CallModal: React.FC = () => {
 
           {/* Remote Avatar Placeholder (if audio call or video pending) */}
           {(!remoteStream || activeCall.type === 'AUDIO') && (
-            <div className="flex flex-col items-center justify-center text-center p-6 space-y-4">
-              <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white text-3xl font-bold ring-4 ring-blue-500/30 animate-pulse shadow-xl">
+            <div className="flex flex-col items-center justify-center text-center p-6 space-y-3">
+              <div className="w-20 h-20 rounded-full bg-neutral-900 border border-neutral-700 flex items-center justify-center text-white text-2xl font-bold shadow-xl">
                 {partnerName.slice(0, 2).toUpperCase()}
               </div>
               <div>
-                <p className="text-white text-base font-medium">{partnerName}</p>
-                <p className="text-gray-400 text-xs">
+                <p className="text-white text-sm font-semibold">{partnerName}</p>
+                <p className="text-neutral-400 text-xs">
                   {connectionState === 'connected' ? 'Connected' : 'Establishing peer connection...'}
                 </p>
               </div>
@@ -122,7 +122,7 @@ export const CallModal: React.FC = () => {
           )}
 
           {/* Local Video Tile (Picture-in-Picture) */}
-          <div className="absolute bottom-4 right-4 z-10 w-28 sm:w-44 aspect-video bg-gray-800 rounded-xl overflow-hidden shadow-2xl border-2 border-white/20">
+          <div className="absolute bottom-4 right-4 z-10 w-28 sm:w-40 aspect-video bg-neutral-900 rounded-lg overflow-hidden shadow-xl border border-neutral-700">
             {localStream && !isVideoDisabled ? (
               <video
                 ref={localVideoRef}
@@ -132,7 +132,7 @@ export const CallModal: React.FC = () => {
                 className="w-full h-full object-cover -scale-x-100"
               />
             ) : (
-              <div className="w-full h-full flex flex-col items-center justify-center bg-gray-800 text-gray-400 text-xs">
+              <div className="w-full h-full flex flex-col items-center justify-center bg-neutral-900 text-neutral-400 text-xs">
                 <VideoOff className="w-4 h-4 mb-1" />
                 <span>Camera off</span>
               </div>
@@ -141,57 +141,57 @@ export const CallModal: React.FC = () => {
         </div>
 
         {/* Call Controls Bar */}
-        <div className="relative z-20 p-4 bg-gradient-to-t from-black/90 via-black/70 to-transparent flex items-center justify-center gap-4 sm:gap-6">
+        <div className="relative z-20 p-4 bg-gradient-to-t from-black/95 to-black/60 flex items-center justify-center gap-3 sm:gap-4 border-t border-neutral-800">
           {/* Mute/Unmute Mic */}
           <button
             type="button"
             onClick={toggleAudio}
-            className={`p-3.5 rounded-full transition-all shadow-lg ${
+            className={`p-3 rounded-full transition-all cursor-pointer ${
               isAudioMuted
-                ? 'bg-amber-500 text-white hover:bg-amber-600'
-                : 'bg-white/10 hover:bg-white/20 text-white'
+                ? 'bg-amber-600 text-white'
+                : 'bg-neutral-800 hover:bg-neutral-700 text-white border border-neutral-700'
             }`}
             title={isAudioMuted ? 'Unmute microphone' : 'Mute microphone'}
           >
-            {isAudioMuted ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+            {isAudioMuted ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
           </button>
 
           {/* Camera Toggle */}
           <button
             type="button"
             onClick={toggleVideo}
-            className={`p-3.5 rounded-full transition-all shadow-lg ${
+            className={`p-3 rounded-full transition-all cursor-pointer ${
               isVideoDisabled
-                ? 'bg-amber-500 text-white hover:bg-amber-600'
-                : 'bg-white/10 hover:bg-white/20 text-white'
+                ? 'bg-amber-600 text-white'
+                : 'bg-neutral-800 hover:bg-neutral-700 text-white border border-neutral-700'
             }`}
             title={isVideoDisabled ? 'Turn camera on' : 'Turn camera off'}
           >
-            {isVideoDisabled ? <VideoOff className="w-5 h-5" /> : <VideoIcon className="w-5 h-5" />}
+            {isVideoDisabled ? <VideoOff className="w-4 h-4" /> : <VideoIcon className="w-4 h-4" />}
           </button>
 
           {/* Screen Share Toggle */}
           <button
             type="button"
             onClick={toggleScreenShare}
-            className={`p-3.5 rounded-full transition-all shadow-lg ${
+            className={`p-3 rounded-full transition-all cursor-pointer ${
               isScreenSharing
-                ? 'bg-blue-600 text-white ring-2 ring-blue-400'
-                : 'bg-white/10 hover:bg-white/20 text-white'
+                ? 'bg-white text-black'
+                : 'bg-neutral-800 hover:bg-neutral-700 text-white border border-neutral-700'
             }`}
             title={isScreenSharing ? 'Stop screen sharing' : 'Share your screen'}
           >
-            <Share2 className="w-5 h-5" />
+            <Share2 className="w-4 h-4" />
           </button>
 
           {/* End Call Button */}
           <button
             type="button"
             onClick={() => endCall(activeCall.id)}
-            className="p-3.5 rounded-full bg-red-600 hover:bg-red-700 text-white transition-all shadow-lg hover:scale-105 ring-4 ring-red-500/20"
+            className="p-3 rounded-full bg-rose-600 hover:bg-rose-700 text-white transition-all shadow-md cursor-pointer"
             title="End call"
           >
-            <PhoneOff className="w-5 h-5" />
+            <PhoneOff className="w-4 h-4" />
           </button>
         </div>
       </div>

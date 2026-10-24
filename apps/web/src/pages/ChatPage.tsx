@@ -42,7 +42,6 @@ export const ChatPage: React.FC = () => {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const typingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-
   // 1. Load Conversations
   const fetchConversations = useCallback(async () => {
     try {
@@ -121,42 +120,35 @@ export const ChatPage: React.FC = () => {
     };
   }, [activeConversationId, socket]);
 
-  // Auto-scroll on new messages
+  // Scroll to bottom on new message
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, partnerTyping]);
 
-  // 3. Listen to Real-Time Socket Events
+  // Socket listeners for incoming messages & typing
   useEffect(() => {
     if (!socket) return;
 
-    // Handle new message
     const handleNewMessage = (newMsg: MessageDto) => {
       if (newMsg.conversationId === activeConversationId) {
-        setMessages((prev) => {
-          if (prev.some((m) => m.id === newMsg.id || (m.clientTempId && m.clientTempId === newMsg.clientTempId))) {
-            return prev.map((m) =>
-              m.id === newMsg.id || (m.clientTempId && m.clientTempId === newMsg.clientTempId) ? newMsg : m
-            );
-          }
-          return [...prev, newMsg];
-        });
+        setMessages((prev) => [...prev, newMsg]);
+        setPartnerTyping(false);
 
-        // Mark as read immediately if actively viewing
-        if (newMsg.senderId !== user?.id && activeConversationId) {
-          apiService.conversations.markAsRead(activeConversationId);
-        }
+        // Mark read
+        apiService.conversations.markAsRead(newMsg.conversationId);
       }
 
-      // Update conversation lastMessage & unreadCount in sidebar
+      // Update snippet in conversation list
       setConversations((prev) =>
         prev.map((c) => {
           if (c.id === newMsg.conversationId) {
-            const isCurrent = c.id === activeConversationId;
             return {
               ...c,
               lastMessage: newMsg,
-              unreadCount: isCurrent || newMsg.senderId === user?.id ? 0 : c.unreadCount + 1,
+              unreadCount:
+                newMsg.conversationId === activeConversationId
+                  ? 0
+                  : c.unreadCount + 1,
             };
           }
           return c;
@@ -164,106 +156,88 @@ export const ChatPage: React.FC = () => {
       );
     };
 
-    // Handle read receipts
-    const handleMessageRead = (payload: { conversationId: string; readAt: string }) => {
-      if (payload.conversationId === activeConversationId) {
-        setMessages((prev) =>
-          prev.map((m) => (m.senderId === user?.id ? { ...m, isRead: true, readAt: payload.readAt } : m))
-        );
-      }
-    };
-
-    // Handle Typing indicators
-    const handleTypingStart = (payload: { conversationId: string; userId: string }) => {
-      if (payload.conversationId === activeConversationId && payload.userId !== user?.id) {
+    const handleTypingStart = (data: { conversationId: string; userId: string }) => {
+      if (data.conversationId === activeConversationId && data.userId !== user?.id) {
         setPartnerTyping(true);
+
         if (typingTimerRef.current) clearTimeout(typingTimerRef.current);
-        typingTimerRef.current = setTimeout(() => setPartnerTyping(false), 3000);
+        typingTimerRef.current = setTimeout(() => {
+          setPartnerTyping(false);
+        }, 3000);
       }
     };
 
-    const handleTypingStop = (payload: { conversationId: string; userId: string }) => {
-      if (payload.conversationId === activeConversationId && payload.userId !== user?.id) {
+    const handleTypingStop = (data: { conversationId: string; userId: string }) => {
+      if (data.conversationId === activeConversationId && data.userId !== user?.id) {
         setPartnerTyping(false);
       }
     };
 
     socket.on(SOCKET_EVENTS.MESSAGE_NEW, handleNewMessage);
-    socket.on(SOCKET_EVENTS.MESSAGE_READ, handleMessageRead);
     socket.on(SOCKET_EVENTS.TYPING_START, handleTypingStart);
     socket.on(SOCKET_EVENTS.TYPING_STOP, handleTypingStop);
 
     return () => {
       socket.off(SOCKET_EVENTS.MESSAGE_NEW, handleNewMessage);
-      socket.off(SOCKET_EVENTS.MESSAGE_READ, handleMessageRead);
       socket.off(SOCKET_EVENTS.TYPING_START, handleTypingStart);
       socket.off(SOCKET_EVENTS.TYPING_STOP, handleTypingStop);
     };
   }, [socket, activeConversationId, user?.id]);
 
-  // 4. Send Message Handler
-  const handleSendMessage = async (content: string, type: MessageType, metadata?: MessageMetadata) => {
-    if (!activeConversationId || !user) return;
-
-    const tempId = `temp-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
-    const optimisticMessage: MessageDto = {
-      id: tempId,
-      conversationId: activeConversationId,
-      senderId: user.id,
-      senderName: user.fullName,
-      senderAvatar: user.avatarUrl,
-      type,
-      content,
-      metadata: metadata || null,
-      isRead: false,
-      clientTempId: tempId,
-      createdAt: new Date().toISOString(),
-    };
-
-    // Optimistic UI update
-    setMessages((prev) => [...prev, optimisticMessage]);
+  // Send message
+  const handleSendMessage = async (
+    content: string,
+    type: MessageType,
+    metadata?: MessageMetadata
+  ) => {
+    if (!activeConversationId) return;
 
     try {
       const res = await apiService.conversations.sendMessage(activeConversationId, {
         content,
         type,
         metadata,
-        clientTempId: tempId,
       });
 
       if (res.data) {
-        setMessages((prev) => prev.map((m) => (m.clientTempId === tempId ? res.data : m)));
+        setMessages((prev) => [...prev, res.data]);
+
+        // Optimistically update conversation list preview
+        setConversations((prev) =>
+          prev.map((c) =>
+            c.id === activeConversationId ? { ...c, lastMessage: res.data } : c
+          )
+        );
       }
     } catch (err: unknown) {
       setErrorBanner(err instanceof Error ? err.message : 'Failed to send message');
-      setMessages((prev) => prev.filter((m) => m.clientTempId !== tempId));
     }
   };
 
   const filteredConversations = conversations.filter((c) =>
-    c.participant.fullName.toLowerCase().includes(searchQuery.toLowerCase())
+    c.participant.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    c.participant.college?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
-    <div className="max-w-7xl mx-auto h-[calc(100vh-80px)] flex bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
-      {/* ----------------------------------------------------------------- */}
+    <div className="flex-1 flex overflow-hidden h-[calc(100vh-3.5rem)] sm:h-[calc(100vh-4rem)]">
       {/* LEFT SIDEBAR: CONVERSATION LIST */}
-      {/* ----------------------------------------------------------------- */}
       <div
-        className={`w-full md:w-80 lg:w-96 border-r border-gray-200 flex flex-col bg-gray-50/50 ${activeConversationId ? 'hidden md:flex' : 'flex'
-          }`}
+        className={`w-full md:w-80 lg:w-88 border-r border-border flex flex-col bg-card ${
+          activeConversationId ? 'hidden md:flex' : 'flex'
+        }`}
       >
         {/* Search header */}
-        <div className="p-3 border-b border-gray-200 bg-white">
-          <h2 className="text-base font-bold text-gray-900 mb-2">Direct Messages</h2>
+        <div className="p-3.5 border-b border-border bg-card">
+          <h2 className="text-sm font-bold text-foreground mb-2">Direct Messages</h2>
           <div className="relative">
-            <Search className="w-4 h-4 text-gray-400 absolute left-3 top-2.5" />
+            <Search className="w-3.5 h-3.5 text-foreground-muted absolute left-3 top-2.5" />
             <input
               type="text"
               placeholder="Search conversations..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-1.5 bg-gray-100 border border-transparent rounded-xl text-xs text-gray-900 focus:bg-white focus:border-blue-500 focus:outline-none transition-all"
+              className="w-full pl-9 pr-3 py-1.5 bg-background border border-border rounded-lg text-xs text-foreground placeholder:text-foreground-muted focus:border-foreground dark:focus:border-white focus:outline-none transition-all"
             />
           </div>
         </div>
@@ -271,8 +245,8 @@ export const ChatPage: React.FC = () => {
         {/* Conversation list */}
         <div className="flex-1 overflow-y-auto p-2 space-y-1">
           {loadingConversations ? (
-            <div className="flex items-center justify-center p-8 text-gray-400 text-xs">
-              <Loader2 className="w-5 h-5 animate-spin mr-2" />
+            <div className="flex items-center justify-center p-8 text-foreground-muted text-xs">
+              <Loader2 className="w-4 h-4 animate-spin mr-2" />
               Loading conversations...
             </div>
           ) : filteredConversations.length === 0 ? (
@@ -280,13 +254,13 @@ export const ChatPage: React.FC = () => {
               <EmptyState
                 icon={<MessageSquare className="w-6 h-6" />}
                 title="No conversations yet"
-                description="Connect with learning partners in Discover to start sharing knowledge!"
+                description="Connect with learning partners in Discover to start collaborating."
                 action={{
                   label: 'Find Partners',
                   href: '/discover',
                   variant: 'outline',
                 }}
-                className="p-6! border-0 shadow-none bg-transparent"
+                className="p-4! border-0 shadow-none bg-transparent"
               />
             </div>
           ) : (
@@ -306,70 +280,73 @@ export const ChatPage: React.FC = () => {
         </div>
       </div>
 
-      {/* ----------------------------------------------------------------- */}
       {/* RIGHT MAIN CHAT AREA */}
-      {/* ----------------------------------------------------------------- */}
       <div
-        className={`flex-1 flex flex-col bg-white ${!activeConversationId ? 'hidden md:flex' : 'flex'
-          }`}
+        className={`flex-1 flex flex-col bg-background ${
+          !activeConversationId ? 'hidden md:flex' : 'flex'
+        }`}
       >
         {activeConversation ? (
           <>
             {/* Chat Header */}
-            <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between bg-white shadow-xs">
+            <div className="px-4 py-3 border-b border-border flex items-center justify-between bg-card shadow-xs">
               <div className="flex items-center gap-3">
                 {/* Back button on mobile */}
                 <button
                   type="button"
                   onClick={() => setActiveConversationId(null)}
-                  className="md:hidden p-1 text-gray-500 hover:text-gray-800"
+                  className="md:hidden p-1 text-foreground-muted hover:text-foreground cursor-pointer"
+                  aria-label="Back to conversations"
                 >
-                  <ArrowLeft className="w-5 h-5" />
+                  <ArrowLeft className="w-4 h-4" />
                 </button>
 
                 {/* Participant details */}
                 <div className="relative">
-                  <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm">
+                  <div className="w-9 h-9 rounded-full bg-surface-hover border border-border flex items-center justify-center text-foreground font-bold text-xs shadow-xs">
                     {activeConversation.participant.fullName.slice(0, 2).toUpperCase()}
                   </div>
                   <span
-                    className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-white ${onlineUsers.has(activeConversation.participant.id)
+                    className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-card ${
+                      onlineUsers.has(activeConversation.participant.id)
                         ? 'bg-emerald-500'
-                        : 'bg-gray-300'
-                      }`}
+                        : 'bg-foreground-muted'
+                    }`}
                   />
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-bold text-gray-900 leading-tight">
+                  <h3 className="text-xs sm:text-sm font-bold text-foreground leading-tight">
                     {activeConversation.participant.fullName}
                   </h3>
-                  <p className="text-[11px] text-gray-500">
+                  <p className="text-[11px] text-foreground-muted">
                     {onlineUsers.has(activeConversation.participant.id) ? (
-                      <span className="text-emerald-600 font-medium">Online</span>
+                      <span className="text-emerald-600 dark:text-emerald-400 font-medium">Online</span>
                     ) : (
                       'Offline'
                     )}{' '}
-                    • {activeConversation.participant.college || 'PeerLume Student'}
+                    • {activeConversation.participant.college || 'PeerLearn Student'}
                   </p>
                 </div>
               </div>
 
               {/* Call Initiation Action Buttons */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 <button
                   type="button"
                   onClick={() => initiateCall(activeConversation.participant.id, 'AUDIO')}
-                  className="p-2.5 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors border border-gray-200"
+                  className="p-2 text-foreground-secondary hover:text-foreground bg-card hover:bg-surface-hover rounded-lg transition-colors border border-border cursor-pointer shadow-xs"
                   title="Start Voice Call"
+                  aria-label="Start Voice Call"
                 >
                   <Phone className="w-4 h-4" />
                 </button>
                 <button
                   type="button"
                   onClick={() => initiateCall(activeConversation.participant.id, 'VIDEO')}
-                  className="p-2.5 text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors border border-blue-200"
+                  className="p-2 text-foreground hover:opacity-90 bg-foreground text-background rounded-lg transition-all cursor-pointer shadow-xs"
                   title="Start Video Call"
+                  aria-label="Start Video Call"
                 >
                   <Video className="w-4 h-4" />
                 </button>
@@ -378,29 +355,29 @@ export const ChatPage: React.FC = () => {
 
             {/* Error banner if present */}
             {errorBanner && (
-              <div className="bg-rose-50 border-b border-rose-200 px-4 py-2 text-xs text-rose-700 flex items-center gap-2">
-                <ShieldAlert className="w-4 h-4 text-rose-600 shrink-0" />
+              <div className="bg-rose-500/10 border-b border-rose-500/20 px-4 py-2 text-xs text-rose-500 flex items-center gap-2">
+                <ShieldAlert className="w-4 h-4 shrink-0" />
                 <span>{errorBanner}</span>
               </div>
             )}
 
             {/* Messages Scroll Area */}
-            <div className="flex-1 overflow-y-auto p-4 bg-gray-50/30">
+            <div className="flex-1 overflow-y-auto p-4 bg-background">
               {loadingMessages ? (
-                <div className="flex items-center justify-center h-full text-xs text-gray-400">
-                  <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                <div className="flex items-center justify-center h-full text-xs text-foreground-muted">
+                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
                   Loading message history...
                 </div>
               ) : messages.length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-full text-center text-gray-400 space-y-2 p-6">
-                  <div className="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center">
-                    <MessageSquare className="w-6 h-6" />
+                <div className="flex flex-col items-center justify-center h-full text-center text-foreground-muted space-y-2 p-6">
+                  <div className="w-10 h-10 rounded-full bg-surface-hover border border-border text-foreground flex items-center justify-center">
+                    <MessageSquare className="w-5 h-5" />
                   </div>
-                  <p className="text-sm font-semibold text-gray-800">
-                    Say hello to {activeConversation.participant.fullName}!
+                  <p className="text-sm font-semibold text-foreground">
+                    Conversation with {activeConversation.participant.fullName}
                   </p>
-                  <p className="text-xs text-gray-500 max-w-sm">
-                    Ask questions, share code snippets, discuss goals, and study together.
+                  <p className="text-xs text-foreground-muted max-w-sm">
+                    Exchange questions, share code snippets, schedule study sessions, and study together.
                   </p>
                 </div>
               ) : (
@@ -439,7 +416,7 @@ export const ChatPage: React.FC = () => {
         ) : (
           <div className="flex-1 flex items-center justify-center p-8">
             <EmptyState
-              icon={<MessageSquare className="w-8 h-8" />}
+              icon={<MessageSquare className="w-6 h-6" />}
               title="No conversation selected"
               description="Choose a student from the sidebar or find a study partner in Discover to begin chatting."
               action={{

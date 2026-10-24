@@ -66,11 +66,11 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
   };
 
   return (
-    <header className="bg-slate-900 border-b border-slate-800 px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+    <header className="bg-card border-b border-border px-4 py-2.5 flex flex-wrap items-center justify-between gap-4 text-foreground">
       {/* Left: Title, Session context, and Role */}
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20">
-          <Code2 className="w-5 h-5" />
+        <div className="w-9 h-9 rounded-lg bg-foreground text-background flex items-center justify-center font-bold shadow-xs">
+          <Code2 className="w-4 h-4" />
         </div>
 
         <div>
@@ -83,19 +83,19 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
                   onChange={(e) => setTitleInput(e.target.value)}
                   onBlur={() => setIsEditingTitle(false)}
                   autoFocus
-                  className="bg-slate-800 text-white font-bold text-lg px-2 py-0.5 rounded border border-indigo-500 focus:outline-none"
+                  className="bg-surface text-foreground font-bold text-base px-2 py-0.5 rounded border border-foreground focus:outline-none"
                 />
               </form>
             ) : (
               <div className="flex items-center gap-2 group">
-                <h1 className="text-white font-bold text-lg">{title}</h1>
+                <h1 className="text-foreground font-bold text-base">{title}</h1>
                 {isOwner && (
                   <button
                     onClick={() => {
                       setTitleInput(title);
                       setIsEditingTitle(true);
                     }}
-                    className="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-white transition-opacity p-0.5"
+                    className="opacity-0 group-hover:opacity-100 text-foreground-muted hover:text-foreground transition-opacity p-0.5"
                     title="Rename workspace"
                   >
                     <Edit2 className="w-3.5 h-3.5" />
@@ -106,22 +106,20 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
 
             {/* Role Badge */}
             <span
-              className={`text-xs px-2 py-0.5 rounded-full font-semibold ${
+              className={`text-xs px-2 py-0.5 rounded-full font-semibold border ${
                 role === 'OWNER'
-                  ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
-                  : role === 'EDITOR'
-                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                  : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                  ? 'bg-surface-elevated text-foreground border-border'
+                  : 'bg-surface text-foreground-secondary border-border-subtle'
               }`}
             >
               {role}
             </span>
           </div>
 
-          <div className="flex items-center gap-3 text-xs text-slate-400 mt-0.5">
+          <div className="flex items-center gap-3 text-xs text-foreground-muted mt-0.5">
             {sessionTitle && (
-              <span className="flex items-center gap-1 text-indigo-400">
-                <Calendar className="w-3 h-3" />
+              <span className="flex items-center gap-1 text-foreground-secondary font-medium">
+                <Calendar className="w-3 h-3 text-foreground-muted" />
                 Session: {sessionTitle}
               </span>
             )}
@@ -136,19 +134,19 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
         <div
           className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${
             connectionStatus === 'connected'
-              ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+              ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/20'
               : connectionStatus === 'connecting'
-              ? 'bg-amber-500/10 text-amber-400 border-amber-500/20 animate-pulse'
-              : 'bg-rose-500/10 text-rose-400 border-rose-500/20'
+              ? 'bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/20 animate-pulse'
+              : 'bg-rose-500/10 text-rose-700 dark:text-rose-300 border-rose-500/20'
           }`}
         >
           <span
             className={`w-1.5 h-1.5 rounded-full ${
               connectionStatus === 'connected'
-                ? 'bg-emerald-400'
+                ? 'bg-emerald-500'
                 : connectionStatus === 'connecting'
-                ? 'bg-amber-400'
-                : 'bg-rose-400'
+                ? 'bg-amber-500'
+                : 'bg-rose-500'
             }`}
           />
           <span className="capitalize">{connectionStatus}</span>
@@ -158,12 +156,12 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
         <div
           className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${
             saveStatus === 'saved'
-              ? 'bg-slate-800 text-slate-300 border-slate-700'
+              ? 'bg-surface text-foreground-secondary border-border-subtle'
               : saveStatus === 'saving'
-              ? 'bg-indigo-500/10 text-indigo-300 border-indigo-500/20 animate-pulse'
+              ? 'bg-surface text-foreground border-border animate-pulse'
               : saveStatus === 'unsaved'
-              ? 'bg-amber-500/10 text-amber-300 border-amber-500/20'
-              : 'bg-rose-500/10 text-rose-400 border-rose-500/20'
+              ? 'bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/20'
+              : 'bg-rose-500/10 text-rose-700 dark:text-rose-300 border-rose-500/20'
           }`}
         >
           <span>
@@ -182,7 +180,7 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
           value={language}
           onChange={(e) => onLanguageChange(e.target.value)}
           disabled={role === 'VIEWER'}
-          className="bg-slate-800 text-slate-200 text-xs font-medium rounded-lg px-2.5 py-1.5 border border-slate-700 focus:outline-none focus:border-indigo-500 disabled:opacity-60 cursor-pointer"
+          className="bg-surface text-foreground text-xs font-medium rounded-lg px-2.5 py-1.5 border border-border focus:outline-none focus:border-foreground disabled:opacity-60 cursor-pointer"
         >
           {SUPPORTED_LANGUAGES.map((lang) => (
             <option key={lang.id} value={lang.id}>
@@ -196,16 +194,16 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
       <div className="flex items-center gap-2">
         <button
           onClick={onToggleSandbox}
-          className="p-2 text-slate-400 hover:text-white bg-slate-800/80 hover:bg-slate-800 rounded-lg border border-slate-700 transition-colors flex items-center gap-1.5 text-xs font-medium"
+          className="p-2 text-foreground-secondary hover:text-foreground bg-surface hover:bg-surface-hover rounded-lg border border-border transition-colors flex items-center gap-1.5 text-xs font-medium shadow-xs"
           title="Sandbox security & starter templates"
         >
-          <ShieldAlert className="w-3.5 h-3.5 text-indigo-400" />
+          <ShieldAlert className="w-3.5 h-3.5 text-foreground-muted" />
           <span className="hidden sm:inline">Templates & Sandbox</span>
         </button>
 
         <button
           onClick={onOpenRevisions}
-          className="p-2 text-slate-400 hover:text-white bg-slate-800/80 hover:bg-slate-800 rounded-lg border border-slate-700 transition-colors flex items-center gap-1.5 text-xs font-medium"
+          className="p-2 text-foreground-secondary hover:text-foreground bg-surface hover:bg-surface-hover rounded-lg border border-border transition-colors flex items-center gap-1.5 text-xs font-medium shadow-xs"
           title="View document revisions"
         >
           <History className="w-3.5 h-3.5" />
@@ -214,7 +212,7 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
 
         <button
           onClick={onCopy}
-          className="p-2 text-slate-400 hover:text-white bg-slate-800/80 hover:bg-slate-800 rounded-lg border border-slate-700 transition-colors flex items-center gap-1.5 text-xs font-medium"
+          className="p-2 text-foreground-secondary hover:text-foreground bg-surface hover:bg-surface-hover rounded-lg border border-border transition-colors flex items-center gap-1.5 text-xs font-medium shadow-xs"
           title="Copy full code to clipboard"
         >
           <Copy className="w-3.5 h-3.5" />
@@ -223,10 +221,10 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
 
         <button
           onClick={handleShareLink}
-          className="p-2 text-slate-400 hover:text-white bg-slate-800/80 hover:bg-slate-800 rounded-lg border border-slate-700 transition-colors flex items-center gap-1.5 text-xs font-medium"
+          className="p-2 text-foreground-secondary hover:text-foreground bg-surface hover:bg-surface-hover rounded-lg border border-border transition-colors flex items-center gap-1.5 text-xs font-medium shadow-xs"
           title="Copy workspace share link"
         >
-          {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Share2 className="w-3.5 h-3.5" />}
+          {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Share2 className="w-3.5 h-3.5" />}
           <span className="hidden sm:inline">{copiedLink ? 'Copied' : 'Share'}</span>
         </button>
 
@@ -234,7 +232,7 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
           <button
             onClick={onSave}
             disabled={saveStatus === 'saving'}
-            className="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-indigo-600/20 transition-colors"
+            className="px-3.5 py-1.5 bg-foreground text-background hover:bg-foreground/90 disabled:opacity-50 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors"
             title="Save code checkpoint (Ctrl+S)"
           >
             <Save className="w-3.5 h-3.5" />

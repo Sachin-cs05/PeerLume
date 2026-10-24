@@ -253,21 +253,21 @@ export const StudyRoomPage: React.FC = () => {
   if (loading) {
     return (
       <div className="min-h-[70vh] flex flex-col items-center justify-center p-8">
-        <div className="w-10 h-10 border-4 border-brand-500 border-t-transparent rounded-full animate-spin mb-4" />
-        <p className="text-sm text-slate-500">Loading collaborative study room...</p>
+        <div className="w-10 h-10 border-4 border-foreground border-t-transparent rounded-full animate-spin mb-4" />
+        <p className="text-sm text-foreground-secondary">Loading collaborative study room...</p>
       </div>
     );
   }
 
   if (error || !room) {
     return (
-      <div className="max-w-md mx-auto my-16 p-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl text-center shadow-lg">
-        <ShieldAlert className="w-12 h-12 text-rose-500 mx-auto mb-3" />
-        <h2 className="text-lg font-bold text-slate-900 dark:text-white">Unable to Enter Study Room</h2>
-        <p className="text-xs text-slate-500 mt-2 mb-6">{error || 'Room not found or access revoked.'}</p>
+      <div className="max-w-md mx-auto my-16 p-8 bg-card border border-border rounded-3xl text-center shadow-lg">
+        <ShieldAlert className="w-12 h-12 text-foreground mx-auto mb-3" />
+        <h2 className="text-lg font-bold text-foreground">Unable to Enter Study Room</h2>
+        <p className="text-xs text-foreground-secondary mt-2 mb-6">{error || 'Room not found or access revoked.'}</p>
         <Link
           to="/study-rooms"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-xl text-xs font-semibold"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl text-xs font-medium"
         >
           <ChevronLeft className="w-4 h-4" />
           <span>Back to Study Rooms</span>
@@ -279,36 +279,34 @@ export const StudyRoomPage: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col gap-3 min-h-[calc(100vh-4rem)]">
       {/* Room Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 p-3.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm text-slate-800 dark:text-slate-100">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 p-3.5 bg-card border border-border rounded-2xl shadow-sm text-foreground">
         <div className="flex items-center gap-3">
           <Link
             to="/study-rooms"
-            className="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 transition-colors"
+            className="p-1.5 rounded-xl hover:bg-surface text-foreground-muted hover:text-foreground transition-colors"
             title="Back to Study Rooms"
           >
             <ChevronLeft className="w-5 h-5" />
           </Link>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white truncate max-w-sm">
+              <h1 className="text-base sm:text-lg font-semibold text-foreground truncate max-w-sm">
                 {room.title}
               </h1>
-              <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold uppercase ${
+              <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium uppercase border ${
                 role === 'OWNER'
-                  ? 'bg-amber-100 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300'
-                  : role === 'EDITOR'
-                  ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300'
-                  : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
+                  ? 'bg-surface text-foreground border-border-strong font-semibold'
+                  : 'bg-surface text-foreground-secondary border-border'
               }`}>
                 {role}
               </span>
               {!room.isActive && (
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300 font-semibold">
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-surface text-foreground-muted border border-border font-medium">
                   Ended
                 </span>
               )}
             </div>
-            <p className="text-xs text-brand-600 dark:text-brand-400 truncate max-w-md">
+            <p className="text-xs text-foreground-secondary truncate max-w-md">
               {room.topic}
             </p>
           </div>
@@ -317,7 +315,7 @@ export const StudyRoomPage: React.FC = () => {
         {/* Status Indicators & Room Actions */}
         <div className="flex items-center gap-2 self-end md:self-auto flex-wrap">
           {/* Connection status */}
-          <span className="flex items-center gap-1.5 text-xs text-slate-500 bg-slate-100 dark:bg-slate-800/80 px-2.5 py-1 rounded-xl">
+          <span className="flex items-center gap-1.5 text-xs text-foreground-secondary bg-surface border border-border px-2.5 py-1 rounded-xl">
             <span
               className={`w-2 h-2 rounded-full ${
                 isConnected ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'
@@ -328,14 +326,14 @@ export const StudyRoomPage: React.FC = () => {
 
           {/* Save Status Badge */}
           <span
-            className={`text-xs px-2.5 py-1 rounded-xl font-medium ${
+            className={`text-xs px-2.5 py-1 rounded-xl font-medium border ${
               saveStatus === 'saving'
-                ? 'bg-indigo-50 text-indigo-600 dark:bg-indigo-950/40 dark:text-indigo-300 animate-pulse'
+                ? 'bg-surface text-foreground border-border animate-pulse'
                 : saveStatus === 'dirty'
-                ? 'bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-300'
+                ? 'bg-surface text-foreground-secondary border-border'
                 : saveStatus === 'failed'
-                ? 'bg-rose-50 text-rose-600 dark:bg-rose-950/40 dark:text-rose-300'
-                : 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-300'
+                ? 'bg-surface text-foreground border-border'
+                : 'bg-surface text-foreground-secondary border-border'
             }`}
           >
             {saveStatus === 'saving'
@@ -350,17 +348,17 @@ export const StudyRoomPage: React.FC = () => {
           {/* Copy link */}
           <button
             onClick={handleCopyLink}
-            className="flex items-center gap-1 px-2.5 py-1 text-xs rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="flex items-center gap-1 px-2.5 py-1 text-xs rounded-xl border border-border hover:bg-surface text-foreground transition-colors"
             title="Copy room link"
           >
-            {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+            {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 text-foreground-muted" />}
             <span>{copiedLink ? 'Copied' : 'Share'}</span>
           </button>
 
           {/* Leave Room */}
           <button
             onClick={handleLeaveRoom}
-            className="flex items-center gap-1 px-2.5 py-1 text-xs rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors"
+            className="flex items-center gap-1 px-2.5 py-1 text-xs rounded-xl border border-border hover:bg-surface text-foreground-secondary hover:text-foreground transition-colors"
           >
             <LogOut className="w-3.5 h-3.5" />
             <span>Leave</span>
@@ -370,7 +368,7 @@ export const StudyRoomPage: React.FC = () => {
           {isOwner && room.isActive && (
             <button
               onClick={handleEndRoom}
-              className="flex items-center gap-1 px-2.5 py-1 text-xs rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-rose-600 dark:text-rose-300 hover:bg-rose-100 dark:hover:bg-rose-900/60 font-medium transition-colors"
+              className="flex items-center gap-1 px-2.5 py-1 text-xs rounded-xl bg-surface border border-border text-foreground hover:bg-surface-hover font-medium transition-colors"
             >
               <Power className="w-3.5 h-3.5" />
               <span>End Room</span>
@@ -427,13 +425,13 @@ export const StudyRoomPage: React.FC = () => {
         {/* Right 1 Col: Collaboration Sidebar */}
         <div className="flex flex-col gap-3">
           {/* Tab Selector */}
-          <div className="flex items-center gap-1 p-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-semibold">
+          <div className="flex items-center gap-1 p-1 bg-card border border-border rounded-xl text-xs font-medium">
             <button
               onClick={() => setActiveSidebarTab('call')}
               className={`flex-1 py-1.5 rounded-lg transition-colors ${
                 activeSidebarTab === 'call'
-                  ? 'bg-brand-500 text-white shadow-sm'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                  ? 'bg-primary text-primary-foreground shadow-sm'
+                  : 'text-foreground-secondary hover:text-foreground'
               }`}
             >
               Call
@@ -442,8 +440,8 @@ export const StudyRoomPage: React.FC = () => {
               onClick={() => setActiveSidebarTab('resources')}
               className={`flex-1 py-1.5 rounded-lg transition-colors ${
                 activeSidebarTab === 'resources'
-                  ? 'bg-brand-500 text-white shadow-sm'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                  ? 'bg-primary text-primary-foreground shadow-sm'
+                  : 'text-foreground-secondary hover:text-foreground'
               }`}
             >
               Notes & Code
@@ -452,8 +450,8 @@ export const StudyRoomPage: React.FC = () => {
               onClick={() => setActiveSidebarTab('participants')}
               className={`flex-1 py-1.5 rounded-lg transition-colors ${
                 activeSidebarTab === 'participants'
-                  ? 'bg-brand-500 text-white shadow-sm'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                  ? 'bg-primary text-primary-foreground shadow-sm'
+                  : 'text-foreground-secondary hover:text-foreground'
               }`}
             >
               Peers ({room.participants?.filter((p) => !p.leftAt).length || 1})
@@ -477,9 +475,9 @@ export const StudyRoomPage: React.FC = () => {
           )}
 
           {activeSidebarTab === 'participants' && (
-            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm text-slate-800 dark:text-slate-100 flex flex-col gap-3">
+            <div className="bg-card border border-border rounded-2xl p-4 shadow-sm text-foreground flex flex-col gap-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                <span className="text-xs font-medium uppercase tracking-wider text-foreground-muted">
                   Collaborators ({room.participants?.filter((p) => !p.leftAt).length || 1})
                 </span>
               </div>
@@ -490,17 +488,17 @@ export const StudyRoomPage: React.FC = () => {
                   .map((p) => (
                     <div
                       key={p.userId}
-                      className="flex items-center justify-between p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700/60 text-xs"
+                      className="flex items-center justify-between p-2 rounded-xl bg-surface border border-border text-xs"
                     >
                       <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 rounded-lg bg-brand-600 text-white flex items-center justify-center font-bold text-[10px]">
+                        <div className="w-6 h-6 rounded-lg bg-primary text-primary-foreground flex items-center justify-center font-bold text-[10px]">
                           {p.user?.fullName?.charAt(0) || 'P'}
                         </div>
                         <div>
-                          <p className="font-semibold text-slate-900 dark:text-white">
+                          <p className="font-medium text-foreground">
                             {p.user?.fullName} {p.userId === user?.id && '(You)'}
                           </p>
-                          <span className="text-[10px] text-slate-400 capitalize">{p.role}</span>
+                          <span className="text-[10px] text-foreground-muted capitalize">{p.role}</span>
                         </div>
                       </div>
                       <span className="w-2 h-2 rounded-full bg-emerald-500" title="Online" />

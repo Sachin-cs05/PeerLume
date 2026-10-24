@@ -197,61 +197,61 @@ export const SessionDetailPage: React.FC = () => {
       </div>
 
       {/* Main Header Card */}
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6">
+      <div className="bg-card border border-border rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
         <div>
-          <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-brand-500/10 text-brand-300 border border-brand-500/20 mb-3">
+          <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-surface text-foreground-secondary border border-border mb-3">
             {session.topic}
           </span>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
             {session.title}
           </h1>
           {session.description && (
-            <p className="text-sm text-slate-300 mt-2 leading-relaxed">
+            <p className="text-sm text-foreground-secondary mt-2 leading-relaxed">
               {session.description}
             </p>
           )}
         </div>
 
         {/* Schedule & Mode Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-slate-950/70 p-4 rounded-2xl border border-slate-850">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-surface p-4 rounded-xl border border-border-subtle">
           <div className="space-y-1">
-            <span className="text-[11px] font-semibold text-slate-400 flex items-center gap-1.5 uppercase tracking-wider">
-              <Calendar className="w-3.5 h-3.5 text-brand-400" />
+            <span className="text-[11px] font-semibold text-foreground-muted flex items-center gap-1.5 uppercase tracking-wider">
+              <Calendar className="w-3.5 h-3.5 text-foreground-muted" />
               Date
             </span>
-            <div className="text-xs font-medium text-white">{formattedDate}</div>
+            <div className="text-xs font-semibold text-foreground">{formattedDate}</div>
           </div>
 
           <div className="space-y-1">
-            <span className="text-[11px] font-semibold text-slate-400 flex items-center gap-1.5 uppercase tracking-wider">
-              <Clock className="w-3.5 h-3.5 text-brand-400" />
+            <span className="text-[11px] font-semibold text-foreground-muted flex items-center gap-1.5 uppercase tracking-wider">
+              <Clock className="w-3.5 h-3.5 text-foreground-muted" />
               Time ({session.timeZone})
             </span>
-            <div className="text-xs font-medium text-white">
+            <div className="text-xs font-semibold text-foreground">
               {formattedTime} ({durationMinutes}m)
             </div>
           </div>
 
           <div className="space-y-1">
-            <span className="text-[11px] font-semibold text-slate-400 flex items-center gap-1.5 uppercase tracking-wider">
+            <span className="text-[11px] font-semibold text-foreground-muted flex items-center gap-1.5 uppercase tracking-wider">
               {session.mode === 'ONLINE' ? (
-                <Video className="w-3.5 h-3.5 text-emerald-400" />
+                <Video className="w-3.5 h-3.5 text-foreground-muted" />
               ) : (
-                <MapPin className="w-3.5 h-3.5 text-purple-400" />
+                <MapPin className="w-3.5 h-3.5 text-foreground-muted" />
               )}
               Session Mode
             </span>
-            <div className="text-xs font-medium text-white">
+            <div className="text-xs font-semibold text-foreground">
               {session.mode === 'ONLINE' ? 'Online Video Call' : 'In-Person'}
             </div>
           </div>
 
           <div className="space-y-1">
-            <span className="text-[11px] font-semibold text-slate-400 flex items-center gap-1.5 uppercase tracking-wider">
-              <Users className="w-3.5 h-3.5 text-indigo-400" />
+            <span className="text-[11px] font-semibold text-foreground-muted flex items-center gap-1.5 uppercase tracking-wider">
+              <Users className="w-3.5 h-3.5 text-foreground-muted" />
               Participants
             </span>
-            <div className="text-xs font-medium text-white">
+            <div className="text-xs font-semibold text-foreground">
               {session.participants.length} Students
             </div>
           </div>
@@ -259,10 +259,10 @@ export const SessionDetailPage: React.FC = () => {
 
         {/* In-Person Location Info */}
         {session.mode === 'IN_PERSON' && session.location && (
-          <div className="bg-purple-500/10 border border-purple-500/20 rounded-2xl p-4 flex items-start gap-3 text-purple-200 text-xs">
-            <MapPin className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
+          <div className="bg-surface border border-border rounded-xl p-4 flex items-start gap-3 text-foreground-secondary text-xs">
+            <MapPin className="w-4 h-4 text-foreground-muted shrink-0 mt-0.5" />
             <div>
-              <span className="font-semibold block text-white">Location Details:</span>
+              <span className="font-semibold block text-foreground">Location Details:</span>
               <span>{session.location}</span>
             </div>
           </div>
@@ -270,12 +270,12 @@ export const SessionDetailPage: React.FC = () => {
 
         {/* Learning Objectives */}
         {session.objectives && (
-          <div className="space-y-1.5 pt-2 border-t border-slate-800">
-            <div className="flex items-center gap-1.5 text-xs font-semibold text-brand-400 uppercase tracking-wider">
-              <Target className="w-4 h-4" />
+          <div className="space-y-1.5 pt-2 border-t border-border">
+            <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground uppercase tracking-wider">
+              <Target className="w-4 h-4 text-foreground-muted" />
               <span>Learning Objectives</span>
             </div>
-            <p className="text-xs text-slate-300 leading-relaxed bg-slate-950/60 p-3 rounded-xl border border-slate-850">
+            <p className="text-xs text-foreground-secondary leading-relaxed bg-surface p-3 rounded-lg border border-border-subtle">
               {session.objectives}
             </p>
           </div>
@@ -283,19 +283,19 @@ export const SessionDetailPage: React.FC = () => {
 
         {/* Preparation Notes */}
         {session.notes && (
-          <div className="space-y-1.5 pt-2 border-t border-slate-800">
-            <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-400 uppercase tracking-wider">
-              <FileText className="w-4 h-4" />
+          <div className="space-y-1.5 pt-2 border-t border-border">
+            <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground uppercase tracking-wider">
+              <FileText className="w-4 h-4 text-foreground-muted" />
               <span>Preparation & Instructions</span>
             </div>
-            <p className="text-xs text-slate-300 leading-relaxed bg-slate-950/60 p-3 rounded-xl border border-slate-850">
+            <p className="text-xs text-foreground-secondary leading-relaxed bg-surface p-3 rounded-lg border border-border-subtle">
               {session.notes}
             </p>
           </div>
         )}
 
         {/* Primary Action Controls Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-800">
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-border">
           <div className="flex items-center gap-2">
             {isPendingInvitee && (
               <>
@@ -318,7 +318,7 @@ export const SessionDetailPage: React.FC = () => {
 
             {session.status === 'ACCEPTED' && (
               <Link to="/code">
-                <Button variant="outline" size="sm" leftIcon={<Code2 className="w-4 h-4 text-indigo-400" />}>
+                <Button variant="outline" size="sm" leftIcon={<Code2 className="w-4 h-4" />}>
                   Code Workspace
                 </Button>
               </Link>
@@ -326,7 +326,7 @@ export const SessionDetailPage: React.FC = () => {
 
             {session.status === 'ACCEPTED' && (
               <Link to={`/study-rooms?sessionId=${session.id}`}>
-                <Button variant="outline" size="sm" leftIcon={<Presentation className="w-4 h-4 text-brand-400" />}>
+                <Button variant="outline" size="sm" leftIcon={<Presentation className="w-4 h-4" />}>
                   Study Room
                 </Button>
               </Link>
@@ -335,7 +335,7 @@ export const SessionDetailPage: React.FC = () => {
             <Button
               variant="outline"
               size="sm"
-              leftIcon={<Download className="w-4 h-4 text-emerald-400" />}
+              leftIcon={<Download className="w-4 h-4 text-foreground-muted" />}
               onClick={handleExportIcs}
               isLoading={isExporting}
             >
@@ -364,7 +364,7 @@ export const SessionDetailPage: React.FC = () => {
             <Button
               variant="ghost"
               size="sm"
-              className="text-rose-400 hover:text-rose-300 hover:bg-rose-500/10"
+              className="text-rose-600 dark:text-rose-400 hover:bg-rose-500/10"
               onClick={handleCancelSession}
             >
               Cancel Session
@@ -375,15 +375,15 @@ export const SessionDetailPage: React.FC = () => {
 
       {/* Reschedule Proposal Timeline & Banner */}
       {pendingProposal && (
-        <div className="bg-indigo-500/10 border border-indigo-500/30 rounded-3xl p-6 space-y-4">
+        <div className="bg-card border border-border rounded-2xl p-6 space-y-4">
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-2xl bg-indigo-500/20 text-indigo-400">
+              <div className="p-2.5 rounded-lg bg-surface border border-border text-foreground">
                 <RefreshCw className="w-5 h-5 animate-pulse" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-white">Reschedule Proposal Pending</h3>
-                <p className="text-xs text-indigo-300">
+                <h3 className="text-base font-bold text-foreground">Reschedule Proposal Pending</h3>
+                <p className="text-xs text-foreground-muted">
                   Proposed by {pendingProposal.proposerName} on{' '}
                   {new Date(pendingProposal.createdAt).toLocaleDateString()}
                 </p>
@@ -412,18 +412,18 @@ export const SessionDetailPage: React.FC = () => {
             )}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs bg-slate-900/80 p-3.5 rounded-xl border border-indigo-500/20">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs bg-surface p-3.5 rounded-lg border border-border-subtle">
             <div>
-              <span className="text-slate-400 block mb-0.5">Proposed Time:</span>
-              <span className="font-semibold text-white">
+              <span className="text-foreground-muted block mb-0.5">Proposed Time:</span>
+              <span className="font-semibold text-foreground">
                 {new Date(pendingProposal.proposedStartTime).toLocaleString()} (
                 {pendingProposal.proposedTimeZone})
               </span>
             </div>
             {pendingProposal.reason && (
               <div>
-                <span className="text-slate-400 block mb-0.5">Reason:</span>
-                <span className="text-slate-300 italic">{pendingProposal.reason}</span>
+                <span className="text-foreground-muted block mb-0.5">Reason:</span>
+                <span className="text-foreground-secondary italic">{pendingProposal.reason}</span>
               </div>
             )}
           </div>
@@ -431,28 +431,28 @@ export const SessionDetailPage: React.FC = () => {
       )}
 
       {/* Participants List */}
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-4 shadow-xl">
-        <h2 className="text-xl font-bold text-white">Session Participants</h2>
+      <div className="bg-card border border-border rounded-2xl p-6 sm:p-8 space-y-4 shadow-sm">
+        <h2 className="text-lg font-bold text-foreground">Session Participants</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {session.participants.map((p) => (
             <div
               key={p.id}
-              className="bg-slate-950/70 border border-slate-850 rounded-2xl p-4 flex items-center justify-between gap-3"
+              className="bg-surface border border-border rounded-xl p-4 flex items-center justify-between gap-3"
             >
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-brand-600 flex items-center justify-center text-white text-sm font-bold shrink-0">
+                <div className="w-9 h-9 rounded-full bg-foreground text-background flex items-center justify-center text-xs font-bold shrink-0">
                   {p.fullName.charAt(0)}
                 </div>
                 <div>
-                  <div className="text-sm font-bold text-white flex items-center gap-2">
+                  <div className="text-sm font-semibold text-foreground flex items-center gap-2">
                     <span>{p.fullName}</span>
                     {p.role === 'ORGANIZER' && (
-                      <span className="text-[10px] font-semibold bg-brand-500/20 text-brand-300 px-2 py-0.5 rounded-full">
+                      <span className="text-[10px] font-semibold bg-surface border border-border text-foreground-secondary px-2 py-0.5 rounded-full">
                         Organizer
                       </span>
                     )}
                   </div>
-                  <div className="text-xs text-slate-400">{p.college || 'Peer Student'}</div>
+                  <div className="text-xs text-foreground-muted">{p.college || 'Peer Student'}</div>
                 </div>
               </div>
 
@@ -460,10 +460,10 @@ export const SessionDetailPage: React.FC = () => {
                 <span
                   className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${
                     p.status === 'ACCEPTED'
-                      ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                      ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/20'
                       : p.status === 'PENDING'
-                      ? 'bg-amber-500/10 text-amber-400 border-amber-500/20'
-                      : 'bg-rose-500/10 text-rose-400 border-rose-500/20'
+                      ? 'bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/20'
+                      : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700'
                   }`}
                 >
                   {p.status}
@@ -478,8 +478,8 @@ export const SessionDetailPage: React.FC = () => {
       <div className="space-y-4">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div>
-            <h2 className="text-xl font-bold text-white">Session Workspace & Resources</h2>
-            <p className="text-xs text-slate-400">
+            <h2 className="text-lg font-bold text-foreground">Session Workspace & Resources</h2>
+            <p className="text-xs text-foreground-muted">
               Shared study notes, code snippets, links, and documents for this session.
             </p>
           </div>
@@ -505,8 +505,8 @@ export const SessionDetailPage: React.FC = () => {
         </div>
 
         {resources.length === 0 ? (
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 text-center text-xs text-slate-400 space-y-2">
-            <FileText className="w-8 h-8 text-slate-600 mx-auto" />
+          <div className="bg-card border border-border rounded-xl p-8 text-center text-xs text-foreground-muted space-y-2 shadow-sm">
+            <FileText className="w-8 h-8 text-foreground-muted mx-auto" />
             <p>No workspace resources attached to this session yet.</p>
           </div>
         ) : (
@@ -538,11 +538,11 @@ export const SessionDetailPage: React.FC = () => {
 
       {/* Create Note Modal */}
       {isNoteEditorOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-2xl p-6 sm:p-8 shadow-2xl relative my-8">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
+          <div className="bg-card border border-border rounded-2xl w-full max-w-2xl p-6 sm:p-8 shadow-2xl relative my-8">
             <button
               onClick={() => setIsNoteEditorOpen(false)}
-              className="absolute top-5 right-5 text-slate-400 hover:text-white transition-colors"
+              className="absolute top-5 right-5 text-foreground-muted hover:text-foreground transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -560,11 +560,11 @@ export const SessionDetailPage: React.FC = () => {
 
       {/* File Upload Modal */}
       {isFileUploadOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-lg p-6 shadow-2xl relative my-8">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
+          <div className="bg-card border border-border rounded-2xl w-full max-w-lg p-6 shadow-2xl relative my-8">
             <button
               onClick={() => setIsFileUploadOpen(false)}
-              className="absolute top-5 right-5 text-slate-400 hover:text-white transition-colors"
+              className="absolute top-5 right-5 text-foreground-muted hover:text-foreground transition-colors"
             >
               <X className="w-5 h-5" />
             </button>

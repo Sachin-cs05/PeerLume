@@ -32,8 +32,8 @@ async function startServer(): Promise<void> {
       if (dbStatus.status === 'connected') {
         logger.info(`🗄️ PostgreSQL database connected (latency: ${dbStatus.latencyMs}ms)`);
       } else {
-        logger.warn(`⚠️ PostgreSQL database is not reachable at localhost:5432 (${dbStatus.message})`);
-        logger.warn(`💡 Tip: Start PostgreSQL service or update DATABASE_URL in .env if using a remote/cloud database.`);
+        logger.warn(`⚠️ PostgreSQL database connection warning: ${dbStatus.message}`);
+        logger.warn(`💡 Tip: If using Neon serverless, compute wakes up automatically within a few seconds.`);
       }
     } catch (err: any) {
       logger.warn(`⚠️ Database check failed: ${err?.message || err}`);

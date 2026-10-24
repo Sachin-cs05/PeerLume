@@ -21,25 +21,30 @@ export const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const baseStyles =
-    'inline-flex items-center justify-center font-medium rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed select-none';
+    'inline-flex items-center justify-center font-medium rounded-lg transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background disabled:opacity-40 disabled:cursor-not-allowed select-none cursor-pointer';
 
   const sizeStyles = {
     sm: 'px-3 py-1.5 text-xs gap-1.5',
-    md: 'px-4 py-2.5 text-sm gap-2',
-    lg: 'px-6 py-3 text-base gap-2.5',
+    md: 'px-4 py-2 text-sm gap-2',
+    lg: 'px-5 py-2.5 text-sm sm:text-base gap-2.5',
   };
 
   const variantStyles = {
+    // Light Mode: Black bg (#111113) with White text. Dark Mode: White bg (#FFFFFF) with Deep Black text (#09090B)
     primary:
-      'bg-brand-600 hover:bg-brand-500 active:bg-brand-700 text-white shadow-lg shadow-brand-600/25 focus:ring-brand-500',
+      'bg-[#111113] hover:bg-[#27272A] active:bg-[#000000] text-white dark:bg-white dark:hover:bg-[#E4E4E7] dark:active:bg-[#D4D4D8] dark:text-[#09090B] font-semibold shadow-xs',
+    // Secondary: Transparent background with border, Near Black text in light mode, Pure White text in dark mode
     secondary:
-      'bg-slate-800 hover:bg-slate-700 active:bg-slate-850 text-slate-100 border border-slate-700/80 focus:ring-slate-500',
+      'bg-transparent hover:bg-surface-hover active:bg-surface-hover/80 text-foreground border border-border hover:border-border-strong font-medium',
+    // Outline: Clean subtle border, text-foreground
     outline:
-      'bg-transparent hover:bg-slate-800/60 active:bg-slate-800 text-slate-200 border border-slate-700 focus:ring-slate-500',
+      'bg-transparent hover:bg-surface-hover text-foreground border border-border hover:border-foreground/40 font-medium',
+    // Ghost: Clean hover surface
     ghost:
-      'bg-transparent hover:bg-slate-800/50 active:bg-slate-800 text-slate-300 hover:text-white focus:ring-slate-500',
+      'bg-transparent hover:bg-surface-hover text-foreground-secondary hover:text-foreground font-medium',
+    // Danger: Restrained semantic red
     danger:
-      'bg-red-600 hover:bg-red-500 active:bg-red-700 text-white shadow-lg shadow-red-600/20 focus:ring-red-500',
+      'bg-rose-500/10 hover:bg-rose-500/20 active:bg-rose-500/25 text-rose-600 dark:text-rose-400 border border-rose-500/20 dark:border-rose-500/30 font-medium',
   };
 
   return (

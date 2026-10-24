@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { MailCheck, AlertCircle, ArrowRight, RefreshCw, Send } from 'lucide-react';
+import { MailCheck, AlertCircle, ArrowRight, RefreshCw, Send, ShieldCheck } from 'lucide-react';
 import { Card } from '../../components/ui/Card.js';
 import { Button } from '../../components/ui/Button.js';
 import { Input } from '../../components/ui/Input.js';
@@ -68,26 +68,30 @@ export const VerifyEmailPage: React.FC = () => {
     <div className="flex-1 flex items-center justify-center p-4 py-12">
       <div className="w-full max-w-md space-y-6">
         <div className="text-center space-y-2">
-          <h1 className="text-3xl font-extrabold text-white tracking-tight">Email Verification</h1>
-          <p className="text-sm text-slate-400">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-border bg-card text-foreground-secondary text-xs font-medium">
+            <ShieldCheck className="w-3.5 h-3.5 text-foreground" />
+            <span>Identity Verification</span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">Email Verification</h1>
+          <p className="text-xs sm:text-sm text-foreground-secondary">
             Confirm your student email address to protect the peer network.
           </p>
         </div>
 
-        <Card className="border-slate-800 bg-slate-900/90 shadow-2xl p-6 sm:p-8">
+        <Card className="border-border bg-card shadow-sm p-6 sm:p-8">
           {verifying ? (
             <div className="text-center py-8 space-y-4">
               <Spinner size="lg" />
-              <p className="text-sm text-slate-300">Validating your email verification token...</p>
+              <p className="text-xs sm:text-sm text-foreground-secondary">Validating your email verification token...</p>
             </div>
           ) : verified ? (
             <div className="text-center space-y-6">
-              <div className="w-12 h-12 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto">
+              <div className="w-12 h-12 rounded-full bg-surface-hover border border-border text-foreground flex items-center justify-center mx-auto">
                 <MailCheck className="w-6 h-6" />
               </div>
-              <div className="space-y-2">
-                <h3 className="text-xl font-bold text-white">Email Successfully Verified!</h3>
-                <p className="text-sm text-slate-300">
+              <div className="space-y-1.5">
+                <h3 className="text-base sm:text-lg font-bold text-foreground">Email Successfully Verified</h3>
+                <p className="text-xs sm:text-sm text-foreground-secondary">
                   Your student account is now verified. You can access all peer features and discovery tools.
                 </p>
               </div>
@@ -111,8 +115,8 @@ export const VerifyEmailPage: React.FC = () => {
                 </Alert>
               ) : (
                 <div className="space-y-4">
-                  <div className="flex items-start gap-3 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs">
-                    <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                  <div className="flex items-start gap-3 p-3 rounded-lg bg-surface-hover border border-border text-foreground-secondary text-xs">
+                    <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-foreground" />
                     <span>
                       If you haven’t clicked the link sent to your inbox, you can request a new verification token below.
                     </span>
@@ -153,8 +157,8 @@ export const VerifyEmailPage: React.FC = () => {
                 </div>
               )}
 
-              <div className="text-center pt-2 border-t border-slate-800">
-                <Link to="/dashboard" className="text-xs text-brand-400 hover:text-brand-300 inline-flex items-center gap-1">
+              <div className="text-center pt-2 border-t border-border">
+                <Link to="/dashboard" className="text-xs text-foreground-muted hover:text-foreground inline-flex items-center gap-1 transition-colors">
                   <RefreshCw className="w-3.5 h-3.5" /> Continue to Student Dashboard
                 </Link>
               </div>

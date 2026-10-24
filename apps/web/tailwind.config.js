@@ -5,25 +5,42 @@ export default {
   theme: {
     extend: {
       colors: {
+        background: 'rgb(var(--color-bg) / <alpha-value>)',
+        'background-secondary': 'rgb(var(--color-bg-secondary) / <alpha-value>)',
+        card: 'rgb(var(--color-card) / <alpha-value>)',
+        surface: 'rgb(var(--color-surface) / <alpha-value>)',
+        'surface-elevated': 'rgb(var(--color-surface-elevated) / <alpha-value>)',
+        'surface-hover': 'rgb(var(--color-surface-hover) / <alpha-value>)',
+        border: 'rgb(var(--color-border) / <alpha-value>)',
+        'border-subtle': 'rgb(var(--color-border-subtle) / <alpha-value>)',
+        'border-strong': 'rgb(var(--color-border-strong) / <alpha-value>)',
+        foreground: 'rgb(var(--color-foreground) / <alpha-value>)',
+        'foreground-secondary': 'rgb(var(--color-foreground-secondary) / <alpha-value>)',
+        'foreground-muted': 'rgb(var(--color-foreground-muted) / <alpha-value>)',
+        ring: 'rgb(var(--color-ring) / <alpha-value>)',
         brand: {
-          50: '#eef2ff',
-          100: '#e0e7ff',
-          200: '#c7d2fe',
-          300: '#a5b4fc',
-          400: '#818cf8',
-          500: '#6366f1', // Primary Indigo
-          600: '#4f46e5',
-          700: '#4338ca',
-          800: '#3730a3',
-          900: '#312e81',
-          950: '#1e1b4b',
+          50: '#FAFAFA',
+          100: '#F4F4F5',
+          200: '#E4E4E7',
+          300: '#D4D4D8',
+          400: '#A1A1AA',
+          500: '#71717A',
+          600: '#27272A',
+          700: '#18181B',
+          800: '#111113',
+          900: '#0F0F10',
+          950: '#09090B',
         },
         peer: {
-          teal: '#0d9488',
+          teal: '#10b981',
           emerald: '#10b981',
           amber: '#f59e0b',
-          rose: '#f43f5e',
+          rose: '#ef4444',
         },
+      },
+      borderRadius: {
+        card: '14px',
+        panel: '18px',
       },
       fontFamily: {
         sans: [
@@ -37,11 +54,11 @@ export default {
       },
       animation: {
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'fade-in': 'fadeIn 0.5s ease-out forwards',
+        'fade-in': 'fadeIn 0.3s ease-out forwards',
       },
       keyframes: {
         fadeIn: {
-          '0%': { opacity: '0', transform: 'translateY(8px)' },
+          '0%': { opacity: '0', transform: 'translateY(4px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
       },

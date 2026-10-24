@@ -89,15 +89,14 @@ export const WhiteboardToolbar: React.FC<WhiteboardToolbarProps> = ({
   readOnly,
 }) => {
   return (
-    <div className="flex flex-wrap items-center justify-between gap-2 p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm text-slate-700 dark:text-slate-200">
+    <div className="flex flex-wrap items-center justify-between gap-2 p-2 bg-card border border-border rounded-2xl shadow-sm text-foreground">
       {/* Tool Selection Group */}
-      <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800/80 p-1 rounded-xl">
+      <div className="flex items-center gap-1 bg-surface p-1 rounded-xl border border-border-subtle">
         <button
           onClick={() => setTool('select')}
           disabled={readOnly}
-          className={`p-1.5 rounded-lg transition-colors ${
-            tool === 'select' ? 'bg-brand-500 text-white shadow-sm' : 'hover:bg-slate-200 dark:hover:bg-slate-700'
-          }`}
+          className={`p-1.5 rounded-lg transition-colors ${tool === 'select' ? 'bg-primary text-primary-foreground shadow-sm' : 'hover:bg-surface-hover text-foreground-secondary hover:text-foreground'
+            }`}
           title="Select & Pan (V)"
           aria-label="Select tool"
         >
@@ -106,9 +105,8 @@ export const WhiteboardToolbar: React.FC<WhiteboardToolbarProps> = ({
         <button
           onClick={() => setTool('pen')}
           disabled={readOnly}
-          className={`p-1.5 rounded-lg transition-colors ${
-            tool === 'pen' ? 'bg-brand-500 text-white shadow-sm' : 'hover:bg-slate-200 dark:hover:bg-slate-700'
-          }`}
+          className={`p-1.5 rounded-lg transition-colors ${tool === 'pen' ? 'bg-primary text-primary-foreground shadow-sm' : 'hover:bg-surface-hover text-foreground-secondary hover:text-foreground'
+            }`}
           title="Pen (P)"
           aria-label="Pen tool"
         >
@@ -117,9 +115,8 @@ export const WhiteboardToolbar: React.FC<WhiteboardToolbarProps> = ({
         <button
           onClick={() => setTool('line')}
           disabled={readOnly}
-          className={`p-1.5 rounded-lg transition-colors ${
-            tool === 'line' ? 'bg-brand-500 text-white shadow-sm' : 'hover:bg-slate-200 dark:hover:bg-slate-700'
-          }`}
+          className={`p-1.5 rounded-lg transition-colors ${tool === 'line' ? 'bg-primary text-primary-foreground shadow-sm' : 'hover:bg-surface-hover text-foreground-secondary hover:text-foreground'
+            }`}
           title="Line (L)"
           aria-label="Line tool"
         >
@@ -128,9 +125,8 @@ export const WhiteboardToolbar: React.FC<WhiteboardToolbarProps> = ({
         <button
           onClick={() => setTool('arrow')}
           disabled={readOnly}
-          className={`p-1.5 rounded-lg transition-colors ${
-            tool === 'arrow' ? 'bg-brand-500 text-white shadow-sm' : 'hover:bg-slate-200 dark:hover:bg-slate-700'
-          }`}
+          className={`p-1.5 rounded-lg transition-colors ${tool === 'arrow' ? 'bg-primary text-primary-foreground shadow-sm' : 'hover:bg-surface-hover text-foreground-secondary hover:text-foreground'
+            }`}
           title="Arrow (A)"
           aria-label="Arrow tool"
         >
@@ -139,9 +135,8 @@ export const WhiteboardToolbar: React.FC<WhiteboardToolbarProps> = ({
         <button
           onClick={() => setTool('rectangle')}
           disabled={readOnly}
-          className={`p-1.5 rounded-lg transition-colors ${
-            tool === 'rectangle' ? 'bg-brand-500 text-white shadow-sm' : 'hover:bg-slate-200 dark:hover:bg-slate-700'
-          }`}
+          className={`p-1.5 rounded-lg transition-colors ${tool === 'rectangle' ? 'bg-primary text-primary-foreground shadow-sm' : 'hover:bg-surface-hover text-foreground-secondary hover:text-foreground'
+            }`}
           title="Rectangle (R)"
           aria-label="Rectangle tool"
         >
@@ -150,9 +145,8 @@ export const WhiteboardToolbar: React.FC<WhiteboardToolbarProps> = ({
         <button
           onClick={() => setTool('circle')}
           disabled={readOnly}
-          className={`p-1.5 rounded-lg transition-colors ${
-            tool === 'circle' ? 'bg-brand-500 text-white shadow-sm' : 'hover:bg-slate-200 dark:hover:bg-slate-700'
-          }`}
+          className={`p-1.5 rounded-lg transition-colors ${tool === 'circle' ? 'bg-primary text-primary-foreground shadow-sm' : 'hover:bg-surface-hover text-foreground-secondary hover:text-foreground'
+            }`}
           title="Circle (C)"
           aria-label="Circle tool"
         >
@@ -161,9 +155,8 @@ export const WhiteboardToolbar: React.FC<WhiteboardToolbarProps> = ({
         <button
           onClick={() => setTool('text')}
           disabled={readOnly}
-          className={`p-1.5 rounded-lg transition-colors ${
-            tool === 'text' ? 'bg-brand-500 text-white shadow-sm' : 'hover:bg-slate-200 dark:hover:bg-slate-700'
-          }`}
+          className={`p-1.5 rounded-lg transition-colors ${tool === 'text' ? 'bg-primary text-primary-foreground shadow-sm' : 'hover:bg-surface-hover text-foreground-secondary hover:text-foreground'
+            }`}
           title="Text Box (T)"
           aria-label="Text tool"
         >
@@ -172,9 +165,8 @@ export const WhiteboardToolbar: React.FC<WhiteboardToolbarProps> = ({
         <button
           onClick={() => setTool('eraser')}
           disabled={readOnly}
-          className={`p-1.5 rounded-lg transition-colors ${
-            tool === 'eraser' ? 'bg-brand-500 text-white shadow-sm' : 'hover:bg-slate-200 dark:hover:bg-slate-700'
-          }`}
+          className={`p-1.5 rounded-lg transition-colors ${tool === 'eraser' ? 'bg-primary text-primary-foreground shadow-sm' : 'hover:bg-surface-hover text-foreground-secondary hover:text-foreground'
+            }`}
           title="Eraser (E)"
           aria-label="Eraser tool"
         >
@@ -185,15 +177,14 @@ export const WhiteboardToolbar: React.FC<WhiteboardToolbarProps> = ({
       {/* Colors & Widths */}
       <div className="flex items-center gap-2">
         {/* Color Palette */}
-        <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800/80 p-1 rounded-xl">
+        <div className="flex items-center gap-1 bg-surface p-1 rounded-xl border border-border-subtle">
           {PALETTE.map((c) => (
             <button
               key={c.id}
               onClick={() => setColor(c.id)}
               disabled={readOnly}
-              className={`w-5 h-5 rounded-full border transition-transform ${
-                color === c.id ? 'scale-125 ring-2 ring-brand-500 border-white' : 'border-slate-300 dark:border-slate-600 hover:scale-110'
-              }`}
+              className={`w-5 h-5 rounded-full border transition-transform ${color === c.id ? 'scale-125 ring-2 ring-foreground border-background' : 'border-border hover:scale-110'
+                }`}
               style={{ backgroundColor: c.id }}
               title={c.label}
               aria-label={`Select color ${c.label}`}
@@ -202,17 +193,16 @@ export const WhiteboardToolbar: React.FC<WhiteboardToolbarProps> = ({
         </div>
 
         {/* Stroke Width Selector */}
-        <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800/80 p-1 rounded-xl">
+        <div className="flex items-center gap-1 bg-surface p-1 rounded-xl border border-border-subtle">
           {STROKES.map((s) => (
             <button
               key={s.width}
               onClick={() => setStrokeWidth(s.width)}
               disabled={readOnly}
-              className={`px-2 py-1 text-xs font-semibold rounded-lg transition-colors ${
-                strokeWidth === s.width
-                  ? 'bg-brand-500 text-white shadow-sm'
-                  : 'hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300'
-              }`}
+              className={`px-2 py-1 text-xs font-medium rounded-lg transition-colors ${strokeWidth === s.width
+                  ? 'bg-primary text-primary-foreground shadow-sm'
+                  : 'hover:bg-surface-hover text-foreground-secondary hover:text-foreground'
+                }`}
               title={`${s.label} stroke`}
             >
               {s.width}px
@@ -226,7 +216,7 @@ export const WhiteboardToolbar: React.FC<WhiteboardToolbarProps> = ({
         <button
           onClick={onUndo}
           disabled={!canUndo || readOnly}
-          className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-40 transition-colors"
+          className="p-1.5 rounded-lg hover:bg-surface text-foreground-secondary hover:text-foreground disabled:opacity-40 transition-colors"
           title="Undo (Ctrl+Z)"
           aria-label="Undo last action"
         >
@@ -235,30 +225,30 @@ export const WhiteboardToolbar: React.FC<WhiteboardToolbarProps> = ({
         <button
           onClick={onRedo}
           disabled={!canRedo || readOnly}
-          className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-40 transition-colors"
+          className="p-1.5 rounded-lg hover:bg-surface text-foreground-secondary hover:text-foreground disabled:opacity-40 transition-colors"
           title="Redo (Ctrl+Y)"
           aria-label="Redo action"
         >
           <RotateCw className="w-4 h-4" />
         </button>
 
-        <div className="h-4 w-px bg-slate-200 dark:bg-slate-800 mx-1" />
+        <div className="h-4 w-px bg-border mx-1" />
 
         {/* Zoom Controls */}
         <button
           onClick={onZoomOut}
-          className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+          className="p-1.5 rounded-lg hover:bg-surface text-foreground-secondary hover:text-foreground transition-colors"
           title="Zoom Out"
           aria-label="Zoom out"
         >
           <ZoomOut className="w-4 h-4" />
         </button>
-        <span className="text-xs font-medium w-12 text-center text-slate-500">
+        <span className="text-xs font-mono font-medium w-12 text-center text-foreground-secondary">
           {Math.round(zoom * 100)}%
         </span>
         <button
           onClick={onZoomIn}
-          className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+          className="p-1.5 rounded-lg hover:bg-surface text-foreground-secondary hover:text-foreground transition-colors"
           title="Zoom In"
           aria-label="Zoom in"
         >
@@ -266,30 +256,30 @@ export const WhiteboardToolbar: React.FC<WhiteboardToolbarProps> = ({
         </button>
         <button
           onClick={onResetZoom}
-          className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-500 hover:text-slate-700"
+          className="p-1.5 rounded-lg hover:bg-surface transition-colors text-foreground-muted hover:text-foreground"
           title="Reset Zoom to 100%"
           aria-label="Reset zoom"
         >
           <Maximize2 className="w-4 h-4" />
         </button>
 
-        <div className="h-4 w-px bg-slate-200 dark:bg-slate-800 mx-1" />
+        <div className="h-4 w-px bg-border mx-1" />
 
         {/* Math Template Button */}
         <button
           onClick={onInsertMathTemplate}
           disabled={readOnly}
-          className="flex items-center gap-1 px-2.5 py-1 text-xs font-medium rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 border border-indigo-200 dark:border-indigo-800/80 transition-colors"
+          className="flex items-center gap-1 px-2.5 py-1 text-xs font-medium rounded-lg bg-surface text-foreground hover:bg-surface-hover border border-border transition-colors"
           title="Insert formula/diagram template"
         >
-          <Sparkles className="w-3.5 h-3.5" />
+          <Sparkles className="w-3.5 h-3.5 text-foreground-secondary" />
           <span>Formula</span>
         </button>
 
         {/* Accessible Objects Tree */}
         <button
           onClick={onShowAccessibleList}
-          className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-300"
+          className="p-1.5 rounded-lg hover:bg-surface transition-colors text-foreground-secondary hover:text-foreground"
           title="View accessible board elements list"
           aria-label="Accessible elements list"
         >
@@ -299,7 +289,7 @@ export const WhiteboardToolbar: React.FC<WhiteboardToolbarProps> = ({
         {/* History Revisions */}
         <button
           onClick={onShowHistory}
-          className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-300"
+          className="p-1.5 rounded-lg hover:bg-surface transition-colors text-foreground-secondary hover:text-foreground"
           title="View board revision history"
           aria-label="Revision history"
         >
@@ -310,7 +300,7 @@ export const WhiteboardToolbar: React.FC<WhiteboardToolbarProps> = ({
         <button
           onClick={onClear}
           disabled={readOnly}
-          className="p-1.5 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/40 text-rose-500 transition-colors disabled:opacity-40"
+          className="p-1.5 rounded-lg hover:bg-destructive/10 text-foreground-muted hover:text-destructive transition-colors disabled:opacity-40"
           title="Clear canvas"
           aria-label="Clear whiteboard"
         >
@@ -321,7 +311,7 @@ export const WhiteboardToolbar: React.FC<WhiteboardToolbarProps> = ({
         <button
           onClick={onSave}
           disabled={isSaving || readOnly}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-white text-xs font-semibold shadow-sm transition-colors disabled:opacity-50"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-medium shadow-sm transition-colors disabled:opacity-50"
           title="Save board checkpoint now"
           aria-label="Save whiteboard"
         >
@@ -329,7 +319,7 @@ export const WhiteboardToolbar: React.FC<WhiteboardToolbarProps> = ({
           <span>{isSaving ? 'Saving...' : 'Save'}</span>
         </button>
         {saveStatus && (
-          <span className="text-[10px] uppercase font-semibold text-slate-400 dark:text-slate-500 tracking-wider">
+          <span className="text-[10px] uppercase font-semibold text-foreground-muted tracking-wider">
             {saveStatus}
           </span>
         )}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { Eye, EyeOff, Lock, Mail, ArrowRight, Sparkles } from 'lucide-react';
+import { Eye, EyeOff, Lock, Mail, ArrowRight, Layers } from 'lucide-react';
 import { Card } from '../../components/ui/Card.js';
 import { Button } from '../../components/ui/Button.js';
 import { Input } from '../../components/ui/Input.js';
@@ -43,19 +43,19 @@ export const LoginPage: React.FC = () => {
     <div className="flex-1 flex items-center justify-center p-4 py-12">
       <div className="w-full max-w-md space-y-6">
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-300 text-xs font-semibold">
-            <Sparkles className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-border bg-card text-foreground-secondary text-xs font-medium">
+            <Layers className="w-3.5 h-3.5 text-foreground" />
             <span>Student Portal</span>
           </div>
-          <h1 className="text-3xl font-extrabold text-white tracking-tight">Welcome Back</h1>
-          <p className="text-sm text-slate-400">
-            Sign in to continue learning with your friends and peers.
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">Welcome Back</h1>
+          <p className="text-xs sm:text-sm text-foreground-secondary">
+            Sign in to continue learning with your peers and study groups.
           </p>
         </div>
 
-        <Card className="border-slate-800 bg-slate-900/90 shadow-2xl p-6 sm:p-8">
+        <Card className="border-border bg-card shadow-sm p-6 sm:p-8">
           {error && (
-            <Alert variant="error" className="mb-6" onClose={() => setError(null)}>
+            <Alert variant="error" className="mb-5" onClose={() => setError(null)}>
               {error}
             </Alert>
           )}
@@ -73,23 +73,23 @@ export const LoginPage: React.FC = () => {
               autoFocus
             />
 
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 text-left">
               <div className="flex items-center justify-between">
                 <label
                   htmlFor="login-password"
-                  className="block text-xs font-semibold uppercase tracking-wider text-slate-300"
+                  className="block text-xs font-medium text-foreground-secondary"
                 >
                   Password
                 </label>
                 <Link
                   to="/forgot-password"
-                  className="text-xs text-brand-400 hover:text-brand-300 transition-colors"
+                  className="text-xs text-foreground-muted hover:text-foreground transition-colors"
                 >
                   Forgot password?
                 </Link>
               </div>
               <div className="relative">
-                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-foreground-muted">
                   <Lock className="w-4 h-4" />
                 </div>
                 <input
@@ -98,13 +98,13 @@ export const LoginPage: React.FC = () => {
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full rounded-xl border border-slate-700/80 bg-slate-800/80 pl-10 pr-10 py-2.5 text-sm text-slate-100 placeholder-slate-400 backdrop-blur-sm transition-colors focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500 hover:border-slate-600"
+                  className="w-full rounded-lg border border-border bg-white dark:bg-[#18181B] pl-10 pr-10 py-2 text-sm text-foreground placeholder:text-foreground-muted transition-colors focus:outline-none focus:ring-1 focus:ring-foreground/25 dark:focus:ring-white/25 focus:border-foreground dark:focus:border-white hover:border-border-strong"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-400 hover:text-slate-200"
+                  className="absolute inset-y-0 right-0 flex items-center pr-3.5 text-foreground-muted hover:text-foreground cursor-pointer"
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -126,9 +126,9 @@ export const LoginPage: React.FC = () => {
             </div>
           </form>
 
-          <div className="mt-6 pt-6 border-t border-slate-800 text-center text-xs text-slate-400">
+          <div className="mt-6 pt-5 border-t border-border text-center text-xs text-foreground-muted">
             Don’t have an account yet?{' '}
-            <Link to="/register" className="font-semibold text-brand-400 hover:text-brand-300">
+            <Link to="/register" className="font-semibold text-foreground hover:underline">
               Create student account
             </Link>
           </div>

@@ -815,7 +815,7 @@ export const apiService = {
       const a = document.createElement('a');
       a.href = downloadUrl;
       const safeTitle = (sessionTitle || 'session').toLowerCase().replace(/[^a-z0-9_-]/g, '_');
-      a.download = `peerlume_${safeTitle}.ics`;
+      a.download = `peerlearn_${safeTitle}.ics`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -833,7 +833,7 @@ export const apiService = {
       const downloadUrl = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = downloadUrl;
-      a.download = 'peerlume_schedule.ics';
+      a.download = 'peerlearn_schedule.ics';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);

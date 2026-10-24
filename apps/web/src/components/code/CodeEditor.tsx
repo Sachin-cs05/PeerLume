@@ -4,6 +4,7 @@ import { MonacoBinding } from 'y-monaco';
 import type { SocketIoYjsProvider } from '../../services/yjsSocketProvider';
 import type { WorkspaceRole } from '@peerlume/shared';
 import { Loader2 } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext';
 
 interface CodeEditorProps {
   provider: SocketIoYjsProvider | null;
@@ -18,7 +19,9 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   role,
   onContentChange,
 }) => {
+  const { theme } = useTheme();
   const editorRef = useRef<any>(null);
+  const monacoRef = useRef<any>(null);
   const bindingRef = useRef<MonacoBinding | null>(null);
   const [isEditorReady, setIsEditorReady] = useState(false);
 
@@ -26,30 +29,59 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
 
   const handleEditorDidMount: OnMount = (editor, monaco) => {
     editorRef.current = editor;
+    monacoRef.current = monaco;
     setIsEditorReady(true);
 
-    // Set custom monaco theme preferences
+    // Dark Theme (monochrome SaaS background with legible syntax tokens)
     monaco.editor.defineTheme('peerlume-dark', {
       base: 'vs-dark',
       inherit: true,
       rules: [
-        { token: 'comment', foreground: '64748b', fontStyle: 'italic' },
-        { token: 'keyword', foreground: '818cf8', fontStyle: 'bold' },
-        { token: 'string', foreground: '34d399' },
-        { token: 'number', foreground: 'f59e0b' },
+        { token: 'comment', foreground: '71717A', fontStyle: 'italic' },
+        { token: 'keyword', foreground: 'FAFAFA', fontStyle: 'bold' },
+        { token: 'string', foreground: 'A1A1AA' },
+        { token: 'number', foreground: 'E4E4E7' },
       ],
       colors: {
-        'editor.background': '#0b0f19',
-        'editor.foreground': '#f8fafc',
-        'editor.lineHighlightBackground': '#1e293b55',
-        'editorCursor.foreground': '#6366f1',
-        'editorLineNumber.foreground': '#475569',
-        'editorLineNumber.activeForeground': '#94a3b8',
+        'editor.background': '#09090B',
+        'editor.foreground': '#FAFAFA',
+        'editor.lineHighlightBackground': '#18181B',
+        'editorCursor.foreground': '#FFFFFF',
+        'editorLineNumber.foreground': '#71717A',
+        'editorLineNumber.activeForeground': '#FAFAFA',
+        'editor.selectionBackground': '#27272A',
       },
     });
 
-    monaco.editor.setTheme('peerlume-dark');
+    // Light Theme (clean white SaaS background with crisp syntax tokens)
+    monaco.editor.defineTheme('peerlume-light', {
+      base: 'vs',
+      inherit: true,
+      rules: [
+        { token: 'comment', foreground: '71717A', fontStyle: 'italic' },
+        { token: 'keyword', foreground: '111113', fontStyle: 'bold' },
+        { token: 'string', foreground: '52525B' },
+        { token: 'number', foreground: '27272A' },
+      ],
+      colors: {
+        'editor.background': '#FFFFFF',
+        'editor.foreground': '#111113',
+        'editor.lineHighlightBackground': '#F4F4F5',
+        'editorCursor.foreground': '#111113',
+        'editorLineNumber.foreground': '#71717A',
+        'editorLineNumber.activeForeground': '#111113',
+        'editor.selectionBackground': '#EDEDEF',
+      },
+    });
+
+    monaco.editor.setTheme(theme === 'dark' ? 'peerlume-dark' : 'peerlume-light');
   };
+
+  useEffect(() => {
+    if (monacoRef.current && isEditorReady) {
+      monacoRef.current.editor.setTheme(theme === 'dark' ? 'peerlume-dark' : 'peerlume-light');
+    }
+  }, [theme, isEditorReady]);
 
   useEffect(() => {
     if (!editorRef.current || !provider || !isEditorReady) return;
@@ -105,9 +137,9 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   }, [isReadOnly]);
 
   return (
-    <div className="relative w-full h-full flex flex-col bg-[#0b0f19] overflow-hidden rounded-xl border border-slate-800 shadow-2xl">
+    <div className="relative w-full h-full flex flex-col bg-card overflow-hidden rounded-xl border border-border shadow-xs">
       {isReadOnly && (
-        <div className="bg-amber-500/10 border-b border-amber-500/20 px-4 py-1.5 flex items-center justify-between text-xs text-amber-300">
+        <div className="bg-amber-500/10 border-b border-amber-500/20 px-4 py-1.5 flex items-center justify-between text-xs text-amber-700 dark:text-amber-300">
           <span>👀 Read-only mode: You have viewer permissions in this workspace.</span>
           <span className="font-mono text-[10px] bg-amber-500/20 px-2 py-0.5 rounded">VIEWER</span>
         </div>
@@ -117,7 +149,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
         <Editor
           height="100%"
           language={language === 'c++' ? 'cpp' : language}
-          theme="peerlume-dark"
+          theme={theme === 'dark' ? 'peerlume-dark' : 'peerlume-light'}
           options={{
             readOnly: isReadOnly,
             fontSize: 14,
@@ -135,8 +167,8 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
             bracketPairColorization: { enabled: true },
           }}
           loading={
-            <div className="flex flex-col items-center justify-center h-full text-slate-400 gap-3">
-              <Loader2 className="w-8 h-8 animate-spin text-indigo-500" />
+            <div className="flex flex-col items-center justify-center h-full text-foreground-muted gap-3">
+              <Loader2 className="w-8 h-8 animate-spin text-foreground" />
               <p className="text-sm font-medium">Initializing Collaborative Monaco Editor...</p>
             </div>
           }

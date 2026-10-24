@@ -2,7 +2,7 @@ import React from 'react';
 
 export interface BadgeProps {
   children: React.ReactNode;
-  variant?: 'brand' | 'success' | 'warning' | 'danger' | 'neutral';
+  variant?: 'brand' | 'success' | 'warning' | 'danger' | 'neutral' | 'outline';
   size?: 'sm' | 'md';
   dot?: boolean;
   className?: string;
@@ -16,19 +16,27 @@ export const Badge: React.FC<BadgeProps> = ({
   className = '',
 }) => {
   const variantStyles = {
-    brand: 'bg-brand-500/10 text-brand-300 border-brand-500/30',
-    success: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30',
-    warning: 'bg-amber-500/10 text-amber-300 border-amber-500/30',
-    danger: 'bg-rose-500/10 text-rose-300 border-rose-500/30',
-    neutral: 'bg-slate-800 text-slate-300 border-slate-700',
+    brand:
+      'bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 border-neutral-800 dark:border-neutral-200',
+    neutral:
+      'bg-surface-hover text-foreground border-border',
+    outline:
+      'bg-transparent text-foreground border-border',
+    success:
+      'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20',
+    warning:
+      'bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20',
+    danger:
+      'bg-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-500/20',
   };
 
   const dotColors = {
-    brand: 'bg-brand-400',
-    success: 'bg-emerald-400',
-    warning: 'bg-amber-400',
-    danger: 'bg-rose-400',
-    neutral: 'bg-slate-400',
+    brand: 'bg-white dark:bg-neutral-900',
+    neutral: 'bg-foreground-muted',
+    outline: 'bg-foreground-muted',
+    success: 'bg-emerald-500',
+    warning: 'bg-amber-500',
+    danger: 'bg-rose-500',
   };
 
   const sizeStyles = {
@@ -38,7 +46,7 @@ export const Badge: React.FC<BadgeProps> = ({
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 font-medium rounded-full border ${sizeStyles[size]} ${variantStyles[variant]} ${className}`}
+      className={`inline-flex items-center gap-1.5 font-medium rounded-md border ${sizeStyles[size]} ${variantStyles[variant]} ${className}`}
     >
       {dot && <span className={`w-1.5 h-1.5 rounded-full ${dotColors[variant]}`} />}
       {children}

@@ -95,22 +95,22 @@ export const RescheduleDialog: React.FC<RescheduleDialogProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg p-6 shadow-2xl relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+      <div className="bg-card border border-border rounded-xl w-full max-w-lg p-6 shadow-2xl relative">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors"
+          className="absolute top-4 right-4 text-foreground-muted hover:text-foreground transition-colors"
         >
           <X className="w-5 h-5" />
         </button>
 
         <div className="flex items-center gap-2 mb-4">
-          <div className="p-2 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
+          <div className="p-2 rounded-lg bg-surface border border-border text-foreground">
             <RefreshCw className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-white">Propose Reschedule</h3>
-            <p className="text-xs text-slate-400">
+            <h3 className="text-base font-bold text-foreground">Propose Reschedule</h3>
+            <p className="text-xs text-foreground-muted">
               For "{session.title}" • Original schedule stays active until accepted.
             </p>
           </div>
@@ -123,8 +123,8 @@ export const RescheduleDialog: React.FC<RescheduleDialogProps> = ({
         )}
 
         {hasConflict && (
-          <div className="mb-4 bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 flex items-start gap-3 text-amber-300 text-xs">
-            <AlertTriangle className="w-4 h-4 shrink-0 text-amber-400 mt-0.5" />
+          <div className="mb-4 bg-amber-500/10 border border-amber-500/30 rounded-lg p-3 flex items-start gap-3 text-amber-700 dark:text-amber-300 text-xs">
+            <AlertTriangle className="w-4 h-4 shrink-0 text-amber-500 mt-0.5" />
             <div>
               <span className="font-semibold">Conflict: </span>
               {conflictMessage}
@@ -135,7 +135,7 @@ export const RescheduleDialog: React.FC<RescheduleDialogProps> = ({
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
+              <label className="block text-xs font-semibold text-foreground mb-1">
                 New Date *
               </label>
               <input
@@ -144,12 +144,12 @@ export const RescheduleDialog: React.FC<RescheduleDialogProps> = ({
                 min={new Date().toISOString().split('T')[0]}
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-500"
+                className="w-full bg-surface border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:border-foreground"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
+              <label className="block text-xs font-semibold text-foreground mb-1">
                 New Start Time *
               </label>
               <input
@@ -157,19 +157,19 @@ export const RescheduleDialog: React.FC<RescheduleDialogProps> = ({
                 required
                 value={startTime}
                 onChange={(e) => setStartTime(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-500"
+                className="w-full bg-surface border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:border-foreground"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">
+            <label className="block text-xs font-semibold text-foreground mb-1">
               Duration
             </label>
             <select
               value={durationMinutes}
               onChange={(e) => setDurationMinutes(Number(e.target.value))}
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-500"
+              className="w-full bg-surface border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:border-foreground"
             >
               <option value={30}>30 minutes</option>
               <option value={45}>45 minutes</option>
@@ -180,7 +180,7 @@ export const RescheduleDialog: React.FC<RescheduleDialogProps> = ({
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">
+            <label className="block text-xs font-semibold text-foreground mb-1">
               Reason for Rescheduling
             </label>
             <textarea
@@ -188,11 +188,11 @@ export const RescheduleDialog: React.FC<RescheduleDialogProps> = ({
               placeholder="e.g., Unexpected lab exam, conflict with office hours..."
               value={reason}
               onChange={(e) => setReason(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 resize-none"
+              className="w-full bg-surface border border-border rounded-lg p-2.5 text-sm text-foreground placeholder-foreground-muted focus:outline-none focus:border-foreground resize-none"
             />
           </div>
 
-          <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
+          <div className="flex items-center justify-end gap-2 pt-2 border-t border-border">
             <Button variant="ghost" type="button" onClick={onClose} disabled={submitting}>
               Cancel
             </Button>

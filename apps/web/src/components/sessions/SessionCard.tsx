@@ -60,15 +60,15 @@ export const SessionCard: React.FC<SessionCardProps> = ({
   const otherParticipants = session.participants.filter((p) => p.userId !== session.organizerId);
 
   return (
-    <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 hover:border-slate-700 transition-all duration-200 shadow-lg flex flex-col justify-between gap-4">
+    <div className="bg-card border border-border rounded-xl p-5 hover:border-foreground-muted/40 transition-all duration-200 shadow-sm flex flex-col justify-between gap-4">
       {/* Header: Title, Topic, Status Badge */}
       <div className="space-y-2">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-500/10 text-brand-300 border border-brand-500/20 mb-1.5">
+            <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-surface border border-border text-foreground-secondary mb-1.5">
               {session.topic}
             </span>
-            <h3 className="text-lg font-bold text-white hover:text-brand-300 transition-colors">
+            <h3 className="text-base font-semibold text-foreground hover:underline transition-colors">
               <Link to={`/sessions/${session.id}`}>{session.title}</Link>
             </h3>
           </div>
@@ -76,20 +76,20 @@ export const SessionCard: React.FC<SessionCardProps> = ({
         </div>
 
         {session.description && (
-          <p className="text-sm text-slate-400 line-clamp-2 leading-relaxed">
+          <p className="text-xs text-foreground-secondary line-clamp-2 leading-relaxed">
             {session.description}
           </p>
         )}
       </div>
 
       {/* Date, Time, Mode, Location details */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-300 bg-slate-950/60 p-3 rounded-xl border border-slate-850">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-foreground-secondary bg-surface p-3 rounded-lg border border-border-subtle">
         <div className="flex items-center gap-2">
-          <Calendar className="w-4 h-4 text-brand-400 shrink-0" />
+          <Calendar className="w-3.5 h-3.5 text-foreground-muted shrink-0" />
           <span>{formattedDate}</span>
         </div>
         <div className="flex items-center gap-2">
-          <Clock className="w-4 h-4 text-brand-400 shrink-0" />
+          <Clock className="w-3.5 h-3.5 text-foreground-muted shrink-0" />
           <span>
             {formattedTime} ({durationMinutes}m)
           </span>
@@ -97,31 +97,30 @@ export const SessionCard: React.FC<SessionCardProps> = ({
         <div className="flex items-center gap-2">
           {session.mode === 'ONLINE' ? (
             <>
-              <Video className="w-4 h-4 text-emerald-400 shrink-0" />
-              <span className="text-emerald-300">Online Call</span>
+              <Video className="w-3.5 h-3.5 text-foreground-secondary shrink-0" />
+              <span className="font-medium text-foreground">Online Call</span>
             </>
           ) : (
             <>
-              <MapPin className="w-4 h-4 text-purple-400 shrink-0" />
-              <span>{session.location || 'In-Person Session'}</span>
+              <MapPin className="w-3.5 h-3.5 text-foreground-secondary shrink-0" />
+              <span className="truncate">{session.location || 'In-Person'}</span>
             </>
           )}
         </div>
-        <div className="flex items-center gap-2 text-slate-400">
-          <Users className="w-4 h-4 text-indigo-400 shrink-0" />
+        <div className="flex items-center gap-2 text-foreground-muted">
+          <Users className="w-3.5 h-3.5 text-foreground-muted shrink-0" />
           <span>
-            {session.participants.length} participant
-            {session.participants.length === 1 ? '' : 's'}
+            {session.participants.length} participant{session.participants.length === 1 ? '' : 's'}
           </span>
         </div>
       </div>
 
       {/* Participants & Organizer preview */}
-      <div className="flex items-center justify-between pt-1 border-t border-slate-800/60">
+      <div className="flex items-center justify-between pt-1 border-t border-border-subtle">
         <div className="flex items-center gap-2">
           <div className="flex -space-x-2 overflow-hidden">
             <div
-              className="inline-block h-7 w-7 rounded-full ring-2 ring-slate-900 bg-brand-600 flex items-center justify-center text-white text-[11px] font-bold"
+              className="inline-block h-6 w-6 rounded-full ring-2 ring-card bg-foreground flex items-center justify-center text-background text-[10px] font-bold"
               title={`Organizer: ${session.organizerName}`}
             >
               {session.organizerName.charAt(0)}
@@ -129,28 +128,28 @@ export const SessionCard: React.FC<SessionCardProps> = ({
             {otherParticipants.slice(0, 3).map((p) => (
               <div
                 key={p.id}
-                className="inline-block h-7 w-7 rounded-full ring-2 ring-slate-900 bg-slate-700 flex items-center justify-center text-slate-200 text-[11px] font-medium"
+                className="inline-block h-6 w-6 rounded-full ring-2 ring-card bg-surface border border-border flex items-center justify-center text-foreground-secondary text-[10px] font-medium"
                 title={`${p.fullName} (${p.status})`}
               >
                 {p.fullName.charAt(0)}
               </div>
             ))}
           </div>
-          <span className="text-xs text-slate-400">
+          <span className="text-[11px] text-foreground-muted truncate">
             {isOrganizer ? 'Organized by you' : `By ${session.organizerName}`}
           </span>
         </div>
 
         {session.resourcesCount && session.resourcesCount > 0 ? (
-          <span className="inline-flex items-center gap-1 text-[11px] text-slate-400 bg-slate-800/80 px-2 py-0.5 rounded-md">
-            <FileText className="w-3 h-3 text-brand-400" />
+          <span className="inline-flex items-center gap-1 text-[11px] text-foreground-muted bg-surface border border-border-subtle px-2 py-0.5 rounded-md">
+            <FileText className="w-3 h-3 text-foreground-muted" />
             {session.resourcesCount} resource{session.resourcesCount === 1 ? '' : 's'}
           </span>
         ) : null}
       </div>
 
       {/* Action Footer */}
-      <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800/80">
+      <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-border">
         <Link to={`/sessions/${session.id}`}>
           <Button variant="ghost" size="sm" rightIcon={<ChevronRight className="w-4 h-4" />}>
             Details

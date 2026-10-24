@@ -8,11 +8,11 @@ export const IncomingCallDialog: React.FC = () => {
   if (!incomingCall) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 text-center border border-gray-100 flex flex-col items-center">
-        {/* Pulsing Avatar */}
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-xs animate-fade-in">
+      <div className="bg-card text-foreground rounded-xl shadow-2xl max-w-sm w-full p-6 text-center border border-border flex flex-col items-center">
+        {/* Avatar */}
         <div className="relative mb-4">
-          <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white text-2xl font-bold shadow-lg ring-4 ring-blue-100 animate-pulse overflow-hidden">
+          <div className="w-16 h-16 rounded-full bg-surface-hover border border-border flex items-center justify-center text-foreground text-xl font-bold overflow-hidden shadow-xs">
             {incomingCall.callerAvatar ? (
               <img
                 src={incomingCall.callerAvatar}
@@ -23,19 +23,19 @@ export const IncomingCallDialog: React.FC = () => {
               incomingCall.callerName.slice(0, 2).toUpperCase()
             )}
           </div>
-          <span className="absolute -bottom-1 -right-1 bg-blue-600 text-white p-1.5 rounded-full shadow">
+          <span className="absolute -bottom-1 -right-1 bg-foreground text-background p-1 rounded-full shadow-xs">
             {incomingCall.type === 'VIDEO' ? (
-              <Video className="w-4 h-4" />
+              <Video className="w-3.5 h-3.5" />
             ) : (
-              <Phone className="w-4 h-4" />
+              <Phone className="w-3.5 h-3.5" />
             )}
           </span>
         </div>
 
-        <h3 className="text-lg font-bold text-gray-900 mb-1">
+        <h3 className="text-base font-bold text-foreground mb-0.5">
           {incomingCall.callerName}
         </h3>
-        <p className="text-xs text-gray-500 mb-6 animate-pulse">
+        <p className="text-xs text-foreground-muted mb-6">
           Incoming {incomingCall.type.toLowerCase()} call...
         </p>
 
@@ -45,28 +45,28 @@ export const IncomingCallDialog: React.FC = () => {
           <button
             type="button"
             onClick={() => rejectCall(incomingCall.id)}
-            className="flex flex-col items-center gap-1 group"
+            className="flex flex-col items-center gap-1.5 group cursor-pointer"
           >
-            <div className="w-14 h-14 rounded-full bg-red-100 group-hover:bg-red-200 text-red-600 flex items-center justify-center transition-all shadow-md group-hover:scale-105">
-              <PhoneOff className="w-6 h-6" />
+            <div className="w-12 h-12 rounded-full bg-surface-hover group-hover:bg-rose-500/10 text-foreground-secondary group-hover:text-rose-500 border border-border flex items-center justify-center transition-all shadow-xs">
+              <PhoneOff className="w-5 h-5" />
             </div>
-            <span className="text-xs font-medium text-gray-600">Decline</span>
+            <span className="text-xs font-medium text-foreground-muted">Decline</span>
           </button>
 
           {/* Accept Button */}
           <button
             type="button"
             onClick={() => acceptCall(incomingCall.id)}
-            className="flex flex-col items-center gap-1 group"
+            className="flex flex-col items-center gap-1.5 group cursor-pointer"
           >
-            <div className="w-14 h-14 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white flex items-center justify-center transition-all shadow-lg hover:scale-105 ring-4 ring-emerald-100 animate-bounce">
+            <div className="w-12 h-12 rounded-full bg-foreground text-background hover:opacity-90 flex items-center justify-center transition-all shadow-xs">
               {incomingCall.type === 'VIDEO' ? (
-                <Video className="w-6 h-6" />
+                <Video className="w-5 h-5" />
               ) : (
-                <Phone className="w-6 h-6" />
+                <Phone className="w-5 h-5" />
               )}
             </div>
-            <span className="text-xs font-semibold text-emerald-600">Accept</span>
+            <span className="text-xs font-semibold text-foreground">Accept</span>
           </button>
         </div>
       </div>

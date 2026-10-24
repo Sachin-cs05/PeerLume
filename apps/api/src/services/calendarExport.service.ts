@@ -54,7 +54,7 @@ export async function generateSessionIcs(userId: string, sessionId: string): Pro
   let ics = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//PeerLume//PeerLume Learning Platform//EN',
+    'PRODID:-//PeerLearn//PeerLearn Learning Platform//EN',
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
     'BEGIN:VEVENT',
@@ -64,9 +64,9 @@ export async function generateSessionIcs(userId: string, sessionId: string): Pro
     `DTEND:${endStr}`,
     `SUMMARY:${escapeIcsText(session.title)}`,
     `DESCRIPTION:${escapeIcsText(
-      `Topic: ${session.topic}\\n${session.description || ''}\\nOrganized by ${session.organizer.fullName} on PeerLume`
+      `Topic: ${session.topic}\\n${session.description || ''}\\nOrganized by ${session.organizer.fullName} on PeerLearn`
     )}`,
-    session.location ? `LOCATION:${escapeIcsText(session.location)}` : session.meetingUrl ? `LOCATION:${escapeIcsText(session.meetingUrl)}` : 'LOCATION:PeerLume Virtual Study Room',
+    session.location ? `LOCATION:${escapeIcsText(session.location)}` : session.meetingUrl ? `LOCATION:${escapeIcsText(session.meetingUrl)}` : 'LOCATION:PeerLearn Virtual Study Room',
     `ORGANIZER;CN=${escapeIcsText(session.organizer.fullName)}:mailto:${session.organizer.email}`,
     `STATUS:${session.status === 'CANCELLED' ? 'CANCELLED' : 'CONFIRMED'}`,
     'END:VEVENT',
@@ -107,7 +107,7 @@ export async function generateUserCalendarIcs(userId: string): Promise<{ ics: st
       `DTEND:${endStr}`,
       `SUMMARY:${escapeIcsText(session.title)}`,
       `DESCRIPTION:${escapeIcsText(`Topic: ${session.topic}\\n${session.description || ''}`)}`,
-      session.location ? `LOCATION:${escapeIcsText(session.location)}` : 'LOCATION:PeerLume Study Room',
+      session.location ? `LOCATION:${escapeIcsText(session.location)}` : 'LOCATION:PeerLearn Study Room',
       `ORGANIZER;CN=${escapeIcsText(session.organizer.fullName)}:mailto:${session.organizer.email}`,
       'STATUS:CONFIRMED',
       'END:VEVENT'
@@ -117,10 +117,10 @@ export async function generateUserCalendarIcs(userId: string): Promise<{ ics: st
   const ics = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//PeerLume//PeerLume Learning Platform//EN',
+    'PRODID:-//PeerLearn//PeerLearn Learning Platform//EN',
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
-    'X-WR-CALNAME:PeerLume Study Calendar',
+    'X-WR-CALNAME:PeerLearn Study Calendar',
     ...eventLines,
     'END:VCALENDAR',
   ].join('\r\n');

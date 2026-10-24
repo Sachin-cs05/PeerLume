@@ -4,7 +4,7 @@ export function registerServiceWorker(): void {
       navigator.serviceWorker
         .register('/sw.js')
         .then((reg) => {
-          console.info('PeerLume PWA service worker registered:', reg.scope);
+          console.info('PeerLearn PWA service worker registered:', reg.scope);
         })
         .catch((err) => {
           console.warn('PWA service worker registration failed:', err);

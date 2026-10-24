@@ -213,12 +213,12 @@ export const ProfileEditPage: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
-      <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+      <div className="flex items-center justify-between pb-4 border-b border-border">
         <div>
-          <Link to="/profile" className="inline-flex items-center gap-1.5 text-xs text-brand-400 hover:text-brand-300 mb-1">
+          <Link to="/profile" className="inline-flex items-center gap-1.5 text-xs text-foreground-secondary hover:text-foreground mb-1 font-medium transition-colors">
             <ArrowLeft className="w-3.5 h-3.5" /> Back to Profile
           </Link>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
             Edit Student Profile
           </h1>
         </div>
@@ -248,9 +248,9 @@ export const ProfileEditPage: React.FC = () => {
 
       <form onSubmit={handleSubmit} className="space-y-8">
         {/* Basic & Academic Information */}
-        <Card className="border-slate-800 bg-slate-900/80 p-6 space-y-6">
-          <div className="flex items-center gap-2 text-white font-bold text-lg border-b border-slate-800 pb-3">
-            <User className="w-5 h-5 text-brand-400" />
+        <Card className="border-border bg-card p-6 space-y-6 shadow-sm">
+          <div className="flex items-center gap-2 text-foreground font-bold text-lg border-b border-border pb-3">
+            <User className="w-5 h-5 text-foreground-secondary" />
             <h3>Basic & Academic Credentials</h3>
           </div>
 
@@ -304,7 +304,7 @@ export const ProfileEditPage: React.FC = () => {
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-foreground-secondary">
               Biography / Introduction
             </label>
             <textarea
@@ -313,28 +313,28 @@ export const ProfileEditPage: React.FC = () => {
               onChange={(e) => setBio(e.target.value)}
               maxLength={500}
               placeholder="Tell fellow students about your academic interests, study habits, or current projects..."
-              className="w-full rounded-xl border border-slate-700/80 bg-slate-800/80 p-3 text-sm text-slate-100 placeholder-slate-400 backdrop-blur-sm transition-colors focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500 hover:border-slate-600"
+              className="w-full rounded-xl border border-border bg-surface p-3 text-sm text-foreground placeholder:text-foreground-muted transition-colors focus:ring-1 focus:ring-ring outline-none"
             />
-            <p className="text-right text-[11px] text-slate-500">{bio.length} / 500 characters</p>
+            <p className="text-right text-[11px] text-foreground-muted">{bio.length} / 500 characters</p>
           </div>
         </Card>
 
         {/* Preferences: Learning Mode & Visibility */}
-        <Card className="border-slate-800 bg-slate-900/80 p-6 space-y-6">
-          <div className="flex items-center gap-2 text-white font-bold text-lg border-b border-slate-800 pb-3">
-            <Lock className="w-5 h-5 text-teal-400" />
+        <Card className="border-border bg-card p-6 space-y-6 shadow-sm">
+          <div className="flex items-center gap-2 text-foreground font-bold text-lg border-b border-border pb-3">
+            <Lock className="w-5 h-5 text-foreground-secondary" />
             <h3>Study Preferences & Privacy Controls</h3>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-foreground-secondary">
                 Preferred Learning Mode
               </label>
               <select
                 value={preferredLearningMode}
                 onChange={(e) => setPreferredLearningMode(e.target.value as PreferredLearningMode)}
-                className="w-full rounded-xl border border-slate-700/80 bg-slate-800/80 p-2.5 text-sm text-slate-100 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                className="w-full rounded-xl border border-border bg-surface p-2.5 text-sm text-foreground focus:ring-1 focus:ring-ring outline-none"
               >
                 <option value="HYBRID">Hybrid (Online & In-Person)</option>
                 <option value="ONLINE">Online Study Sessions Only</option>
@@ -343,15 +343,15 @@ export const ProfileEditPage: React.FC = () => {
             </div>
 
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-foreground-secondary">
                 Profile Visibility
               </label>
               <select
                 value={visibility}
                 onChange={(e) => setVisibility(e.target.value as ProfileVisibility)}
-                className="w-full rounded-xl border border-slate-700/80 bg-slate-800/80 p-2.5 text-sm text-slate-100 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                className="w-full rounded-xl border border-border bg-surface p-2.5 text-sm text-foreground focus:ring-1 focus:ring-ring outline-none"
               >
-                <option value="PUBLIC">Public (All PeerLume Students)</option>
+                <option value="PUBLIC">Public (All PeerLearn Students)</option>
                 <option value="CAMPUS_ONLY">Campus Only (My College)</option>
                 <option value="CONNECTIONS_ONLY">Connections Only (Mutual Friends)</option>
               </select>
@@ -360,8 +360,8 @@ export const ProfileEditPage: React.FC = () => {
 
           {/* Languages Spoken */}
           <div className="space-y-2 pt-2">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-              <Globe className="w-3.5 h-3.5 text-slate-400" /> Languages Spoken
+            <label className="block text-xs font-semibold uppercase tracking-wider text-foreground-secondary flex items-center gap-1.5">
+              <Globe className="w-3.5 h-3.5 text-foreground-muted" /> Languages Spoken
             </label>
             <div className="flex gap-2">
               <input
@@ -375,7 +375,7 @@ export const ProfileEditPage: React.FC = () => {
                     handleAddLanguage();
                   }
                 }}
-                className="flex-1 rounded-xl border border-slate-700/80 bg-slate-800/80 px-3 py-2 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                className="flex-1 rounded-xl border border-border bg-surface px-3 py-2 text-sm text-foreground placeholder:text-foreground-muted focus:ring-1 focus:ring-ring outline-none"
               />
               <Button type="button" variant="secondary" size="sm" onClick={handleAddLanguage}>
                 Add Language
@@ -385,13 +385,13 @@ export const ProfileEditPage: React.FC = () => {
               {languages.map((lang) => (
                 <span
                   key={lang}
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-800 text-xs font-medium text-slate-200 border border-slate-700"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-surface text-xs font-medium text-foreground border border-border"
                 >
                   {lang}
                   <button
                     type="button"
                     onClick={() => handleRemoveLanguage(lang)}
-                    className="text-slate-400 hover:text-rose-400"
+                    className="text-foreground-muted hover:text-foreground"
                   >
                     ×
                   </button>
@@ -402,31 +402,31 @@ export const ProfileEditPage: React.FC = () => {
         </Card>
 
         {/* Skills I Can Teach Manager */}
-        <Card className="border-slate-800 bg-slate-900/80 p-6 space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-            <div className="flex items-center gap-2 text-white font-bold text-lg">
-              <Sparkles className="w-5 h-5 text-brand-400" />
+        <Card className="border-border bg-card p-6 space-y-4 shadow-sm">
+          <div className="flex items-center justify-between border-b border-border pb-3">
+            <div className="flex items-center gap-2 text-foreground font-bold text-lg">
+              <Sparkles className="w-5 h-5 text-foreground-secondary" />
               <h3>Skills I Can Teach (Mentorship & Exchange)</h3>
             </div>
-            <span className="text-xs text-slate-400">{teachingSkills.length} added</span>
+            <span className="text-xs text-foreground-muted">{teachingSkills.length} added</span>
           </div>
 
           {/* Add skill input form */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 rounded-xl bg-slate-800/30 border border-slate-800">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 rounded-xl bg-surface border border-border">
             <div className="sm:col-span-2">
               <input
                 type="text"
                 placeholder="Skill name (e.g. Data Structures, React, Linear Algebra)"
                 value={newSkillName}
                 onChange={(e) => setNewSkillName(e.target.value)}
-                className="w-full rounded-xl border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                className="w-full rounded-xl border border-border bg-card px-3 py-2 text-sm text-foreground placeholder:text-foreground-muted focus:ring-1 focus:ring-ring outline-none"
               />
             </div>
             <div className="flex gap-2">
               <select
                 value={newSkillProficiency}
                 onChange={(e) => setNewSkillProficiency(e.target.value as SkillProficiency)}
-                className="flex-1 rounded-xl border border-slate-700 bg-slate-800 px-2.5 py-2 text-xs text-slate-100"
+                className="flex-1 rounded-xl border border-border bg-card px-2.5 py-2 text-xs text-foreground outline-none"
               >
                 <option value="BEGINNER">Beginner</option>
                 <option value="INTERMEDIATE">Intermediate</option>
@@ -443,16 +443,16 @@ export const ProfileEditPage: React.FC = () => {
             {teachingSkills.map((skill, index) => (
               <div
                 key={index}
-                className="p-3 rounded-xl bg-slate-800/50 border border-slate-800 flex items-center justify-between"
+                className="p-3 rounded-xl bg-surface border border-border flex items-center justify-between"
               >
                 <div>
-                  <span className="font-semibold text-sm text-white">{skill.name}</span>
-                  <span className="ml-2 text-xs text-brand-300 font-mono">({skill.proficiency})</span>
+                  <span className="font-medium text-sm text-foreground">{skill.name}</span>
+                  <span className="ml-2 text-xs text-foreground-muted font-mono">({skill.proficiency})</span>
                 </div>
                 <button
                   type="button"
                   onClick={() => handleRemoveTeachingSkill(index)}
-                  className="text-slate-400 hover:text-rose-400 p-1"
+                  className="text-foreground-muted hover:text-foreground p-1 transition-colors"
                   aria-label="Remove skill"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -463,17 +463,17 @@ export const ProfileEditPage: React.FC = () => {
         </Card>
 
         {/* Skills I Want to Learn Manager */}
-        <Card className="border-slate-800 bg-slate-900/80 p-6 space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-            <div className="flex items-center gap-2 text-white font-bold text-lg">
-              <Target className="w-5 h-5 text-teal-400" />
+        <Card className="border-border bg-card p-6 space-y-4 shadow-sm">
+          <div className="flex items-center justify-between border-b border-border pb-3">
+            <div className="flex items-center gap-2 text-foreground font-bold text-lg">
+              <Target className="w-5 h-5 text-foreground-secondary" />
               <h3>Skills I Want to Learn (Learning Goals)</h3>
             </div>
-            <span className="text-xs text-slate-400">{learningGoals.length} added</span>
+            <span className="text-xs text-foreground-muted">{learningGoals.length} added</span>
           </div>
 
           {/* Add goal input form */}
-          <div className="space-y-3 p-4 rounded-xl bg-slate-800/30 border border-slate-800">
+          <div className="space-y-3 p-4 rounded-xl bg-surface border border-border">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div className="sm:col-span-2">
                 <input
@@ -481,14 +481,14 @@ export const ProfileEditPage: React.FC = () => {
                   placeholder="Topic or course goal (e.g. Operating Systems, System Design)"
                   value={newGoalName}
                   onChange={(e) => setNewGoalName(e.target.value)}
-                  className="w-full rounded-xl border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full rounded-xl border border-border bg-card px-3 py-2 text-sm text-foreground placeholder:text-foreground-muted focus:ring-1 focus:ring-ring outline-none"
                 />
               </div>
               <div>
                 <select
                   value={newGoalPriority}
                   onChange={(e) => setNewGoalPriority(e.target.value as GoalPriority)}
-                  className="w-full rounded-xl border border-slate-700 bg-slate-800 px-2.5 py-2 text-xs text-slate-100"
+                  className="w-full rounded-xl border border-border bg-card px-2.5 py-2 text-xs text-foreground outline-none"
                 >
                   <option value="LOW">Low Priority</option>
                   <option value="MEDIUM">Medium Priority</option>
@@ -503,7 +503,7 @@ export const ProfileEditPage: React.FC = () => {
                 placeholder="Optional goal notes (e.g. Preparing for midterm exams / project collaboration)"
                 value={newGoalDescription}
                 onChange={(e) => setNewGoalDescription(e.target.value)}
-                className="flex-1 rounded-xl border border-slate-700 bg-slate-800 px-3 py-2 text-xs text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                className="flex-1 rounded-xl border border-border bg-card px-3 py-2 text-xs text-foreground placeholder:text-foreground-muted focus:ring-1 focus:ring-ring outline-none"
               />
               <Button type="button" variant="secondary" size="sm" onClick={handleAddLearningGoal} leftIcon={<Plus className="w-3.5 h-3.5" />}>
                 Add Goal
@@ -516,19 +516,19 @@ export const ProfileEditPage: React.FC = () => {
             {learningGoals.map((goal, index) => (
               <div
                 key={index}
-                className="p-3 rounded-xl bg-slate-800/50 border border-slate-800 flex items-center justify-between"
+                className="p-3 rounded-xl bg-surface border border-border flex items-center justify-between"
               >
                 <div>
-                  <span className="font-semibold text-sm text-white">{goal.name}</span>
-                  <span className="ml-2 text-xs text-amber-300 font-mono">({goal.priority} Priority)</span>
+                  <span className="font-medium text-sm text-foreground">{goal.name}</span>
+                  <span className="ml-2 text-xs text-foreground-muted font-mono">({goal.priority} Priority)</span>
                   {goal.targetDescription && (
-                    <p className="text-xs text-slate-400 mt-0.5">{goal.targetDescription}</p>
+                    <p className="text-xs text-foreground-secondary mt-0.5">{goal.targetDescription}</p>
                   )}
                 </div>
                 <button
                   type="button"
                   onClick={() => handleRemoveLearningGoal(index)}
-                  className="text-slate-400 hover:text-rose-400 p-1"
+                  className="text-foreground-muted hover:text-foreground p-1 transition-colors"
                   aria-label="Remove goal"
                 >
                   <Trash2 className="w-4 h-4" />

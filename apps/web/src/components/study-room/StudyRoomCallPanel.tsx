@@ -86,13 +86,13 @@ export const StudyRoomCallPanel: React.FC<StudyRoomCallPanelProps> = ({
   }, []);
 
   return (
-    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm text-slate-800 dark:text-slate-100 flex flex-col gap-3">
+    <div className="bg-card border border-border rounded-2xl p-4 shadow-sm text-foreground flex flex-col gap-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Volume2 className="w-4 h-4 text-emerald-500" />
+          <Volume2 className="w-4 h-4 text-foreground-secondary" />
           <h2 className="text-sm font-semibold">Study Room Audio / Video</h2>
         </div>
-        <span className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${inCall ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'}`}>
+        <span className={`text-[11px] px-2 py-0.5 rounded-full font-medium border ${inCall ? 'bg-surface text-foreground border-border' : 'bg-surface text-foreground-muted border-border-subtle'}`}>
           {inCall ? 'Call Active' : 'Idle'}
         </span>
       </div>
@@ -102,7 +102,7 @@ export const StudyRoomCallPanel: React.FC<StudyRoomCallPanelProps> = ({
           {/* Active Participants Grid */}
           <div className="grid grid-cols-2 gap-2">
             {/* Self Video / Tile */}
-            <div className="relative aspect-video bg-slate-950 rounded-xl overflow-hidden border border-slate-700 flex items-center justify-center">
+            <div className="relative aspect-video bg-surface rounded-xl overflow-hidden border border-border flex items-center justify-center">
               {videoEnabled ? (
                 <video
                   ref={localVideoRef}
@@ -112,13 +112,13 @@ export const StudyRoomCallPanel: React.FC<StudyRoomCallPanelProps> = ({
                   className="w-full h-full object-cover mirror"
                 />
               ) : (
-                <div className="w-10 h-10 rounded-full bg-brand-600 flex items-center justify-center text-white font-bold text-sm">
+                <div className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-sm">
                   You
                 </div>
               )}
-              <div className="absolute bottom-1.5 left-2 text-[10px] bg-slate-900/80 px-1.5 py-0.5 rounded text-white font-medium flex items-center gap-1">
+              <div className="absolute bottom-1.5 left-2 text-[10px] bg-background/90 px-1.5 py-0.5 rounded text-foreground font-medium flex items-center gap-1 border border-border">
                 <span>You</span>
-                {!micEnabled && <MicOff className="w-2.5 h-2.5 text-rose-400" />}
+                {!micEnabled && <MicOff className="w-2.5 h-2.5 text-foreground-muted" />}
               </div>
             </div>
 
@@ -129,12 +129,12 @@ export const StudyRoomCallPanel: React.FC<StudyRoomCallPanelProps> = ({
               .map((p) => (
                 <div
                   key={p.userId}
-                  className="relative aspect-video bg-slate-100 dark:bg-slate-800/80 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 flex items-center justify-center"
+                  className="relative aspect-video bg-surface rounded-xl overflow-hidden border border-border flex items-center justify-center"
                 >
-                  <div className="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-sm">
+                  <div className="w-10 h-10 rounded-full bg-surface-elevated border border-border flex items-center justify-center text-foreground font-bold text-sm">
                     {p.user?.fullName?.charAt(0).toUpperCase() || 'P'}
                   </div>
-                  <div className="absolute bottom-1.5 left-2 text-[10px] bg-slate-900/80 px-1.5 py-0.5 rounded text-white font-medium">
+                  <div className="absolute bottom-1.5 left-2 text-[10px] bg-background/90 px-1.5 py-0.5 rounded text-foreground font-medium border border-border">
                     {p.user?.fullName?.split(' ')[0] || 'Peer'}
                   </div>
                 </div>
@@ -142,13 +142,13 @@ export const StudyRoomCallPanel: React.FC<StudyRoomCallPanelProps> = ({
           </div>
 
           {/* Call Controls */}
-          <div className="flex items-center justify-center gap-2 pt-1 border-t border-slate-100 dark:border-slate-800">
+          <div className="flex items-center justify-center gap-2 pt-1 border-t border-border">
             <button
               onClick={handleToggleMic}
               className={`p-2.5 rounded-xl border transition-colors ${
                 micEnabled
-                  ? 'bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border-slate-300 dark:border-slate-700'
-                  : 'bg-rose-500 text-white border-rose-600'
+                  ? 'bg-surface hover:bg-surface-hover border-border text-foreground'
+                  : 'bg-primary text-primary-foreground border-primary'
               }`}
               title={micEnabled ? 'Mute microphone' : 'Unmute microphone'}
               aria-label={micEnabled ? 'Mute microphone' : 'Unmute microphone'}
@@ -160,18 +160,18 @@ export const StudyRoomCallPanel: React.FC<StudyRoomCallPanelProps> = ({
               onClick={handleToggleVideo}
               className={`p-2.5 rounded-xl border transition-colors ${
                 videoEnabled
-                  ? 'bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border-slate-300 dark:border-slate-700'
-                  : 'bg-slate-200 dark:bg-slate-800 text-slate-500 border-slate-300 dark:border-slate-700'
+                  ? 'bg-surface hover:bg-surface-hover border-border text-foreground'
+                  : 'bg-surface text-foreground-muted border-border'
               }`}
               title={videoEnabled ? 'Turn camera off' : 'Turn camera on'}
               aria-label={videoEnabled ? 'Turn camera off' : 'Turn camera on'}
             >
-              {videoEnabled ? <Video className="w-4 h-4 text-emerald-500" /> : <VideoOff className="w-4 h-4" />}
+              {videoEnabled ? <Video className="w-4 h-4 text-foreground" /> : <VideoOff className="w-4 h-4" />}
             </button>
 
             <button
               onClick={handleLeaveCall}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold shadow-sm transition-colors"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-destructive hover:bg-destructive/90 text-destructive-foreground text-xs font-medium transition-colors"
               title="Leave audio/video call"
               aria-label="Leave audio video call"
             >
@@ -182,12 +182,12 @@ export const StudyRoomCallPanel: React.FC<StudyRoomCallPanelProps> = ({
         </div>
       ) : (
         <div className="py-3 text-center">
-          <p className="text-xs text-slate-500 mb-3">
+          <p className="text-xs text-foreground-secondary mb-3">
             Start or join an in-room voice/video discussion while working on the whiteboard.
           </p>
           <button
             onClick={handleJoinCall}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-sm transition-colors"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-medium transition-colors"
           >
             <PhoneCall className="w-3.5 h-3.5" />
             <span>Join Room Call</span>

@@ -106,10 +106,12 @@ export function startReminderScheduler(pollIntervalMs = 60000): void {
 
   logger.info('⏰ Session Reminder Scheduler started (checking every 60s)');
   
-  // Run initial check safely
-  checkAndDispatchReminders().catch((err) => {
-    logger.warn(`Reminder check skipped: ${err?.message || 'Database unavailable'}`);
-  });
+  // Run initial check after a short delay to allow database handshake
+  setTimeout(() => {
+    checkAndDispatchReminders().catch((err) => {
+      logger.warn(`Reminder check skipped: ${err?.message || 'Database unavailable'}`);
+    });
+  }, 5000);
 
   reminderTimer = setInterval(() => {
     checkAndDispatchReminders().catch((err) => {

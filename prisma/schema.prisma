@@ -1,4 +1,4 @@
-// PeerLume Prisma Schema - Phase 3: Friends, Connections & Smart Learning Partner Matching
+// PeerLearn Prisma Schema - Phase 3: Friends, Connections & Smart Learning Partner Matching
 // "Learn Together. Grow Together."
 
 generator client {
@@ -12,7 +12,7 @@ datasource db {
 
 // -----------------------------------------------------------------------------
 // Core User Model
-// Note: PeerLume has NO Admin role or Admin dashboard; all users are peer students.
+// Note: PeerLearn has NO Admin role or Admin dashboard; all users are peer students.
 // -----------------------------------------------------------------------------
 
 model User {

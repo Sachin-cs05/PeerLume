@@ -4,38 +4,44 @@ interface DashboardSummaryCardProps {
   title: string;
   value: string | number;
   subtitle?: string;
+  trend?: string;
   icon: React.ReactNode;
-  iconBgColor?: string;
-  iconTextColor?: string;
 }
 
 export const DashboardSummaryCard: React.FC<DashboardSummaryCardProps> = ({
   title,
   value,
   subtitle,
+  trend,
   icon,
-  iconBgColor = 'bg-brand-500/10 border-brand-500/20',
-  iconTextColor = 'text-brand-400',
 }) => {
   return (
-    <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-lg flex items-start justify-between gap-4 hover:border-slate-700 transition-all">
-      <div className="space-y-1">
-        <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">
+    <div className="bg-card border border-border rounded-xl p-5 shadow-xs flex flex-col justify-between gap-3 hover:border-border-strong transition-all">
+      <div className="flex items-center justify-between">
+        <span className="text-xs font-medium text-foreground-secondary uppercase tracking-wider">
           {title}
         </span>
-        <div className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+        <div className="p-2 rounded-lg bg-surface-hover text-foreground border border-border">
+          {icon}
+        </div>
+      </div>
+
+      <div className="flex items-baseline gap-2.5">
+        <div className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
           {value}
         </div>
-        {subtitle && (
-          <p className="text-[11px] text-slate-400 leading-tight">
-            {subtitle}
-          </p>
+        {trend && (
+          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-surface-hover text-foreground border border-border">
+            {trend}
+          </span>
         )}
       </div>
 
-      <div className={`p-3 rounded-2xl border ${iconBgColor} ${iconTextColor} shrink-0`}>
-        {icon}
-      </div>
+      {subtitle && (
+        <p className="text-xs text-foreground-muted leading-tight">
+          {subtitle}
+        </p>
+      )}
     </div>
   );
 };

@@ -77,7 +77,7 @@ describe('Phase 6: Real-Time Collaborative Code Editor Tests', () => {
         workspaceId: 'workspace-123',
         title: 'main.ts',
         language: 'typescript',
-        content: 'console.log("Hello, PeerLume!");',
+        content: 'console.log("Hello, PeerLearn!");',
         version: 1,
         yjsState: null,
         createdAt: new Date(),

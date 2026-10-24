@@ -117,7 +117,7 @@ describe('Phase 4: Real-Time Chat, Calls & Notifications Tests', () => {
         conversationId: mockConversation.id,
         senderId: alice.id,
         type: 'CODE',
-        content: 'const greet = () => console.log("Hello PeerLume!");',
+        content: 'const greet = () => console.log("Hello PeerLearn!");',
         metadata: { language: 'typescript' },
         isRead: false,
         readAt: null,
@@ -133,7 +133,7 @@ describe('Phase 4: Real-Time Chat, Calls & Notifications Tests', () => {
         .post(`/api/conversations/${mockConversation.id}/messages`)
         .set('Authorization', `Bearer ${tokenAlice}`)
         .send({
-          content: 'const greet = () => console.log("Hello PeerLume!");',
+          content: 'const greet = () => console.log("Hello PeerLearn!");',
           type: 'CODE',
           metadata: { language: 'typescript' },
           clientTempId: 'client-temp-123',

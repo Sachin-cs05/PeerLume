@@ -236,8 +236,8 @@ export const CodeEditorPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-slate-400 gap-3">
-        <Loader2 className="w-10 h-10 animate-spin text-indigo-500" />
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center text-foreground-muted gap-3">
+        <Loader2 className="w-10 h-10 animate-spin text-foreground" />
         <p className="text-base font-medium">Opening Collaborative Workspace...</p>
       </div>
     );
@@ -245,16 +245,16 @@ export const CodeEditorPage: React.FC = () => {
 
   if (error || !workspace) {
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4">
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-8 text-center space-y-4 shadow-2xl">
-          <div className="w-12 h-12 rounded-full bg-rose-500/10 text-rose-400 flex items-center justify-center mx-auto">
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4">
+        <div className="bg-card border border-border rounded-2xl max-w-md w-full p-8 text-center space-y-4 shadow-2xl">
+          <div className="w-12 h-12 rounded-full bg-rose-500/10 text-rose-500 flex items-center justify-center mx-auto">
             <AlertTriangle className="w-6 h-6" />
           </div>
-          <h2 className="text-xl font-bold text-white">Workspace Unavailable</h2>
-          <p className="text-sm text-slate-400">{error || 'Workspace could not be loaded or access was denied.'}</p>
+          <h2 className="text-xl font-bold text-foreground">Workspace Unavailable</h2>
+          <p className="text-sm text-foreground-muted">{error || 'Workspace could not be loaded or access was denied.'}</p>
           <button
             onClick={() => navigate('/code')}
-            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-semibold transition-colors flex items-center gap-1.5 mx-auto"
+            className="px-4 py-2 bg-foreground text-background hover:bg-foreground/90 rounded-xl text-sm font-semibold transition-colors flex items-center gap-1.5 mx-auto"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Return to Workspaces</span>
@@ -265,7 +265,7 @@ export const CodeEditorPage: React.FC = () => {
   }
 
   return (
-    <div className="h-screen w-screen flex flex-col bg-slate-950 overflow-hidden font-sans">
+    <div className="h-screen w-screen flex flex-col bg-background overflow-hidden font-sans">
       {/* 1. Header */}
       <WorkspaceHeader
         title={workspace.title}
@@ -285,7 +285,7 @@ export const CodeEditorPage: React.FC = () => {
       />
 
       {/* 2. Document Tabs & Presence Bar */}
-      <div className="bg-slate-950 border-b border-slate-800 px-4 py-1 flex items-center justify-between gap-4">
+      <div className="bg-surface border-b border-border px-4 py-1 flex items-center justify-between gap-4">
         <DocumentTabs
           documents={workspace.documents}
           activeDocId={activeDocId}
@@ -327,7 +327,7 @@ export const CodeEditorPage: React.FC = () => {
 
       {/* 3. Editor & Side Panels */}
       <div className="flex-1 flex overflow-hidden relative">
-        <main className="flex-1 h-full p-2 bg-slate-950">
+        <main className="flex-1 h-full p-2 bg-background">
           <CodeEditor
             provider={activeProvider}
             language={currentLanguage}

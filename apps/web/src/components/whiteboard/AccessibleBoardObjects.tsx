@@ -37,18 +37,18 @@ export const AccessibleBoardObjects: React.FC<AccessibleBoardObjectsProps> = ({
       role="dialog"
       aria-modal="true"
       aria-label="Accessible Whiteboard Elements"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-fade-in"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl overflow-hidden text-slate-800 dark:text-slate-100"
+        className="w-full max-w-lg bg-card border border-border rounded-2xl shadow-xl overflow-hidden text-foreground"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-800">
+        <div className="flex items-center justify-between p-4 border-b border-border">
           <h2 className="text-base font-semibold">Accessible Whiteboard Elements ({elements.length})</h2>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+            className="p-1 rounded-lg text-foreground-muted hover:text-foreground transition-colors"
             aria-label="Close accessible elements dialog"
           >
             <X className="w-5 h-5" />
@@ -57,37 +57,37 @@ export const AccessibleBoardObjects: React.FC<AccessibleBoardObjectsProps> = ({
 
         <div className="max-h-96 overflow-y-auto p-4 space-y-2.5">
           {elements.length === 0 ? (
-            <p className="text-sm text-slate-400 text-center py-6">The whiteboard is currently empty.</p>
+            <p className="text-sm text-foreground-muted text-center py-6">The whiteboard is currently empty.</p>
           ) : (
             elements.map((el, index) => (
               <div
                 key={el.id}
-                className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60"
+                className="flex items-start gap-3 p-3 rounded-xl bg-surface border border-border"
               >
-                <div className="p-1.5 rounded-lg bg-white dark:bg-slate-900 shrink-0 mt-0.5">
+                <div className="p-1.5 rounded-lg bg-card border border-border shrink-0 mt-0.5 text-foreground-secondary">
                   {getIcon(el.type)}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold capitalize text-slate-700 dark:text-slate-300">
+                    <span className="text-xs font-semibold capitalize text-foreground">
                       #{index + 1} {el.type}
                     </span>
                     <span
-                      className="w-3 h-3 rounded-full border border-slate-300 dark:border-slate-600"
+                      className="w-3 h-3 rounded-full border border-border"
                       style={{ backgroundColor: el.color }}
                       title={`Color: ${el.color}`}
                     />
                   </div>
                   {el.text ? (
-                    <p className="text-sm font-medium mt-1 text-slate-900 dark:text-white break-words">
+                    <p className="text-sm font-medium mt-1 text-foreground break-words">
                       &ldquo;{el.text}&rdquo;
                     </p>
                   ) : el.points ? (
-                    <p className="text-xs text-slate-500 mt-1">
+                    <p className="text-xs text-foreground-muted mt-1">
                       Freehand stroke with {el.points.length} coordinate points ({el.strokeWidth}px width)
                     </p>
                   ) : (
-                    <p className="text-xs text-slate-500 mt-1">
+                    <p className="text-xs text-foreground-muted mt-1">
                       Shape bounds: {Math.round(el.width || 0)}px × {Math.round(el.height || 0)}px at position ({Math.round(el.x || 0)}, {Math.round(el.y || 0)})
                     </p>
                   )}
@@ -97,10 +97,10 @@ export const AccessibleBoardObjects: React.FC<AccessibleBoardObjectsProps> = ({
           )}
         </div>
 
-        <div className="p-4 bg-slate-50 dark:bg-slate-900/80 border-t border-slate-200 dark:border-slate-800 text-right">
+        <div className="p-4 bg-surface border-t border-border text-right">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-xs font-semibold rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-700"
+            className="px-4 py-2 text-xs font-medium rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground transition-colors"
           >
             Close
           </button>

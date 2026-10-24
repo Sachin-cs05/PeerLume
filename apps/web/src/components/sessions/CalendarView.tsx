@@ -74,14 +74,14 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
   return (
     <div className="space-y-6">
       {/* Calendar Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-slate-900 border border-slate-800 rounded-2xl p-4">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-card border border-border rounded-xl p-4">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-brand-500/10 border border-brand-500/20 text-brand-400">
+          <div className="p-2.5 rounded-lg bg-surface border border-border text-foreground">
             <CalendarIcon className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-white">{monthName}</h2>
-            <p className="text-xs text-slate-400">
+            <h2 className="text-lg font-bold text-foreground">{monthName}</h2>
+            <p className="text-xs text-foreground-muted">
               {sessions.length} total session{sessions.length === 1 ? '' : 's'} scheduled
             </p>
           </div>
@@ -91,18 +91,18 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
           <Button variant="outline" size="sm" onClick={goToToday}>
             Today
           </Button>
-          <div className="flex items-center border border-slate-800 rounded-xl overflow-hidden bg-slate-950">
+          <div className="flex items-center border border-border rounded-lg overflow-hidden bg-surface">
             <button
               onClick={prevMonth}
               aria-label="Previous month"
-              className="p-2 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+              className="p-2 text-foreground-muted hover:text-foreground hover:bg-surface-hover transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <button
               onClick={nextMonth}
               aria-label="Next month"
-              className="p-2 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+              className="p-2 text-foreground-muted hover:text-foreground hover:bg-surface-hover transition-colors"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
@@ -111,18 +111,18 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
       </div>
 
       {/* Calendar Grid */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+      <div className="bg-card border border-border rounded-xl overflow-hidden shadow-sm">
         {/* Days of week header */}
-        <div className="grid grid-cols-7 border-b border-slate-800 bg-slate-950/60 text-center text-xs font-semibold text-slate-400 py-3">
+        <div className="grid grid-cols-7 border-b border-border bg-surface text-center text-xs font-semibold text-foreground-secondary py-2.5">
           {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((d) => (
             <div key={d}>{d}</div>
           ))}
         </div>
 
         {/* Days cells */}
-        <div className="grid grid-cols-7 auto-rows-fr gap-px bg-slate-800/40">
+        <div className="grid grid-cols-7 auto-rows-fr gap-px bg-border">
           {emptyPaddingArray.map((i) => (
-            <div key={`empty-${i}`} className="min-h-[90px] bg-slate-950/40 p-2" />
+            <div key={`empty-${i}`} className="min-h-[80px] sm:min-h-[100px] bg-surface/50 p-2" />
           ))}
 
           {daysArray.map((day) => {
@@ -136,22 +136,22 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
               <div
                 key={day}
                 onClick={() => handleDayClick(day)}
-                className={`min-h-[90px] sm:min-h-[110px] p-2 bg-slate-900 hover:bg-slate-850/60 transition-colors cursor-pointer flex flex-col justify-between ${
-                  isToday ? 'ring-1 ring-inset ring-brand-500/50 bg-brand-500/5' : ''
+                className={`min-h-[80px] sm:min-h-[100px] p-2 bg-card hover:bg-surface-hover transition-colors cursor-pointer flex flex-col justify-between ${
+                  isToday ? 'ring-1 ring-inset ring-foreground font-bold' : ''
                 }`}
               >
                 <div className="flex items-center justify-between mb-1">
                   <span
-                    className={`text-xs font-semibold ${
+                    className={`text-xs ${
                       isToday
-                        ? 'w-6 h-6 rounded-full bg-brand-500 text-white flex items-center justify-center font-bold'
-                        : 'text-slate-400'
+                        ? 'w-5 h-5 rounded-full bg-foreground text-background flex items-center justify-center font-bold text-[11px]'
+                        : 'text-foreground-secondary'
                     }`}
                   >
                     {day}
                   </span>
                   {daySessions.length > 0 && (
-                    <span className="text-[10px] text-brand-400 font-medium">
+                    <span className="text-[10px] text-foreground-muted font-medium">
                       {daySessions.length} sess
                     </span>
                   )}
@@ -162,28 +162,22 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
                   {daySessions.slice(0, 2).map((s) => (
                     <div
                       key={s.id}
-                      className={`text-[10px] truncate px-1.5 py-0.5 rounded font-medium flex items-center gap-1 border ${
-                        s.status === 'ACCEPTED'
-                          ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20'
-                          : s.status === 'PENDING'
-                          ? 'bg-amber-500/10 text-amber-300 border-amber-500/20'
-                          : 'bg-indigo-500/10 text-indigo-300 border-indigo-500/20'
-                      }`}
+                      className="text-[10px] truncate px-1.5 py-0.5 rounded font-medium flex items-center gap-1 border bg-surface border-border text-foreground-secondary"
                       title={`${s.title} (${new Date(s.startTime).toLocaleTimeString([], {
                         hour: 'numeric',
                         minute: '2-digit',
                       })})`}
                     >
                       {s.mode === 'ONLINE' ? (
-                        <Video className="w-2.5 h-2.5 shrink-0" />
+                        <Video className="w-2.5 h-2.5 shrink-0 text-foreground-muted" />
                       ) : (
-                        <MapPin className="w-2.5 h-2.5 shrink-0" />
+                        <MapPin className="w-2.5 h-2.5 shrink-0 text-foreground-muted" />
                       )}
                       <span className="truncate">{s.title}</span>
                     </div>
                   ))}
                   {daySessions.length > 2 && (
-                    <div className="text-[10px] text-slate-400 text-center font-medium">
+                    <div className="text-[10px] text-foreground-muted text-center font-medium">
                       +{daySessions.length - 2} more
                     </div>
                   )}
@@ -196,11 +190,11 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
 
       {/* Selected Day Sessions Drawer / Section */}
       {selectedDaySessions && (
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div className="bg-card border border-border rounded-xl p-6 space-y-4">
+          <div className="flex items-center justify-between border-b border-border pb-3">
             <div>
-              <h3 className="text-lg font-bold text-white">Sessions on {selectedDateStr}</h3>
-              <p className="text-xs text-slate-400">
+              <h3 className="text-base font-bold text-foreground">Sessions on {selectedDateStr}</h3>
+              <p className="text-xs text-foreground-muted">
                 {selectedDaySessions.length} session{selectedDaySessions.length === 1 ? '' : 's'} on this day
               </p>
             </div>
@@ -210,7 +204,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
           </div>
 
           {selectedDaySessions.length === 0 ? (
-            <div className="py-6 text-center text-xs text-slate-400">
+            <div className="py-6 text-center text-xs text-foreground-muted">
               No learning sessions scheduled on this day.
             </div>
           ) : (

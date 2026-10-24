@@ -1,4 +1,4 @@
-export const APP_NAME = 'PeerLume';
+export const APP_NAME = 'PeerLearn';
 export const APP_TAGLINE = 'Learn Together. Grow Together.';
 export const APP_VERSION = '0.1.0';
 
@@ -187,7 +187,7 @@ export const SUPPORTED_LANGUAGES = [
 ] as const;
 
 export const STARTER_TEMPLATES: Record<string, string> = {
-  typescript: `// PeerLume Collaborative TypeScript Workspace
+  typescript: `// PeerLearn Collaborative TypeScript Workspace
 // Learn Together. Grow Together.
 
 interface Student {
@@ -197,7 +197,7 @@ interface Student {
 }
 
 function greetStudent(student: Student): string {
-  return \`Welcome to PeerLume, \${student.name}! Ready to master \${student.goals.join(', ')}?\`;
+  return \`Welcome to PeerLearn, \${student.name}! Ready to master \${student.goals.join(', ')}?\`;
 }
 
 const learner: Student = {
@@ -208,7 +208,7 @@ const learner: Student = {
 
 console.log(greetStudent(learner));
 `,
-  javascript: `// PeerLume Collaborative JavaScript Workspace
+  javascript: `// PeerLearn Collaborative JavaScript Workspace
 // Learn Together. Grow Together.
 
 function calculatePeerSynergy(peerA, peerB) {
@@ -224,7 +224,7 @@ const bob = { name: "Bob", skills: ["Python", "JavaScript", "React"] };
 
 console.log("Synergy:", calculatePeerSynergy(alice, bob));
 `,
-  python: `# PeerLume Collaborative Python Workspace
+  python: `# PeerLearn Collaborative Python Workspace
 # Learn Together. Grow Together.
 
 class LearningSession:
@@ -241,18 +241,18 @@ session = LearningSession("Algorithms & Data Structures", 60)
 session.add_peer("Alex")
 session.add_peer("Sam")
 `,
-  java: `// PeerLume Collaborative Java Workspace
+  java: `// PeerLearn Collaborative Java Workspace
 // Learn Together. Grow Together.
 
 public class Main {
     public static void main(String[] args) {
-        String greeting = "Welcome to PeerLume!";
+        String greeting = "Welcome to PeerLearn!";
         System.out.println(greeting);
         System.out.println("Learn Together. Grow Together.");
     }
 }
 `,
-  cpp: `// PeerLume Collaborative C++ Workspace
+  cpp: `// PeerLearn Collaborative C++ Workspace
 // Learn Together. Grow Together.
 
 #include <iostream>
@@ -260,7 +260,7 @@ public class Main {
 #include <string>
 
 int main() {
-    std::cout << "PeerLume C++ Collaborative Workspace" << std::endl;
+    std::cout << "PeerLearn C++ Collaborative Workspace" << std::endl;
     std::cout << "Learn Together. Grow Together." << std::endl;
     return 0;
 }
@@ -269,19 +269,19 @@ int main() {
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>PeerLume Collaborative Page</title>
+  <title>PeerLearn Collaborative Page</title>
   <style>
     body { font-family: sans-serif; background: #0f172a; color: #f8fafc; padding: 2rem; }
     h1 { color: #6366f1; }
   </style>
 </head>
 <body>
-  <h1>PeerLume</h1>
+  <h1>PeerLearn</h1>
   <p>Learn Together. Grow Together.</p>
 </body>
 </html>
 `,
-  css: `/* PeerLume Collaborative CSS Workspace */
+  css: `/* PeerLearn Collaborative CSS Workspace */
 
 :root {
   --primary-color: #6366f1;
@@ -298,7 +298,7 @@ body {
 }
 `,
   json: `{
-  "platform": "PeerLume",
+  "platform": "PeerLearn",
   "tagline": "Learn Together. Grow Together.",
   "module": "Phase 6: Real-Time Collaborative Code Editor",
   "features": [
@@ -310,7 +310,7 @@ body {
   ]
 }
 `,
-  sql: `-- PeerLume Collaborative SQL Workspace
+  sql: `-- PeerLearn Collaborative SQL Workspace
 -- Learn Together. Grow Together.
 
 SELECT 

@@ -33,13 +33,11 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
 
-    // Typing debounce
     if (onTypingStart) {
       onTypingStart();
     }
@@ -101,17 +99,17 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
   };
 
   return (
-    <div className="border-t border-gray-200 bg-white p-3 space-y-2">
+    <div className="border-t border-border bg-card p-3 space-y-2">
       {/* Code mode banner */}
       {isCodeMode && (
-        <div className="flex items-center justify-between bg-blue-50 border border-blue-200 rounded-lg px-3 py-1.5 text-xs text-blue-900">
+        <div className="flex items-center justify-between bg-surface-hover border border-border rounded-md px-3 py-1.5 text-xs text-foreground">
           <div className="flex items-center gap-2">
-            <Code2 className="w-4 h-4 text-blue-600" />
-            <span className="font-medium">Code Snippet Mode:</span>
+            <Code2 className="w-3.5 h-3.5 text-foreground" />
+            <span className="font-medium text-xs">Code Mode:</span>
             <select
               value={selectedLanguage}
               onChange={(e) => setSelectedLanguage(e.target.value)}
-              className="bg-white border border-blue-300 rounded px-2 py-0.5 text-xs text-blue-950 focus:outline-none focus:ring-1 focus:ring-blue-500 font-medium"
+              className="bg-background border border-border rounded px-2 py-0.5 text-xs text-foreground focus:outline-none"
             >
               {PROGRAMMING_LANGUAGES.map((lang) => (
                 <option key={lang.value} value={lang.value}>
@@ -123,23 +121,23 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
           <button
             type="button"
             onClick={() => setIsCodeMode(false)}
-            className="text-gray-500 hover:text-gray-700"
+            className="text-foreground-muted hover:text-foreground cursor-pointer"
           >
-            <X className="w-4 h-4" />
+            <X className="w-3.5 h-3.5" />
           </button>
         </div>
       )}
 
       {/* Link mode banner */}
       {isLinkMode && (
-        <div className="flex items-center gap-2 bg-purple-50 border border-purple-200 rounded-lg px-3 py-1.5 text-xs text-purple-900">
-          <LinkIcon className="w-4 h-4 text-purple-600 shrink-0" />
+        <div className="flex items-center gap-2 bg-surface-hover border border-border rounded-md px-3 py-1.5 text-xs text-foreground">
+          <LinkIcon className="w-3.5 h-3.5 text-foreground shrink-0" />
           <input
             type="url"
             placeholder="Paste URL link here (https://...)"
             value={linkUrl}
             onChange={(e) => setLinkUrl(e.target.value)}
-            className="flex-1 bg-white border border-purple-300 rounded px-2 py-1 text-xs text-gray-900 focus:outline-none focus:ring-1 focus:ring-purple-500"
+            className="flex-1 bg-background border border-border rounded px-2 py-0.5 text-xs text-foreground focus:outline-none"
           />
           <button
             type="button"
@@ -147,16 +145,16 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
               setIsLinkMode(false);
               setLinkUrl('');
             }}
-            className="text-gray-500 hover:text-gray-700"
+            className="text-foreground-muted hover:text-foreground cursor-pointer"
           >
-            <X className="w-4 h-4" />
+            <X className="w-3.5 h-3.5" />
           </button>
         </div>
       )}
 
       {/* Main text area & action bar */}
       <div className="flex items-end gap-2">
-        <div className="flex-1 border border-gray-300 rounded-xl bg-gray-50 focus-within:bg-white focus-within:border-blue-500 transition-colors">
+        <div className="flex-1 border border-border rounded-lg bg-background focus-within:border-foreground dark:focus-within:border-white transition-colors">
           <textarea
             ref={textareaRef}
             rows={isCodeMode ? 4 : 2}
@@ -171,12 +169,13 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
                   ? 'Add an optional note about this link...'
                   : 'Type a message... (Press Enter to send, Shift+Enter for new line)'
             }
-            className={`w-full bg-transparent p-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none resize-none ${isCodeMode ? 'font-mono text-xs' : ''
-              }`}
+            className={`w-full bg-transparent p-2.5 text-xs sm:text-sm text-foreground placeholder:text-foreground-muted focus:outline-none resize-none ${
+              isCodeMode ? 'font-mono text-xs' : ''
+            }`}
           />
 
           {/* Bottom toolbar inside input box */}
-          <div className="flex items-center justify-between px-2.5 py-1.5 border-t border-gray-100 bg-white/50 rounded-b-xl">
+          <div className="flex items-center justify-between px-2.5 py-1.5 border-t border-border bg-card/40 rounded-b-lg">
             <div className="flex items-center gap-1">
               <button
                 type="button"
@@ -184,13 +183,14 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
                   setIsCodeMode(!isCodeMode);
                   setIsLinkMode(false);
                 }}
-                className={`p-1.5 rounded-md text-xs font-medium transition-colors flex items-center gap-1 ${isCodeMode
-                    ? 'bg-blue-100 text-blue-700'
-                    : 'text-gray-500 hover:text-gray-800 hover:bg-gray-100'
-                  }`}
+                className={`p-1 rounded text-xs font-medium transition-colors flex items-center gap-1 cursor-pointer ${
+                  isCodeMode
+                    ? 'bg-foreground text-background font-semibold'
+                    : 'text-foreground-muted hover:text-foreground hover:bg-surface-hover'
+                }`}
                 title="Share Code Snippet"
               >
-                <Code2 className="w-4 h-4" />
+                <Code2 className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">Code</span>
               </button>
 
@@ -200,18 +200,19 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
                   setIsLinkMode(!isLinkMode);
                   setIsCodeMode(false);
                 }}
-                className={`p-1.5 rounded-md text-xs font-medium transition-colors flex items-center gap-1 ${isLinkMode
-                    ? 'bg-purple-100 text-purple-700'
-                    : 'text-gray-500 hover:text-gray-800 hover:bg-gray-100'
-                  }`}
+                className={`p-1 rounded text-xs font-medium transition-colors flex items-center gap-1 cursor-pointer ${
+                  isLinkMode
+                    ? 'bg-foreground text-background font-semibold'
+                    : 'text-foreground-muted hover:text-foreground hover:bg-surface-hover'
+                }`}
                 title="Share Resource Link"
               >
-                <LinkIcon className="w-4 h-4" />
+                <LinkIcon className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">Link</span>
               </button>
             </div>
 
-            <span className="text-[11px] text-gray-400">
+            <span className="text-[11px] font-mono text-foreground-muted">
               {content.length}/5000
             </span>
           </div>
@@ -222,7 +223,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
           type="button"
           onClick={handleSend}
           disabled={!content.trim() || disabled || isSubmitting}
-          className="p-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-xl shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 flex items-center justify-center shrink-0"
+          className="p-2.5 bg-foreground hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed text-background rounded-lg shadow-xs transition-all focus:outline-none flex items-center justify-center shrink-0 cursor-pointer"
           title="Send message"
         >
           <Send className="w-4 h-4" />

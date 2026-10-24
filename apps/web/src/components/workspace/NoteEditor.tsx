@@ -92,16 +92,16 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({
     <form onSubmit={handleSubmit} className="space-y-4">
       {error && <Alert variant="error">{error}</Alert>}
 
-      <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+      <div className="flex items-center justify-between border-b border-border pb-3">
         <div className="flex items-center gap-2">
-          <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400">
+          <div className="p-2 rounded-lg bg-surface border border-border text-foreground">
             <FileText className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-white">
+            <h3 className="text-base font-bold text-foreground">
               {isEditing ? 'Edit Study Note' : 'Create Study Note'}
             </h3>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-foreground-muted">
               {isEditing ? `Last modified ${new Date().toLocaleTimeString()}` : 'Write and save notes in your workspace'}
             </p>
           </div>
@@ -109,13 +109,13 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({
 
         {/* Live Saving Status Pill */}
         {savingStatus === 'saving' && (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface border border-border text-foreground text-xs">
             <Clock className="w-3.5 h-3.5 animate-spin" />
             <span>Saving...</span>
           </span>
         )}
         {savingStatus === 'saved' && (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 text-xs">
             <CheckCircle2 className="w-3.5 h-3.5" />
             <span>Saved</span>
           </span>
@@ -124,7 +124,7 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({
 
       {/* Title */}
       <div>
-        <label className="block text-xs font-semibold text-slate-300 mb-1">
+        <label className="block text-xs font-semibold text-foreground mb-1">
           Note Title *
         </label>
         <input
@@ -133,13 +133,13 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({
           placeholder="e.g., Dynamic Programming Memoization Notes"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 transition-colors"
+          className="w-full bg-surface border border-border rounded-lg px-3.5 py-2 text-sm text-foreground placeholder-foreground-muted focus:outline-none focus:border-foreground transition-colors"
         />
       </div>
 
       {/* Description / Summary */}
       <div>
-        <label className="block text-xs font-semibold text-slate-300 mb-1">
+        <label className="block text-xs font-semibold text-foreground mb-1">
           Short Summary or Tags
         </label>
         <input
@@ -147,42 +147,42 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({
           placeholder="e.g., CS301, Midterm prep, Top-down recursion"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 transition-colors"
+          className="w-full bg-surface border border-border rounded-lg px-3.5 py-2 text-sm text-foreground placeholder-foreground-muted focus:outline-none focus:border-foreground transition-colors"
         />
       </div>
 
       {/* Note Content Editor */}
       <div>
         <div className="flex items-center justify-between mb-1">
-          <label className="block text-xs font-semibold text-slate-300">
+          <label className="block text-xs font-semibold text-foreground">
             Note Content (Markdown supported)
           </label>
-          <span className="text-[11px] text-slate-400">
+          <span className="text-[11px] text-foreground-muted">
             {wordCount} words • {charCount} chars
           </span>
         </div>
         <textarea
           rows={10}
-          placeholder="# Study Notes\n\n- Key Concept 1: ...\n- Formula: ..."
+          placeholder="# Study Notes&#10;&#10;- Key Concept 1: ...&#10;- Formula: ..."
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3.5 text-sm font-sans text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand-500 transition-colors leading-relaxed font-mono"
+          className="w-full bg-surface border border-border rounded-lg p-3.5 text-sm font-sans text-foreground placeholder-foreground-muted focus:outline-none focus:border-foreground transition-colors leading-relaxed font-mono resize-none"
         />
       </div>
 
       {/* Privacy Switch */}
-      <div className="flex items-center justify-between bg-slate-950/80 border border-slate-800 rounded-xl p-3.5">
+      <div className="flex items-center justify-between bg-surface border border-border rounded-xl p-3.5">
         <div className="flex items-center gap-2.5">
           {isPrivate ? (
-            <Lock className="w-4 h-4 text-amber-400" />
+            <Lock className="w-4 h-4 text-foreground-muted" />
           ) : (
-            <Globe className="w-4 h-4 text-teal-400" />
+            <Globe className="w-4 h-4 text-foreground-muted" />
           )}
           <div>
-            <div className="text-xs font-semibold text-white">
+            <div className="text-xs font-semibold text-foreground">
               {isPrivate ? 'Private Note' : 'Shared Resource'}
             </div>
-            <div className="text-[11px] text-slate-400">
+            <div className="text-[11px] text-foreground-muted">
               {isPrivate
                 ? 'Only visible to you'
                 : sessionId
@@ -195,20 +195,20 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({
         <button
           type="button"
           onClick={() => setIsPrivate(!isPrivate)}
-          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
-            isPrivate ? 'bg-slate-700' : 'bg-brand-500'
+          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none border border-border ${
+            isPrivate ? 'bg-surface-elevated' : 'bg-foreground'
           }`}
         >
           <span
-            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-              isPrivate ? 'translate-x-1' : 'translate-x-6'
+            className={`inline-block h-4 w-4 transform rounded-full transition-transform ${
+              isPrivate ? 'translate-x-1 bg-foreground-muted' : 'translate-x-6 bg-background'
             }`}
           />
         </button>
       </div>
 
       {/* Actions */}
-      <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+      <div className="flex items-center justify-end gap-3 pt-3 border-t border-border">
         <Button variant="ghost" type="button" onClick={onCancel} disabled={savingStatus === 'saving'}>
           Cancel
         </Button>

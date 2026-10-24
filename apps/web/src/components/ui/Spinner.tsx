@@ -14,14 +14,14 @@ export const Spinner: React.FC<SpinnerProps> = ({
 }) => {
   const sizeMap = {
     sm: 'w-4 h-4',
-    md: 'w-6 h-6',
-    lg: 'w-8 h-8',
+    md: 'w-5 h-5',
+    lg: 'w-7 h-7',
   };
 
   return (
-    <div className={`inline-flex items-center gap-2 text-brand-400 ${className}`}>
-      <Loader2 className={`${sizeMap[size]} animate-spin`} />
-      {label && <span className="text-sm font-medium text-slate-300">{label}</span>}
+    <div className={`inline-flex items-center gap-2 text-foreground ${className}`}>
+      <Loader2 className={`${sizeMap[size]} animate-spin text-current`} />
+      {label && <span className="text-xs sm:text-sm font-medium text-foreground-secondary">{label}</span>}
     </div>
   );
 };

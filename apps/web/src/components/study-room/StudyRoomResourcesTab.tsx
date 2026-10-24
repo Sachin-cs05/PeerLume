@@ -40,17 +40,17 @@ export const StudyRoomResourcesTab: React.FC<StudyRoomResourcesTabProps> = ({
   }, [sessionId]);
 
   return (
-    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm text-slate-800 dark:text-slate-100 flex flex-col gap-4">
+    <div className="bg-card border border-border rounded-2xl p-4 shadow-sm text-foreground flex flex-col gap-4">
       {/* Code Workspace Linkage */}
       <div>
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-1.5">
-            <Code2 className="w-4 h-4 text-indigo-500" />
-            <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-500">Collaborative Code Workspace</h2>
+            <Code2 className="w-4 h-4 text-foreground-secondary" />
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-foreground-muted">Collaborative Code Workspace</h2>
           </div>
           <Link
             to="/code"
-            className="text-xs text-brand-500 hover:text-brand-600 font-medium flex items-center gap-1"
+            className="text-xs text-foreground hover:underline font-medium flex items-center gap-1"
           >
             <span>Open IDE</span>
             <ExternalLink className="w-3 h-3" />
@@ -65,20 +65,20 @@ export const StudyRoomResourcesTab: React.FC<StudyRoomResourcesTabProps> = ({
                 to={`/code/${w.id}`}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center justify-between p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700/60 transition-colors"
+                className="flex items-center justify-between p-2 rounded-xl bg-surface hover:bg-surface-hover border border-border transition-colors"
               >
                 <div className="truncate">
-                  <p className="text-xs font-semibold truncate text-slate-900 dark:text-white">{w.title}</p>
-                  <p className="text-[10px] text-slate-500 truncate">{w.description || 'Code Workspace'}</p>
+                  <p className="text-xs font-medium truncate text-foreground">{w.title}</p>
+                  <p className="text-[10px] text-foreground-muted truncate">{w.description || 'Code Workspace'}</p>
                 </div>
-                <ExternalLink className="w-3.5 h-3.5 text-slate-400 shrink-0 ml-2" />
+                <ExternalLink className="w-3.5 h-3.5 text-foreground-muted shrink-0 ml-2" />
               </Link>
             ))}
           </div>
         ) : (
-          <div className="text-center py-2 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-dashed border-slate-200 dark:border-slate-700 text-xs text-slate-400">
+          <div className="text-center py-2 bg-surface rounded-xl border border-dashed border-border text-xs text-foreground-muted">
             <span>No linked code workspace yet.</span>
-            <Link to="/code" className="block text-brand-500 font-medium mt-1">
+            <Link to="/code" className="block text-foreground font-medium mt-1 hover:underline">
               + Launch New Workspace
             </Link>
           </div>
@@ -86,41 +86,41 @@ export const StudyRoomResourcesTab: React.FC<StudyRoomResourcesTabProps> = ({
       </div>
 
       {/* Session Resources */}
-      <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
+      <div className="pt-2 border-t border-border">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-1.5">
-            <BookOpen className="w-4 h-4 text-amber-500" />
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500">Study Resources & Notes</h3>
+            <BookOpen className="w-4 h-4 text-foreground-secondary" />
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-foreground-muted">Study Resources & Notes</h3>
           </div>
           <Link
             to="/workspace"
-            className="text-xs text-brand-500 hover:text-brand-600 font-medium"
+            className="text-xs text-foreground hover:underline font-medium"
           >
             All Resources
           </Link>
         </div>
 
         {loading ? (
-          <div className="py-4 text-center text-xs text-slate-400">Loading resources...</div>
+          <div className="py-4 text-center text-xs text-foreground-muted">Loading resources...</div>
         ) : resources.length > 0 ? (
           <div className="space-y-1.5">
             {resources.map((r) => (
               <div
                 key={r.id}
-                className="flex items-center justify-between p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 text-xs"
+                className="flex items-center justify-between p-2 rounded-xl bg-surface border border-border text-xs"
               >
                 <div className="flex items-center gap-2 truncate">
-                  <FileText className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                  <span className="font-medium truncate text-slate-800 dark:text-slate-200">{r.title}</span>
+                  <FileText className="w-3.5 h-3.5 text-foreground-muted shrink-0" />
+                  <span className="font-medium truncate text-foreground">{r.title}</span>
                 </div>
-                <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 uppercase shrink-0">
+                <span className="text-[10px] px-1.5 py-0.5 rounded bg-surface-elevated border border-border text-foreground-secondary uppercase shrink-0">
                   {r.type}
                 </span>
               </div>
             ))}
           </div>
         ) : (
-          <p className="text-xs text-slate-400 text-center py-2">
+          <p className="text-xs text-foreground-muted text-center py-2">
             No attached session resources found.
           </p>
         )}

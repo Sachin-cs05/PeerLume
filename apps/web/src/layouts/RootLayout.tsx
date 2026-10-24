@@ -7,7 +7,7 @@ import { CallModal } from '../components/calls/CallModal.js';
 
 export const RootLayout: React.FC = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-slate-900 text-slate-100 bg-radial-glow">
+    <div className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-150">
       <Header />
       <main className="flex-1 flex flex-col">
         <Outlet />
@@ -19,4 +19,3 @@ export const RootLayout: React.FC = () => {
     </div>
   );
 };
-

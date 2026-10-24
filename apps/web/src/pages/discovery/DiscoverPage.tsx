@@ -124,38 +124,38 @@ export const DiscoverPage: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto space-y-8">
+    <div className="py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto space-y-6">
         {/* Header Hero Banner */}
-        <div className="relative rounded-3xl bg-gradient-to-r from-brand-900/40 via-purple-900/20 to-slate-900 border border-slate-800 p-6 sm:p-8 overflow-hidden shadow-2xl">
-          <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-brand-500/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div className="space-y-2">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-300 text-xs font-semibold">
+        <div className="rounded-xl border border-border bg-card p-6 sm:p-7 shadow-xs">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="space-y-1.5">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-hover border border-border text-foreground text-xs font-medium">
                 <Compass className="w-3.5 h-3.5" />
-                <span>Learning Partner Discovery</span>
+                <span>Partner Discovery</span>
               </div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              <h1 className="text-xl sm:text-2xl font-extrabold text-foreground tracking-tight">
                 Discover Learning Partners
               </h1>
-              <p className="text-sm sm:text-base text-slate-400 max-w-2xl leading-relaxed">
-                Connect with peers who can mentor you in the skills you want to learn, and share what you know in return.
+              <p className="text-xs sm:text-sm text-foreground-secondary max-w-2xl leading-relaxed">
+                Connect with peers who can mentor you in topics you want to learn, and exchange knowledge collaboratively.
               </p>
             </div>
 
             {/* Mode Switcher */}
-            <div className="flex bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800 shrink-0 self-start md:self-center shadow-lg">
+            <div className="flex bg-background p-1 rounded-lg border border-border shrink-0 self-start md:self-center">
               <button
                 onClick={() => {
                   setViewMode('recommended');
                   setPage(1);
                 }}
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${viewMode === 'recommended'
-                    ? 'bg-gradient-to-r from-brand-600 to-purple-600 text-white shadow-md'
-                    : 'text-slate-400 hover:text-white'
-                  }`}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-all cursor-pointer ${
+                  viewMode === 'recommended'
+                    ? 'bg-foreground text-background shadow-xs'
+                    : 'text-foreground-secondary hover:text-foreground'
+                }`}
               >
-                <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                <Sparkles className="w-3.5 h-3.5" />
                 <span>Smart Matching</span>
               </button>
               <button
@@ -163,10 +163,11 @@ export const DiscoverPage: React.FC = () => {
                   setViewMode('directory');
                   setPage(1);
                 }}
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${viewMode === 'directory'
-                    ? 'bg-gradient-to-r from-brand-600 to-purple-600 text-white shadow-md'
-                    : 'text-slate-400 hover:text-white'
-                  }`}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-all cursor-pointer ${
+                  viewMode === 'directory'
+                    ? 'bg-foreground text-background shadow-xs'
+                    : 'text-foreground-secondary hover:text-foreground'
+                }`}
               >
                 <Users className="w-3.5 h-3.5" />
                 <span>All Students</span>
@@ -176,11 +177,11 @@ export const DiscoverPage: React.FC = () => {
         </div>
 
         {/* Filter Toolbar */}
-        <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-xl space-y-4">
+        <div className="bg-card border border-border rounded-xl p-4 sm:p-5 shadow-xs space-y-3.5">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {/* Search Input */}
             <div className="relative">
-              <Search className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
+              <Search className="w-3.5 h-3.5 text-foreground-muted absolute left-3 top-3" />
               <input
                 type="text"
                 placeholder="Search name, bio, or college..."
@@ -189,13 +190,13 @@ export const DiscoverPage: React.FC = () => {
                   setSearchQuery(e.target.value);
                   setPage(1);
                 }}
-                className="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-800/80 border border-slate-700/80 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 transition-colors"
+                className="w-full pl-9 pr-3.5 py-2 rounded-lg bg-background border border-border text-xs sm:text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-foreground dark:focus:border-white focus:ring-1 focus:ring-foreground/20 transition-colors"
               />
             </div>
 
             {/* Skill Filter */}
             <div className="relative">
-              <BookOpen className="w-4 h-4 text-emerald-400 absolute left-3 top-3" />
+              <BookOpen className="w-3.5 h-3.5 text-foreground-muted absolute left-3 top-3" />
               <input
                 type="text"
                 placeholder="Filter by skill (e.g. Python, React)"
@@ -204,22 +205,22 @@ export const DiscoverPage: React.FC = () => {
                   setSkillFilter(e.target.value);
                   setPage(1);
                 }}
-                className="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-800/80 border border-slate-700/80 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 transition-colors"
+                className="w-full pl-9 pr-3.5 py-2 rounded-lg bg-background border border-border text-xs sm:text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-foreground dark:focus:border-white focus:ring-1 focus:ring-foreground/20 transition-colors"
               />
             </div>
 
             {/* College Filter */}
             <div className="relative">
-              <GraduationCap className="w-4 h-4 text-brand-400 absolute left-3 top-3" />
+              <GraduationCap className="w-3.5 h-3.5 text-foreground-muted absolute left-3 top-3" />
               <input
                 type="text"
-                placeholder="Filter by college / university"
+                placeholder="Filter by university / campus"
                 value={collegeFilter}
                 onChange={(e) => {
                   setCollegeFilter(e.target.value);
                   setPage(1);
                 }}
-                className="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-800/80 border border-slate-700/80 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 transition-colors"
+                className="w-full pl-9 pr-3.5 py-2 rounded-lg bg-background border border-border text-xs sm:text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-foreground dark:focus:border-white focus:ring-1 focus:ring-foreground/20 transition-colors"
               />
             </div>
 
@@ -227,20 +228,20 @@ export const DiscoverPage: React.FC = () => {
             <div>
               <input
                 type="text"
-                placeholder="Filter by branch (e.g. CS, Mechanical)"
+                placeholder="Filter by branch (e.g. CS, EE)"
                 value={branchFilter}
                 onChange={(e) => {
                   setBranchFilter(e.target.value);
                   setPage(1);
                 }}
-                className="w-full px-3 py-2 rounded-xl bg-slate-800/80 border border-slate-700/80 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 transition-colors"
+                className="w-full px-3.5 py-2 rounded-lg bg-background border border-border text-xs sm:text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-foreground dark:focus:border-white focus:ring-1 focus:ring-foreground/20 transition-colors"
               />
             </div>
           </div>
 
           {/* Secondary Filter Row */}
-          <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-800/80 text-xs">
-            <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-border text-xs">
+            <div className="flex flex-wrap items-center gap-2.5">
               {/* Learning Mode */}
               <select
                 value={preferredMode}
@@ -248,7 +249,7 @@ export const DiscoverPage: React.FC = () => {
                   setPreferredMode(e.target.value);
                   setPage(1);
                 }}
-                className="px-3 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 focus:outline-none"
+                className="px-2.5 py-1.5 rounded-md bg-background border border-border text-foreground focus:outline-none"
               >
                 <option value="">Any Learning Mode</option>
                 <option value="ONLINE">Online Only</option>
@@ -265,28 +266,28 @@ export const DiscoverPage: React.FC = () => {
                   setLanguageFilter(e.target.value);
                   setPage(1);
                 }}
-                className="px-3 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 placeholder-slate-500 focus:outline-none max-w-[140px]"
+                className="px-2.5 py-1.5 rounded-md bg-background border border-border text-foreground placeholder:text-foreground-muted focus:outline-none max-w-[140px]"
               />
 
               {hasActiveFilters && (
                 <button
                   onClick={handleResetFilters}
-                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white border border-slate-700"
+                  className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-md bg-surface-hover text-foreground hover:bg-surface-hover/80 border border-border transition-colors cursor-pointer"
                 >
-                  <X className="w-3.5 h-3.5" />
+                  <X className="w-3 h-3" />
                   <span>Reset Filters</span>
                 </button>
               )}
             </div>
 
-            <div className="flex items-center gap-3 text-slate-400">
+            <div className="flex items-center gap-3 text-foreground-muted">
               <span>
-                Found <strong className="text-white">{totalItems}</strong> {totalItems === 1 ? 'peer' : 'peers'}
+                Found <strong className="text-foreground">{totalItems}</strong> {totalItems === 1 ? 'peer' : 'peers'}
               </span>
               <button
                 onClick={fetchResults}
                 disabled={loading}
-                className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition-colors"
+                className="p-1 rounded-md hover:bg-surface-hover text-foreground-muted hover:text-foreground transition-colors cursor-pointer"
                 title="Refresh list"
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
@@ -295,32 +296,32 @@ export const DiscoverPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Content Area: Loading, Error, Empty, or Cards Grid */}
+        {/* Content Area */}
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {[...Array(6)].map((_, i) => (
               <div
                 key={i}
-                className="animate-pulse bg-slate-900/60 border border-slate-800/80 rounded-2xl p-5 h-72 flex flex-col justify-between"
+                className="animate-pulse bg-card border border-border rounded-xl p-5 h-64 flex flex-col justify-between shadow-xs"
               >
                 <div className="space-y-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-xl bg-slate-800" />
+                    <div className="w-10 h-10 rounded-lg bg-surface-hover" />
                     <div className="space-y-1.5 flex-1">
-                      <div className="h-4 bg-slate-800 rounded w-3/4" />
-                      <div className="h-3 bg-slate-800 rounded w-1/2" />
+                      <div className="h-3.5 bg-surface-hover rounded w-3/4" />
+                      <div className="h-3 bg-surface-hover rounded w-1/2" />
                     </div>
                   </div>
-                  <div className="h-3 bg-slate-800 rounded w-full" />
-                  <div className="h-3 bg-slate-800 rounded w-2/3" />
+                  <div className="h-2.5 bg-surface-hover rounded w-full" />
+                  <div className="h-2.5 bg-surface-hover rounded w-2/3" />
                 </div>
-                <div className="h-8 bg-slate-800 rounded-xl w-full" />
+                <div className="h-8 bg-surface-hover rounded-lg w-full" />
               </div>
             ))}
           </div>
         ) : error ? (
-          <div className="p-8 rounded-2xl bg-rose-950/20 border border-rose-500/30 text-center space-y-3 max-w-lg mx-auto">
-            <p className="text-sm text-rose-300">{error}</p>
+          <div className="p-8 rounded-xl bg-card border border-border text-center space-y-3 max-w-lg mx-auto">
+            <p className="text-sm text-rose-500">{error}</p>
             <Button variant="outline" size="sm" onClick={fetchResults}>
               Retry Discovery
             </Button>
@@ -328,7 +329,7 @@ export const DiscoverPage: React.FC = () => {
         ) : (viewMode === 'recommended' && recommendations.length === 0) ||
           (viewMode === 'directory' && directoryStudents.length === 0) ? (
           <EmptyState
-            icon={<Compass className="w-8 h-8" />}
+            icon={<Compass className="w-6 h-6" />}
             title="No Learning Partners Found"
             description={
               hasActiveFilters
@@ -343,13 +344,13 @@ export const DiscoverPage: React.FC = () => {
                   onClick: handleResetFilters,
                 }
                 : {
-                  label: 'Add Your Skills & Goals',
+                  label: 'Add Skills & Goals',
                   href: '/profile/edit',
                 }
             }
           />
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {viewMode === 'recommended'
               ? recommendations.map((rec) => (
                 <StudentCard
@@ -373,20 +374,20 @@ export const DiscoverPage: React.FC = () => {
               size="sm"
               disabled={page <= 1 || loading}
               onClick={() => setPage((p) => Math.max(1, p - 1))}
-              leftIcon={<ChevronLeft className="w-4 h-4" />}
+              leftIcon={<ChevronLeft className="w-3.5 h-3.5" />}
             >
               Previous
             </Button>
-            <span className="text-xs text-slate-400 font-medium">
-              Page <strong className="text-white">{page}</strong> of{' '}
-              <strong className="text-white">{totalPages}</strong>
+            <span className="text-xs text-foreground-muted font-medium">
+              Page <strong className="text-foreground">{page}</strong> of{' '}
+              <strong className="text-foreground">{totalPages}</strong>
             </span>
             <Button
               variant="outline"
               size="sm"
               disabled={page >= totalPages || loading}
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-              rightIcon={<ChevronRight className="w-4 h-4" />}
+              rightIcon={<ChevronRight className="w-3.5 h-3.5" />}
             >
               Next
             </Button>

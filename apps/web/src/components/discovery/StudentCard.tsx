@@ -43,7 +43,7 @@ export const StudentCard: React.FC<StudentCardProps> = ({
       setFeedback(res.error);
     } else {
       setStatus('REQUEST_SENT');
-      setFeedback('Request sent!');
+      setFeedback('Request sent');
       onRefresh?.();
     }
   };
@@ -74,7 +74,7 @@ export const StudentCard: React.FC<StudentCardProps> = ({
       setFeedback(res.error);
     } else {
       setStatus('FRIENDS');
-      setFeedback('Connected!');
+      setFeedback('Connected');
       onRefresh?.();
     }
   };
@@ -94,32 +94,30 @@ export const StudentCard: React.FC<StudentCardProps> = ({
 
   return (
     <>
-      <div className="relative group bg-slate-900/90 border border-slate-800 hover:border-slate-700/80 rounded-2xl p-5 shadow-lg hover:shadow-2xl hover:shadow-brand-500/5 transition-all duration-300 flex flex-col justify-between">
+      <div className="relative group bg-card border border-border hover:border-border-strong rounded-xl p-5 shadow-xs transition-all duration-200 flex flex-col justify-between">
         <div>
           {/* Card Top: Avatar, Name & Match Score */}
-          <div className="flex items-start justify-between gap-3 mb-4">
+          <div className="flex items-start justify-between gap-3 mb-3.5">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-brand-600 to-purple-600 p-0.5 shadow-md shrink-0">
-                <div className="w-full h-full bg-slate-900 rounded-[10px] flex items-center justify-center overflow-hidden">
-                  {student.avatarUrl ? (
-                    <img src={student.avatarUrl} alt={student.fullName} className="w-full h-full object-cover" />
-                  ) : (
-                    <span className="text-base font-bold text-white tracking-wider">
-                      {student.fullName.charAt(0).toUpperCase()}
-                    </span>
-                  )}
-                </div>
+              <div className="w-10 h-10 rounded-lg bg-surface-hover border border-border flex items-center justify-center overflow-hidden shrink-0">
+                {student.avatarUrl ? (
+                  <img src={student.avatarUrl} alt={student.fullName} className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-sm font-bold text-foreground">
+                    {student.fullName.charAt(0).toUpperCase()}
+                  </span>
+                )}
               </div>
 
               <div>
-                <h3 className="font-bold text-white text-base group-hover:text-brand-300 transition-colors line-clamp-1">
+                <h3 className="font-bold text-foreground text-sm line-clamp-1">
                   {student.fullName}
                 </h3>
-                <div className="flex items-center gap-1.5 text-xs text-slate-400 mt-0.5">
-                  <GraduationCap className="w-3.5 h-3.5 text-brand-400 shrink-0" />
-                  <span className="truncate max-w-[160px] sm:max-w-[190px]">{student.college}</span>
+                <div className="flex items-center gap-1.5 text-xs text-foreground-secondary mt-0.5">
+                  <GraduationCap className="w-3.5 h-3.5 text-foreground-muted shrink-0" />
+                  <span className="truncate max-w-[150px] sm:max-w-[180px]">{student.college}</span>
                 </div>
-                <div className="text-[11px] text-slate-400">
+                <div className="text-[11px] text-foreground-muted">
                   {student.branch} • {student.semester}
                 </div>
               </div>
@@ -136,10 +134,11 @@ export const StudentCard: React.FC<StudentCardProps> = ({
               <button
                 onClick={handleToggleSave}
                 disabled={loading}
-                className={`p-1.5 rounded-lg border transition-colors ${isSaved
-                    ? 'bg-brand-500/20 border-brand-500/40 text-brand-300'
-                    : 'bg-slate-800/80 border-slate-700/60 text-slate-400 hover:text-white'
-                  }`}
+                className={`p-1.5 rounded-md border transition-colors cursor-pointer ${
+                  isSaved
+                    ? 'bg-foreground text-background border-foreground'
+                    : 'bg-background hover:bg-surface-hover border-border text-foreground-muted hover:text-foreground'
+                }`}
                 title={isSaved ? 'Remove from saved' : 'Save learning partner'}
                 aria-label="Save partner"
               >
@@ -150,7 +149,7 @@ export const StudentCard: React.FC<StudentCardProps> = ({
 
           {/* Truthful Explanations */}
           {recommendation && recommendation.explanations.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 mb-4">
+            <div className="flex flex-wrap gap-1.5 mb-3">
               {recommendation.explanations.slice(0, 3).map((exp, idx) => (
                 <MatchExplanationPill key={idx} explanation={exp} />
               ))}
@@ -159,30 +158,30 @@ export const StudentCard: React.FC<StudentCardProps> = ({
 
           {/* Bio Preview if present */}
           {student.bio && (
-            <p className="text-xs text-slate-400 line-clamp-2 mb-4 leading-relaxed">
+            <p className="text-xs text-foreground-secondary line-clamp-2 mb-3 leading-relaxed">
               {student.bio}
             </p>
           )}
 
           {/* Skills They Teach */}
-          <div className="mb-3">
-            <span className="text-[11px] font-semibold text-emerald-400 uppercase tracking-wider block mb-1.5 flex items-center gap-1">
-              <BookOpen className="w-3 h-3" /> Can Teach
+          <div className="mb-2.5">
+            <span className="text-[11px] font-semibold text-foreground-muted uppercase tracking-wider block mb-1 flex items-center gap-1">
+              <BookOpen className="w-3 h-3 text-foreground" /> Can Teach
             </span>
             {student.teachingSkills.length === 0 ? (
-              <span className="text-xs text-slate-400 italic">No skills listed</span>
+              <span className="text-xs text-foreground-muted italic">No skills listed</span>
             ) : (
               <div className="flex flex-wrap gap-1.5">
                 {student.teachingSkills.slice(0, 4).map((ts, idx) => (
                   <span
                     key={idx}
-                    className="inline-flex items-center px-2 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px]"
+                    className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-surface-hover text-foreground border border-border"
                   >
                     {ts.name}
                   </span>
                 ))}
                 {student.teachingSkills.length > 4 && (
-                  <span className="text-[10px] text-slate-400 self-center">
+                  <span className="text-[10px] text-foreground-muted self-center">
                     +{student.teachingSkills.length - 4} more
                   </span>
                 )}
@@ -191,24 +190,24 @@ export const StudentCard: React.FC<StudentCardProps> = ({
           </div>
 
           {/* Skills They Want to Learn */}
-          <div className="mb-4">
-            <span className="text-[11px] font-semibold text-purple-400 uppercase tracking-wider block mb-1.5 flex items-center gap-1">
-              <Target className="w-3 h-3" /> Wants to Learn
+          <div className="mb-3.5">
+            <span className="text-[11px] font-semibold text-foreground-muted uppercase tracking-wider block mb-1 flex items-center gap-1">
+              <Target className="w-3 h-3 text-foreground" /> Wants to Learn
             </span>
             {student.learningGoals.length === 0 ? (
-              <span className="text-xs text-slate-400 italic">No goals listed</span>
+              <span className="text-xs text-foreground-muted italic">No goals listed</span>
             ) : (
               <div className="flex flex-wrap gap-1.5">
                 {student.learningGoals.slice(0, 4).map((lg, idx) => (
                   <span
                     key={idx}
-                    className="inline-flex items-center px-2 py-0.5 rounded-md bg-purple-500/10 border border-purple-500/20 text-purple-300 text-[11px]"
+                    className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-background text-foreground-secondary border border-border"
                   >
                     {lg.name}
                   </span>
                 ))}
                 {student.learningGoals.length > 4 && (
-                  <span className="text-[10px] text-slate-400 self-center">
+                  <span className="text-[10px] text-foreground-muted self-center">
                     +{student.learningGoals.length - 4} more
                   </span>
                 )}
@@ -218,26 +217,26 @@ export const StudentCard: React.FC<StudentCardProps> = ({
         </div>
 
         {/* Card Footer: Status & Actions */}
-        <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between gap-2">
+        <div className="pt-3 border-t border-border flex items-center justify-between gap-2">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setProfileModalOpen(true)}
             leftIcon={<ExternalLink className="w-3.5 h-3.5" />}
-            className="text-xs text-slate-400 hover:text-white"
+            className="text-xs"
           >
             Profile
           </Button>
 
           <div className="flex items-center gap-2">
             {feedback && (
-              <span className="text-[11px] text-emerald-400 animate-fade-in font-medium">
+              <span className="text-[11px] text-foreground-secondary font-mono">
                 {feedback}
               </span>
             )}
 
             {status === 'FRIENDS' && (
-              <span className="inline-flex items-center gap-1 text-xs text-emerald-400 font-semibold px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+              <span className="inline-flex items-center gap-1 text-xs text-foreground font-semibold px-2 py-0.5 rounded-md bg-surface-hover border border-border">
                 <UserCheck className="w-3.5 h-3.5" />
                 Friends
               </span>
@@ -249,7 +248,7 @@ export const StudentCard: React.FC<StudentCardProps> = ({
                 size="sm"
                 isLoading={loading}
                 onClick={handleCancelRequest}
-                leftIcon={<Clock className="w-3.5 h-3.5 text-amber-400" />}
+                leftIcon={<Clock className="w-3.5 h-3.5" />}
                 className="text-xs"
               >
                 Cancel

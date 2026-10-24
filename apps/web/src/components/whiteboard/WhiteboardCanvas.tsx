@@ -485,7 +485,7 @@ export const WhiteboardCanvas: React.FC<WhiteboardCanvasProps> = ({
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-full min-h-[500px] overflow-hidden bg-slate-50 dark:bg-slate-950 rounded-2xl border border-slate-200 dark:border-slate-800 touch-none select-none"
+      className="relative w-full h-full min-h-[500px] overflow-hidden bg-card rounded-2xl border border-border touch-none select-none"
     >
       <canvas
         ref={canvasRef}
@@ -515,7 +515,7 @@ export const WhiteboardCanvas: React.FC<WhiteboardCanvasProps> = ({
             onChange={(e) => setTextInput({ ...textInput, text: e.target.value })}
             onBlur={handleTextSubmit}
             placeholder="Type note or formula..."
-            className="px-2 py-1 text-sm bg-white dark:bg-slate-900 border-2 border-brand-500 rounded-lg shadow-lg outline-none text-slate-900 dark:text-white min-w-[140px]"
+            className="px-2 py-1 text-sm bg-card border-2 border-primary rounded-lg shadow-lg outline-none text-foreground min-w-[140px]"
           />
         </form>
       )}
@@ -531,13 +531,13 @@ export const WhiteboardCanvas: React.FC<WhiteboardCanvasProps> = ({
             style={{ left: `${screenX}px`, top: `${screenY}px` }}
           >
             <svg
-              className="w-4 h-4 text-brand-500 filter drop-shadow"
+              className="w-4 h-4 text-foreground filter drop-shadow"
               viewBox="0 0 24 24"
               fill="currentColor"
             >
               <path d="M3 3l7 18 3-7 7-3L3 3z" />
             </svg>
-            <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-brand-500 text-white shadow whitespace-nowrap ml-2">
+            <span className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-primary text-primary-foreground shadow whitespace-nowrap ml-2">
               Collaborator
             </span>
           </div>

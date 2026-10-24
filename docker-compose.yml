@@ -38,7 +38,7 @@ services:
       WEB_ORIGIN: ${WEB_ORIGIN:-http://localhost}
       APP_BASE_URL: ${APP_BASE_URL:-http://localhost}
       EMAIL_PROVIDER: ${EMAIL_PROVIDER:-development}
-      EMAIL_FROM: ${EMAIL_FROM:-PeerLume <noreply@peerlume.edu>}
+      EMAIL_FROM: ${EMAIL_FROM:-PeerLearn <noreply@peerlearn.edu>}
     ports:
       - "5000:5000"
     healthcheck:

@@ -18,41 +18,41 @@ export const Alert: React.FC<AlertProps> = ({
 }) => {
   const config = {
     info: {
-      bg: 'bg-brand-500/10 border-brand-500/25 text-brand-200',
-      icon: <Info className="w-5 h-5 text-brand-400 shrink-0" />,
-      titleColor: 'text-brand-300',
+      bg: 'bg-surface-hover/80 border-border text-foreground',
+      icon: <Info className="w-4 h-4 text-foreground-secondary shrink-0 mt-0.5" />,
+      titleColor: 'text-foreground',
     },
     success: {
-      bg: 'bg-emerald-500/10 border-emerald-500/25 text-emerald-200',
-      icon: <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />,
-      titleColor: 'text-emerald-300',
+      bg: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-900 dark:text-emerald-200',
+      icon: <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />,
+      titleColor: 'text-emerald-900 dark:text-emerald-100',
     },
     warning: {
-      bg: 'bg-amber-500/10 border-amber-500/25 text-amber-200',
-      icon: <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0" />,
-      titleColor: 'text-amber-300',
+      bg: 'bg-amber-500/10 border-amber-500/20 text-amber-900 dark:text-amber-200',
+      icon: <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />,
+      titleColor: 'text-amber-900 dark:text-amber-100',
     },
     error: {
-      bg: 'bg-rose-500/10 border-rose-500/25 text-rose-200',
-      icon: <AlertCircle className="w-5 h-5 text-rose-400 shrink-0" />,
-      titleColor: 'text-rose-300',
+      bg: 'bg-rose-500/10 border-rose-500/20 text-rose-900 dark:text-rose-200',
+      icon: <AlertCircle className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />,
+      titleColor: 'text-rose-900 dark:text-rose-100',
     },
   }[variant];
 
   return (
     <div
       role="alert"
-      className={`flex items-start gap-3.5 rounded-xl border p-4 backdrop-blur-sm ${config.bg} ${className}`}
+      className={`flex items-start gap-3 rounded-lg border p-3.5 text-sm ${config.bg} ${className}`}
     >
       {config.icon}
-      <div className="flex-1 text-sm">
-        {title && <h5 className={`font-semibold mb-0.5 ${config.titleColor}`}>{title}</h5>}
-        <div className="opacity-90">{children}</div>
+      <div className="flex-1">
+        {title && <h5 className={`font-semibold text-xs mb-0.5 ${config.titleColor}`}>{title}</h5>}
+        <div className="leading-relaxed text-xs sm:text-sm">{children}</div>
       </div>
       {onClose && (
         <button
           onClick={onClose}
-          className="text-slate-400 hover:text-slate-200 transition-colors"
+          className="text-foreground-muted hover:text-foreground transition-colors cursor-pointer"
           aria-label="Dismiss alert"
         >
           <X className="w-4 h-4" />

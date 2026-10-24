@@ -1,6 +1,6 @@
-# PeerLume
+# PeerLearn
 
-PeerLume is an autonomous peer-to-peer learning platform designed for students. It enables learners to connect with classmates, find study partners tailored to their academic goals and skills, and collaborate in real time. Built with student privacy and focus in mind, PeerLume provides an all-in-one virtual study space without bureaucratic overhead or administrative clutter.
+PeerLearn is an autonomous peer-to-peer learning platform designed for students. It enables learners to connect with classmates, find study partners tailored to their academic goals and skills, and collaborate in real time. Built with student privacy and focus in mind, PeerLearn provides an all-in-one virtual study space without bureaucratic overhead or administrative clutter.
 
 ### Core Features
 - **Profiles**: Customize student identity with academic majors, learning styles, goals, bio, and technical skills.
@@ -86,7 +86,7 @@ Configure these variables in your root `.env` file:
 | `SMTP_PORT` | No | `587` | SMTP server port. |
 | `SMTP_USER` | No | `user@example.com` | SMTP username / credential. |
 | `SMTP_PASS` | No | `secret` | SMTP password / credential. |
-| `EMAIL_FROM` | No | `PeerLume <noreply@...>` | Outgoing sender display name and address. |
+| `EMAIL_FROM` | No | `PeerLearn <noreply@...>` | Outgoing sender display name and address. |
 | `STUN_SERVERS` | No | `stun:stun.l.google...` | Comma-delimited STUN server URIs for WebRTC peer connections. |
 | `TURN_SERVER` | No | - | Optional TURN server URI for WebRTC NAT traversal. |
 | `TURN_USERNAME` | No | - | Optional TURN server username. |

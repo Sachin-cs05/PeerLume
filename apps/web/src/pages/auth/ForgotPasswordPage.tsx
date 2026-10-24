@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, ArrowLeft, Send } from 'lucide-react';
+import { Mail, ArrowLeft, Send, KeyRound } from 'lucide-react';
 import { Card } from '../../components/ui/Card.js';
 import { Button } from '../../components/ui/Button.js';
 import { Input } from '../../components/ui/Input.js';
@@ -37,15 +37,19 @@ export const ForgotPasswordPage: React.FC = () => {
     <div className="flex-1 flex items-center justify-center p-4 py-12">
       <div className="w-full max-w-md space-y-6">
         <div className="text-center space-y-2">
-          <h1 className="text-3xl font-extrabold text-white tracking-tight">Reset Password</h1>
-          <p className="text-sm text-slate-400">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-border bg-card text-foreground-secondary text-xs font-medium">
+            <KeyRound className="w-3.5 h-3.5 text-foreground" />
+            <span>Account Security</span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">Reset Password</h1>
+          <p className="text-xs sm:text-sm text-foreground-secondary">
             Enter your email to receive a single-use, secure password recovery link.
           </p>
         </div>
 
-        <Card className="border-slate-800 bg-slate-900/90 shadow-2xl p-6 sm:p-8">
+        <Card className="border-border bg-card shadow-sm p-6 sm:p-8">
           {error && (
-            <Alert variant="error" className="mb-6" onClose={() => setError(null)}>
+            <Alert variant="error" className="mb-5" onClose={() => setError(null)}>
               {error}
             </Alert>
           )}
@@ -55,7 +59,7 @@ export const ForgotPasswordPage: React.FC = () => {
               <Alert variant="success" title="Recovery Link Dispatched">
                 If an account exists with <strong>{email}</strong>, a password reset link has been dispatched. The link is valid for 15 minutes.
               </Alert>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-foreground-muted">
                 In local development mode, the reset token is safely logged to the backend console.
               </p>
               <div className="pt-2">
@@ -93,7 +97,7 @@ export const ForgotPasswordPage: React.FC = () => {
               </div>
 
               <div className="text-center pt-2">
-                <Link to="/login" className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-slate-200">
+                <Link to="/login" className="inline-flex items-center gap-1.5 text-xs text-foreground-muted hover:text-foreground transition-colors">
                   <ArrowLeft className="w-3.5 h-3.5" /> Back to Sign In
                 </Link>
               </div>

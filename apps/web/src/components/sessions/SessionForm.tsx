@@ -177,8 +177,8 @@ export const SessionForm: React.FC<SessionFormProps> = ({
       )}
 
       {hasConflict && (
-        <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 flex items-start gap-3 text-amber-300 text-xs">
-          <AlertTriangle className="w-4 h-4 shrink-0 text-amber-400 mt-0.5" />
+        <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 flex items-start gap-3 text-amber-700 dark:text-amber-300 text-xs">
+          <AlertTriangle className="w-4 h-4 shrink-0 text-amber-500 mt-0.5" />
           <div>
             <span className="font-semibold">Schedule Conflict Warning: </span>
             {conflictMessage} You can still schedule if you wish.
@@ -189,7 +189,7 @@ export const SessionForm: React.FC<SessionFormProps> = ({
       {/* Title & Topic */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+          <label className="block text-xs font-semibold text-foreground mb-1.5">
             Session Title *
           </label>
           <input
@@ -198,11 +198,11 @@ export const SessionForm: React.FC<SessionFormProps> = ({
             placeholder="e.g., Graph Algorithms Practice"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 transition-colors"
+            className="w-full bg-surface border border-border rounded-lg px-3.5 py-2 text-sm text-foreground placeholder-foreground-muted focus:outline-none focus:border-foreground transition-colors"
           />
         </div>
         <div>
-          <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+          <label className="block text-xs font-semibold text-foreground mb-1.5">
             Topic or Subject *
           </label>
           <input
@@ -211,7 +211,7 @@ export const SessionForm: React.FC<SessionFormProps> = ({
             placeholder="e.g., Computer Science, Calculus, UI Design"
             value={topic}
             onChange={(e) => setTopic(e.target.value)}
-            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 transition-colors"
+            className="w-full bg-surface border border-border rounded-lg px-3.5 py-2 text-sm text-foreground placeholder-foreground-muted focus:outline-none focus:border-foreground transition-colors"
           />
         </div>
       </div>
@@ -219,7 +219,7 @@ export const SessionForm: React.FC<SessionFormProps> = ({
       {/* Description & Learning Objectives */}
       <div className="space-y-4">
         <div>
-          <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+          <label className="block text-xs font-semibold text-foreground mb-1.5">
             Description
           </label>
           <textarea
@@ -227,12 +227,12 @@ export const SessionForm: React.FC<SessionFormProps> = ({
             placeholder="What will you work on together?"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 transition-colors resize-none"
+            className="w-full bg-surface border border-border rounded-lg px-3.5 py-2 text-sm text-foreground placeholder-foreground-muted focus:outline-none focus:border-foreground transition-colors resize-none"
           />
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+          <label className="block text-xs font-semibold text-foreground mb-1.5">
             Learning Objectives & Goals
           </label>
           <input
@@ -240,16 +240,16 @@ export const SessionForm: React.FC<SessionFormProps> = ({
             placeholder="e.g., Solve 3 LeetCode Mediums on DFS/BFS"
             value={objectives}
             onChange={(e) => setObjectives(e.target.value)}
-            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 transition-colors"
+            className="w-full bg-surface border border-border rounded-lg px-3.5 py-2 text-sm text-foreground placeholder-foreground-muted focus:outline-none focus:border-foreground transition-colors"
           />
         </div>
       </div>
 
       {/* Date, Time, Duration, Timezone */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-slate-950/70 p-4 rounded-xl border border-slate-850">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-surface p-4 rounded-xl border border-border-subtle">
         <div>
-          <label className="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center gap-1.5">
-            <Calendar className="w-3.5 h-3.5 text-brand-400" />
+          <label className="block text-xs font-semibold text-foreground mb-1.5 flex items-center gap-1.5">
+            <Calendar className="w-3.5 h-3.5 text-foreground-muted" />
             <span>Date *</span>
           </label>
           <input
@@ -258,13 +258,13 @@ export const SessionForm: React.FC<SessionFormProps> = ({
             min={new Date().toISOString().split('T')[0]}
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-500"
+            className="w-full bg-card border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:border-foreground"
           />
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center gap-1.5">
-            <Clock className="w-3.5 h-3.5 text-brand-400" />
+          <label className="block text-xs font-semibold text-foreground mb-1.5 flex items-center gap-1.5">
+            <Clock className="w-3.5 h-3.5 text-foreground-muted" />
             <span>Start Time *</span>
           </label>
           <input
@@ -272,18 +272,18 @@ export const SessionForm: React.FC<SessionFormProps> = ({
             required
             value={startTime}
             onChange={(e) => setStartTime(e.target.value)}
-            className="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-500"
+            className="w-full bg-card border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:border-foreground"
           />
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+          <label className="block text-xs font-semibold text-foreground mb-1.5">
             Duration
           </label>
           <select
             value={durationMinutes}
             onChange={(e) => setDurationMinutes(Number(e.target.value))}
-            className="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-500"
+            className="w-full bg-card border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:border-foreground"
           >
             <option value={30}>30 minutes</option>
             <option value={45}>45 minutes</option>
@@ -297,39 +297,39 @@ export const SessionForm: React.FC<SessionFormProps> = ({
 
       {/* Mode & Location */}
       <div className="space-y-3">
-        <label className="block text-xs font-semibold text-slate-300">
+        <label className="block text-xs font-semibold text-foreground">
           Session Mode
         </label>
         <div className="grid grid-cols-2 gap-3">
           <button
             type="button"
             onClick={() => setMode('ONLINE')}
-            className={`flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-sm font-medium border transition-all ${
+            className={`flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-medium border transition-all ${
               mode === 'ONLINE'
-                ? 'bg-brand-500/10 border-brand-500 text-brand-300'
-                : 'bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700'
+                ? 'bg-foreground text-background border-foreground font-semibold'
+                : 'bg-surface border-border text-foreground-secondary hover:border-foreground-muted'
             }`}
           >
-            <Video className="w-4 h-4 text-emerald-400" />
+            <Video className="w-4 h-4 shrink-0" />
             <span>Online Call (WebRTC)</span>
           </button>
           <button
             type="button"
             onClick={() => setMode('IN_PERSON')}
-            className={`flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-sm font-medium border transition-all ${
+            className={`flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-medium border transition-all ${
               mode === 'IN_PERSON'
-                ? 'bg-brand-500/10 border-brand-500 text-brand-300'
-                : 'bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700'
+                ? 'bg-foreground text-background border-foreground font-semibold'
+                : 'bg-surface border-border text-foreground-secondary hover:border-foreground-muted'
             }`}
           >
-            <MapPin className="w-4 h-4 text-purple-400" />
+            <MapPin className="w-4 h-4 shrink-0" />
             <span>In-Person Meetup</span>
           </button>
         </div>
 
         {mode === 'IN_PERSON' && (
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+            <label className="block text-xs font-semibold text-foreground mb-1.5">
               Campus or Public Location *
             </label>
             <input
@@ -338,7 +338,7 @@ export const SessionForm: React.FC<SessionFormProps> = ({
               placeholder="e.g., Campus Library Study Room 3B"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 transition-colors"
+              className="w-full bg-surface border border-border rounded-lg px-3.5 py-2 text-sm text-foreground placeholder-foreground-muted focus:outline-none focus:border-foreground transition-colors"
             />
           </div>
         )}
@@ -346,17 +346,17 @@ export const SessionForm: React.FC<SessionFormProps> = ({
 
       {/* Invitee Selector from Connected Friends */}
       <div className="space-y-2">
-        <label className="block text-xs font-semibold text-slate-300 flex items-center justify-between">
+        <label className="block text-xs font-semibold text-foreground flex items-center justify-between">
           <span>Invite Learning Partners *</span>
-          <span className="text-[11px] text-slate-400 font-normal">
+          <span className="text-[11px] text-foreground-muted font-normal">
             {selectedInvitees.length} selected
           </span>
         </label>
 
         {loadingFriends ? (
-          <div className="text-xs text-slate-400 py-3 text-center">Loading connections...</div>
+          <div className="text-xs text-foreground-muted py-3 text-center">Loading connections...</div>
         ) : friends.length === 0 ? (
-          <div className="bg-slate-950/80 border border-slate-800 rounded-xl p-4 text-center text-xs text-slate-400">
+          <div className="bg-surface border border-border rounded-lg p-4 text-center text-xs text-foreground-muted">
             No connected learning partners found. Connect with friends or discover partners first!
           </div>
         ) : (
@@ -368,29 +368,29 @@ export const SessionForm: React.FC<SessionFormProps> = ({
                   key={friend.id}
                   type="button"
                   onClick={() => handleToggleInvitee(friend.friendId)}
-                  className={`flex items-center gap-3 p-2.5 rounded-xl border text-left transition-all ${
+                  className={`flex items-center gap-3 p-2.5 rounded-lg border text-left transition-all ${
                     isSelected
-                      ? 'bg-brand-500/10 border-brand-500/60 text-white'
-                      : 'bg-slate-950 border-slate-850 text-slate-300 hover:border-slate-750'
+                      ? 'bg-surface-elevated border-foreground text-foreground'
+                      : 'bg-surface border-border text-foreground-secondary hover:border-foreground-muted'
                   }`}
                 >
-                  <div className="w-8 h-8 rounded-full bg-brand-600 flex items-center justify-center text-white text-xs font-bold shrink-0">
+                  <div className="w-8 h-8 rounded-full bg-foreground text-background flex items-center justify-center text-xs font-bold shrink-0">
                     {friend.student?.fullName ? friend.student.fullName.charAt(0) : 'P'}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <div className="text-xs font-semibold truncate">
+                    <div className="text-xs font-semibold truncate text-foreground">
                       {friend.student?.fullName || 'Learning Partner'}
                     </div>
-                    <div className="text-[11px] text-slate-400 truncate">
+                    <div className="text-[11px] text-foreground-muted truncate">
                       {friend.student?.college || 'Student'}
                     </div>
                   </div>
                   <div
                     className={`w-4 h-4 rounded border flex items-center justify-center ${
-                      isSelected ? 'bg-brand-500 border-brand-500 text-white' : 'border-slate-700'
+                      isSelected ? 'bg-foreground border-foreground text-background' : 'border-border'
                     }`}
                   >
-                    {isSelected && <span className="text-[10px] leading-none">✓</span>}
+                    {isSelected && <span className="text-[10px] leading-none font-bold">✓</span>}
                   </div>
                 </button>
               );
@@ -401,7 +401,7 @@ export const SessionForm: React.FC<SessionFormProps> = ({
 
       {/* Notes */}
       <div>
-        <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+        <label className="block text-xs font-semibold text-foreground mb-1.5">
           Preparation Notes or Materials
         </label>
         <textarea
@@ -409,12 +409,12 @@ export const SessionForm: React.FC<SessionFormProps> = ({
           placeholder="Links, chapters to review, or software to install beforehand..."
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
-          className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 transition-colors resize-none"
+          className="w-full bg-surface border border-border rounded-lg px-3.5 py-2 text-sm text-foreground placeholder-foreground-muted focus:outline-none focus:border-foreground transition-colors resize-none"
         />
       </div>
 
       {/* Footer Buttons */}
-      <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
+      <div className="flex items-center justify-end gap-3 pt-4 border-t border-border">
         <Button variant="ghost" type="button" onClick={onCancel} disabled={submitting}>
           Cancel
         </Button>

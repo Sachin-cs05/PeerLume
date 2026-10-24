@@ -3,31 +3,99 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    /* Light Mode Tokens: Pure Minimalist B&W SaaS */
+    --color-bg: 255 255 255;               /* #FFFFFF - Main application background */
+    --color-bg-secondary: 250 250 250;     /* #FAFAFA - Secondary background */
+    --color-card: 244 244 245;             /* #F4F4F5 - Primary card background */
+    --color-surface: 255 255 255;          /* #FFFFFF - Elevated surface */
+    --color-surface-elevated: 255 255 255; /* #FFFFFF - Elevated card background */
+    --color-surface-hover: 237 237 239;    /* #EDEDEF - Hover background */
+    --color-border: 228 228 231;           /* #E4E4E7 - Primary border */
+    --color-border-subtle: 240 240 242;    /* #F0F0F2 - Subtle border */
+    --color-border-strong: 212 212 216;    /* #D4D4D8 - Strong active border */
+    --color-foreground: 17 17 19;          /* #111113 - Primary text (Near Black) */
+    --color-foreground-secondary: 82 82 91;/* #52525B - Secondary text (Dark Grey) */
+    --color-foreground-muted: 113 113 122; /* #71717A - Muted text (Grey) */
+    --color-ring: 17 17 19;                /* #111113 - Focus ring */
+  }
+
+  .dark {
+    /* Dark Mode Tokens: Deep Black & Dark Charcoal Monochrome SaaS */
+    --color-bg: 9 9 11;                    /* #09090B - Main application background (Deep Black) */
+    --color-bg-secondary: 15 15 16;        /* #0F0F10 - Secondary background (Near Black) */
+    --color-card: 24 24 27;                /* #18181B - Primary card background (Dark Charcoal) */
+    --color-surface: 32 32 35;             /* #202023 - Elevated card background (Dark Grey) */
+    --color-surface-elevated: 32 32 35;    /* #202023 - Elevated surface */
+    --color-surface-hover: 39 39 42;       /* #27272A - Hover background (Medium Dark Grey) */
+    --color-border: 63 63 70;              /* #3F3F46 - Primary border (Charcoal Grey) */
+    --color-border-subtle: 39 39 42;       /* #27272A - Subtle border (Dark Grey) */
+    --color-border-strong: 113 113 122;    /* #71717A - Strong active border */
+    --color-foreground: 250 250 250;       /* #FAFAFA - Primary text (Pure White) */
+    --color-foreground-secondary: 161 161 170; /* #A1A1AA - Secondary text (Light Grey) */
+    --color-foreground-muted: 113 113 122; /* #71717A - Muted text (Grey) */
+    --color-ring: 250 250 250;             /* #FAFAFA - Focus ring (White) */
+  }
+
   html {
     scroll-behavior: smooth;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: rgb(var(--color-bg));
+    color: rgb(var(--color-foreground));
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+
+  /* Custom Clean SaaS Scrollbars */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgb(var(--color-border));
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(var(--color-border-strong));
   }
 }
 
 @layer utilities {
-  .bg-radial-glow {
-    background: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.15) 0%, rgba(15, 23, 42, 0) 70%);
+  .saas-card {
+    background-color: rgb(var(--color-card));
+    border: 1px solid rgb(var(--color-border));
+  }
+
+  .saas-card-elevated {
+    background-color: rgb(var(--color-surface-elevated));
+    border: 1px solid rgb(var(--color-border));
   }
 
   .glass-card {
-    background: rgba(30, 41, 59, 0.7);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background-color: rgb(var(--color-card));
+    border: 1px solid rgb(var(--color-border));
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.04);
   }
 
   .glass-card-hover {
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .glass-card-hover:hover {
+    border-color: rgb(var(--color-border-strong));
+    background-color: rgb(var(--color-surface-hover));
+    transform: translateY(-1px);
   }
 
-  .glass-card-hover:hover {
-    border-color: rgba(99, 102, 241, 0.4);
-    box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.2);
-    transform: translateY(-2px);
+  .bg-subtle-grid {
+    background-size: 24px 24px;
+    background-image: linear-gradient(to right, rgb(var(--color-border) / 0.4) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(var(--color-border) / 0.4) 1px, transparent 1px);
   }
 }

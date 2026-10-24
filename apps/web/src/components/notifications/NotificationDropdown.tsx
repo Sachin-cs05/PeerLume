@@ -81,15 +81,15 @@ export const NotificationDropdown: React.FC = () => {
   const getNotificationIcon = (type: string) => {
     switch (type) {
       case 'NEW_MESSAGE':
-        return <MessageSquare className="w-4 h-4 text-blue-600" />;
+        return <MessageSquare className="w-4 h-4 text-foreground" />;
       case 'FRIEND_REQUEST_RECEIVED':
       case 'FRIEND_REQUEST_ACCEPTED':
-        return <UserPlus className="w-4 h-4 text-emerald-600" />;
+        return <UserPlus className="w-4 h-4 text-foreground" />;
       case 'CALL_MISSED':
       case 'CALL_INCOMING':
-        return <PhoneCall className="w-4 h-4 text-rose-600" />;
+        return <PhoneCall className="w-4 h-4 text-foreground" />;
       default:
-        return <Bell className="w-4 h-4 text-gray-600" />;
+        return <Bell className="w-4 h-4 text-foreground-muted" />;
     }
   };
 
@@ -99,12 +99,12 @@ export const NotificationDropdown: React.FC = () => {
       <button
         type="button"
         onClick={handleToggle}
-        className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="relative p-2 text-foreground-secondary hover:text-foreground hover:bg-surface rounded-full transition-colors focus:outline-none focus:ring-1 focus:ring-ring"
         title="Notifications"
       >
         <Bell className="w-5 h-5" />
         {unreadNotificationsCount > 0 && (
-          <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-[10px] font-bold text-white shadow-sm ring-2 ring-white animate-pulse">
+          <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground shadow-sm ring-2 ring-background animate-pulse">
             {unreadNotificationsCount > 9 ? '9+' : unreadNotificationsCount}
           </span>
         )}
@@ -112,14 +112,14 @@ export const NotificationDropdown: React.FC = () => {
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-gray-100 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-          <div className="flex items-center justify-between px-4 py-2 border-b border-gray-100">
-            <h3 className="font-semibold text-gray-900 text-sm">Notifications</h3>
+        <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-card rounded-2xl shadow-2xl border border-border py-2 z-50 animate-fade-in text-foreground">
+          <div className="flex items-center justify-between px-4 py-2 border-b border-border">
+            <h3 className="font-semibold text-foreground text-sm">Notifications</h3>
             {notifications.some((n) => !n.isRead) && (
               <button
                 type="button"
                 onClick={handleMarkAllRead}
-                className="text-xs text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1"
+                className="text-xs text-foreground-secondary hover:text-foreground font-medium flex items-center gap-1 transition-colors"
               >
                 <CheckCheck className="w-3.5 h-3.5" />
                 <span>Mark all as read</span>
@@ -127,9 +127,9 @@ export const NotificationDropdown: React.FC = () => {
             )}
           </div>
 
-          <div className="max-h-[380px] overflow-y-auto divide-y divide-gray-50">
+          <div className="max-h-[380px] overflow-y-auto divide-y divide-border-subtle">
             {loading ? (
-              <div className="p-6 text-center text-xs text-gray-400">Loading notifications...</div>
+              <div className="p-6 text-center text-xs text-foreground-muted">Loading notifications...</div>
             ) : notifications.length === 0 ? (
               <div className="p-4">
                 <EmptyState
@@ -144,29 +144,29 @@ export const NotificationDropdown: React.FC = () => {
                 <div
                   key={n.id}
                   onClick={() => handleNotificationClick(n)}
-                  className={`p-3 hover:bg-gray-50 cursor-pointer flex items-start gap-3 transition-colors ${
-                    !n.isRead ? 'bg-blue-50/50' : ''
+                  className={`p-3 hover:bg-surface-hover cursor-pointer flex items-start gap-3 transition-colors ${
+                    !n.isRead ? 'bg-surface' : ''
                   }`}
                 >
-                  <div className="p-2 rounded-xl bg-gray-100 shrink-0 mt-0.5">
+                  <div className="p-2 rounded-xl bg-surface-elevated border border-border shrink-0 mt-0.5">
                     {getNotificationIcon(n.type)}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between">
-                      <p className={`text-xs font-semibold ${!n.isRead ? 'text-gray-900' : 'text-gray-700'}`}>
+                      <p className={`text-xs font-semibold ${!n.isRead ? 'text-foreground' : 'text-foreground-secondary'}`}>
                         {n.title}
                       </p>
-                      <span className="text-[10px] text-gray-400 ml-1 shrink-0">
+                      <span className="text-[10px] text-foreground-muted ml-1 shrink-0">
                         {new Date(n.createdAt).toLocaleDateString([], {
                           month: 'short',
                           day: 'numeric',
                         })}
                       </span>
                     </div>
-                    <p className="text-xs text-gray-600 line-clamp-2 mt-0.5">{n.body}</p>
+                    <p className="text-xs text-foreground-secondary line-clamp-2 mt-0.5">{n.body}</p>
                   </div>
                   {!n.isRead && (
-                    <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0 mt-2" />
+                    <span className="w-2 h-2 rounded-full bg-primary shrink-0 mt-2" />
                   )}
                 </div>
               ))

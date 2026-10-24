@@ -9,7 +9,7 @@ describe('API Foundation Tests', () => {
     expect(res.status).toBe(200);
     expect(res.body).toHaveProperty('success', true);
     expect(res.body).toHaveProperty('data');
-    expect(res.body.data).toHaveProperty('name', 'PeerLume');
+    expect(res.body.data).toHaveProperty('name', 'PeerLearn');
     expect(res.body.data).toHaveProperty('tagline', 'Learn Together. Grow Together.');
     expect(res.body.data).toHaveProperty('version');
     expect(res.body.data).toHaveProperty('uptimeSeconds');

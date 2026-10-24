@@ -140,16 +140,16 @@ export const SessionsPage: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-slate-800">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-border">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-300 text-xs font-semibold mb-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface border border-border text-foreground-secondary text-xs font-semibold mb-2">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Study Sessions</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
             Learning Sessions
           </h1>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-sm text-foreground-secondary mt-1">
             Schedule, manage, and collaborate in peer study sessions with friends.
           </p>
         </div>
@@ -157,7 +157,7 @@ export const SessionsPage: React.FC = () => {
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
-            leftIcon={<Download className="w-4 h-4 text-emerald-400" />}
+            leftIcon={<Download className="w-4 h-4 text-foreground-muted" />}
             onClick={handleExportCalendar}
             isLoading={isExporting}
           >
@@ -176,19 +176,19 @@ export const SessionsPage: React.FC = () => {
       {error && <Alert variant="error">{error}</Alert>}
 
       {/* Tabs navigation */}
-      <div className="flex items-center gap-2 border-b border-slate-800 pb-px overflow-x-auto">
+      <div className="flex items-center gap-2 border-b border-border pb-px overflow-x-auto">
         <button
           onClick={() => handleTabChange('upcoming')}
           className={`flex items-center gap-2 px-4 py-3 text-sm font-semibold border-b-2 transition-colors whitespace-nowrap ${
             activeTab === 'upcoming'
-              ? 'border-brand-500 text-brand-400'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'border-foreground text-foreground'
+              : 'border-transparent text-foreground-muted hover:text-foreground'
           }`}
         >
           <Clock className="w-4 h-4" />
           <span>Upcoming</span>
           {upcomingSessions.length > 0 && (
-            <span className="px-2 py-0.5 rounded-full text-xs bg-brand-500/20 text-brand-300 font-bold">
+            <span className="px-2 py-0.5 rounded-full text-xs bg-surface border border-border text-foreground font-bold">
               {upcomingSessions.length}
             </span>
           )}
@@ -198,8 +198,8 @@ export const SessionsPage: React.FC = () => {
           onClick={() => handleTabChange('calendar')}
           className={`flex items-center gap-2 px-4 py-3 text-sm font-semibold border-b-2 transition-colors whitespace-nowrap ${
             activeTab === 'calendar'
-              ? 'border-brand-500 text-brand-400'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'border-foreground text-foreground'
+              : 'border-transparent text-foreground-muted hover:text-foreground'
           }`}
         >
           <Calendar className="w-4 h-4" />
@@ -210,14 +210,14 @@ export const SessionsPage: React.FC = () => {
           onClick={() => handleTabChange('invitations')}
           className={`flex items-center gap-2 px-4 py-3 text-sm font-semibold border-b-2 transition-colors whitespace-nowrap ${
             activeTab === 'invitations'
-              ? 'border-brand-500 text-brand-400'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'border-foreground text-foreground'
+              : 'border-transparent text-foreground-muted hover:text-foreground'
           }`}
         >
           <Mail className="w-4 h-4" />
           <span>Invitations</span>
           {pendingInvitations.length > 0 && (
-            <span className="px-2 py-0.5 rounded-full text-xs bg-amber-500/20 text-amber-300 font-bold">
+            <span className="px-2 py-0.5 rounded-full text-xs bg-amber-500/20 text-amber-700 dark:text-amber-300 font-bold">
               {pendingInvitations.length}
             </span>
           )}
@@ -227,8 +227,8 @@ export const SessionsPage: React.FC = () => {
           onClick={() => handleTabChange('past')}
           className={`flex items-center gap-2 px-4 py-3 text-sm font-semibold border-b-2 transition-colors whitespace-nowrap ${
             activeTab === 'past'
-              ? 'border-brand-500 text-brand-400'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'border-foreground text-foreground'
+              : 'border-transparent text-foreground-muted hover:text-foreground'
           }`}
         >
           <History className="w-4 h-4" />
@@ -238,7 +238,7 @@ export const SessionsPage: React.FC = () => {
 
       {/* Tab Contents */}
       {loading ? (
-        <div className="py-20 text-center text-slate-400 text-sm">
+        <div className="py-20 text-center text-foreground-muted text-sm">
           Loading learning sessions...
         </div>
       ) : activeTab === 'calendar' ? (
@@ -317,18 +317,18 @@ export const SessionsPage: React.FC = () => {
 
       {/* Create Session Modal */}
       {isCreateModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-2xl p-6 sm:p-8 shadow-2xl relative my-8">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
+          <div className="bg-card border border-border rounded-2xl w-full max-w-2xl p-6 sm:p-8 shadow-2xl relative my-8">
             <button
               onClick={() => setIsCreateModalOpen(false)}
-              className="absolute top-5 right-5 text-slate-400 hover:text-white transition-colors"
+              className="absolute top-5 right-5 text-foreground-muted hover:text-foreground transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
 
             <div className="mb-6">
-              <h2 className="text-2xl font-bold text-white">Create Learning Session</h2>
-              <p className="text-xs text-slate-400 mt-1">
+              <h2 className="text-2xl font-bold text-foreground">Create Learning Session</h2>
+              <p className="text-xs text-foreground-secondary mt-1">
                 Invite connected friends for a focused online or in-person study session.
               </p>
             </div>

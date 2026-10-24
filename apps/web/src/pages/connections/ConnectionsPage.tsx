@@ -140,15 +140,15 @@ export const ConnectionsPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto space-y-8">
+    <div className="py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto space-y-6">
         {/* Header Title */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-border">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              Friends & Connections
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+              Friends &amp; Connections
             </h1>
-            <p className="text-sm text-slate-400 mt-1">
+            <p className="text-xs sm:text-sm text-foreground-muted mt-1 font-normal">
               Manage your peer learning network, study circles, and connection requests.
             </p>
           </div>
@@ -156,7 +156,7 @@ export const ConnectionsPage: React.FC = () => {
           <button
             onClick={fetchTabContent}
             disabled={loading}
-            className="self-start sm:self-auto p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition-colors"
+            className="self-start sm:self-auto p-2 rounded-lg bg-card border border-border text-foreground-muted hover:text-foreground shadow-xs transition-colors cursor-pointer"
             title="Refresh"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
@@ -164,24 +164,25 @@ export const ConnectionsPage: React.FC = () => {
         </div>
 
         {error && (
-          <div className="p-4 rounded-xl bg-rose-950/30 border border-rose-500/30 text-rose-300 text-xs">
+          <div className="p-3.5 rounded-lg bg-card border border-rose-500/30 text-rose-500 text-xs">
             {error}
           </div>
         )}
 
         {/* Tab Navigation */}
-        <div className="flex overflow-x-auto pb-2 scrollbar-none border-b border-slate-800 gap-2 sm:gap-4">
+        <div className="flex overflow-x-auto pb-1 scrollbar-none border-b border-border gap-2">
           <button
             onClick={() => setActiveTab('friends')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all shrink-0 ${activeTab === 'friends'
-                ? 'bg-brand-600 text-white shadow-lg shadow-brand-500/20'
-                : 'text-slate-400 hover:text-white hover:bg-slate-900'
-              }`}
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-md font-semibold text-xs sm:text-sm transition-all shrink-0 cursor-pointer ${
+              activeTab === 'friends'
+                ? 'bg-foreground text-background shadow-xs'
+                : 'text-foreground-secondary hover:text-foreground hover:bg-surface-hover'
+            }`}
           >
-            <Users className="w-4 h-4" />
+            <Users className="w-3.5 h-3.5" />
             <span>Friends</span>
             {friends.length > 0 && (
-              <span className="px-1.5 py-0.5 rounded-full bg-white/20 text-[10px] font-bold">
+              <span className="px-1.5 py-0.2 rounded font-mono text-[10px] bg-background text-foreground font-bold">
                 {friends.length}
               </span>
             )}
@@ -189,15 +190,16 @@ export const ConnectionsPage: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('requests')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all shrink-0 ${activeTab === 'requests'
-                ? 'bg-brand-600 text-white shadow-lg shadow-brand-500/20'
-                : 'text-slate-400 hover:text-white hover:bg-slate-900'
-              }`}
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-md font-semibold text-xs sm:text-sm transition-all shrink-0 cursor-pointer ${
+              activeTab === 'requests'
+                ? 'bg-foreground text-background shadow-xs'
+                : 'text-foreground-secondary hover:text-foreground hover:bg-surface-hover'
+            }`}
           >
-            <UserPlus className="w-4 h-4" />
+            <UserPlus className="w-3.5 h-3.5" />
             <span>Connection Requests</span>
             {incomingRequests.length > 0 && (
-              <span className="px-1.5 py-0.5 rounded-full bg-emerald-400 text-slate-950 text-[10px] font-bold animate-pulse">
+              <span className="px-1.5 py-0.2 rounded font-mono text-[10px] bg-background text-foreground font-bold">
                 {incomingRequests.length}
               </span>
             )}
@@ -205,15 +207,16 @@ export const ConnectionsPage: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('saved')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all shrink-0 ${activeTab === 'saved'
-                ? 'bg-brand-600 text-white shadow-lg shadow-brand-500/20'
-                : 'text-slate-400 hover:text-white hover:bg-slate-900'
-              }`}
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-md font-semibold text-xs sm:text-sm transition-all shrink-0 cursor-pointer ${
+              activeTab === 'saved'
+                ? 'bg-foreground text-background shadow-xs'
+                : 'text-foreground-secondary hover:text-foreground hover:bg-surface-hover'
+            }`}
           >
-            <Bookmark className="w-4 h-4" />
+            <Bookmark className="w-3.5 h-3.5" />
             <span>Saved Partners</span>
             {savedPartners.length > 0 && (
-              <span className="px-1.5 py-0.5 rounded-full bg-white/20 text-[10px] font-bold">
+              <span className="px-1.5 py-0.2 rounded font-mono text-[10px] bg-background text-foreground font-bold">
                 {savedPartners.length}
               </span>
             )}
@@ -221,40 +224,41 @@ export const ConnectionsPage: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('blocked')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all shrink-0 ${activeTab === 'blocked'
-                ? 'bg-brand-600 text-white shadow-lg shadow-brand-500/20'
-                : 'text-slate-400 hover:text-white hover:bg-slate-900'
-              }`}
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-md font-semibold text-xs sm:text-sm transition-all shrink-0 cursor-pointer ${
+              activeTab === 'blocked'
+                ? 'bg-foreground text-background shadow-xs'
+                : 'text-foreground-secondary hover:text-foreground hover:bg-surface-hover'
+            }`}
           >
-            <ShieldAlert className="w-4 h-4" />
+            <ShieldAlert className="w-3.5 h-3.5" />
             <span>Blocked</span>
           </button>
         </div>
 
         {/* Tab 1: Friends List */}
         {activeTab === 'friends' && (
-          <div className="space-y-6">
+          <div className="space-y-5">
             {/* Search Friends */}
             <div className="relative max-w-md">
-              <Search className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
+              <Search className="w-3.5 h-3.5 text-foreground-muted absolute left-3 top-3" />
               <input
                 type="text"
                 placeholder="Search within your connections..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 transition-colors"
+                className="w-full pl-9 pr-3.5 py-2 rounded-lg bg-card border border-border text-xs sm:text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-foreground transition-colors shadow-2xs"
               />
             </div>
 
             {loading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 {[...Array(3)].map((_, i) => (
-                  <div key={i} className="animate-pulse bg-slate-900 rounded-2xl p-5 h-48 border border-slate-800" />
+                  <div key={i} className="animate-pulse bg-card rounded-xl p-5 h-44 border border-border shadow-xs" />
                 ))}
               </div>
             ) : friends.length === 0 ? (
               <EmptyState
-                icon={<Users className="w-8 h-8" />}
+                icon={<Users className="w-6 h-6" />}
                 title="No friends yet"
                 description="Find a study partner in Discover with mutual skills and learning goals."
                 action={{
@@ -263,68 +267,62 @@ export const ConnectionsPage: React.FC = () => {
                 }}
               />
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 {friends.map((item) => (
                   <div
                     key={item.id}
-                    className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-lg flex flex-col justify-between"
+                    className="bg-card border border-border hover:border-border-strong rounded-xl p-5 shadow-xs transition-all flex flex-col justify-between"
                   >
                     <div>
                       <div className="flex items-start justify-between gap-3 mb-3">
                         <div className="flex items-center gap-3">
-                          <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-brand-600 to-purple-600 p-0.5 shadow-md shrink-0">
-                            <div className="w-full h-full bg-slate-900 rounded-[10px] flex items-center justify-center text-white font-bold text-base">
-                              {item.student.fullName.charAt(0).toUpperCase()}
-                            </div>
+                          <div className="w-10 h-10 rounded-lg bg-surface-hover border border-border flex items-center justify-center text-foreground font-bold text-sm shrink-0">
+                            {item.student.fullName.charAt(0).toUpperCase()}
                           </div>
                           <div>
-                            <h3 className="font-bold text-white text-base">{item.student.fullName}</h3>
-                            <div className="flex items-center gap-1.5 text-xs text-slate-400">
-                              <GraduationCap className="w-3.5 h-3.5 text-brand-400 shrink-0" />
-                              <span className="truncate max-w-[160px]">{item.student.college}</span>
+                            <h3 className="font-bold text-foreground text-sm">{item.student.fullName}</h3>
+                            <div className="flex items-center gap-1.5 text-xs text-foreground-secondary">
+                              <GraduationCap className="w-3.5 h-3.5 text-foreground-muted shrink-0" />
+                              <span className="truncate max-w-[150px]">{item.student.college}</span>
                             </div>
-                            <div className="text-[11px] text-slate-400">
+                            <div className="text-[11px] text-foreground-muted">
                               {item.student.branch} • {item.student.semester}
                             </div>
                           </div>
                         </div>
 
                         {/* Chat Entry Point */}
-                        <div className="relative group/chat">
-                          <button
-                            type="button"
-                            onClick={() => navigate(`/chat?userId=${item.student.id}`)}
-                            className="p-2 rounded-xl bg-slate-800 hover:bg-brand-600 border border-slate-700/60 hover:border-brand-500 text-slate-300 hover:text-white transition-all shadow-sm"
-                            title="Message student"
-                          >
-                            <MessageSquare className="w-4 h-4 text-brand-400 group-hover/chat:text-white" />
-                          </button>
-                        </div>
+                        <button
+                          type="button"
+                          onClick={() => navigate(`/chat?userId=${item.student.id}`)}
+                          className="p-2 rounded-lg bg-background hover:bg-surface-hover border border-border text-foreground transition-all cursor-pointer"
+                          title="Message student"
+                          aria-label="Message student"
+                        >
+                          <MessageSquare className="w-3.5 h-3.5" />
+                        </button>
                       </div>
 
-
                       {/* Skills Preview */}
-                      <div className="space-y-2 mb-4 text-xs">
-                        <div>
-                          <span className="text-[10px] text-emerald-400 font-semibold uppercase tracking-wider block mb-1">
-                            Teaches
-                          </span>
-                          <div className="flex flex-wrap gap-1">
-                            {item.student.teachingSkills.slice(0, 3).map((s, idx) => (
-                              <span
-                                key={idx}
-                                className="px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px]"
-                              >
-                                {s.name}
-                              </span>
-                            ))}
-                          </div>
+                      <div className="space-y-1.5 mb-3 text-xs">
+                        <span className="text-[10px] text-foreground-muted font-semibold uppercase tracking-wider block">
+                          Teaches
+                        </span>
+                        <div className="flex flex-wrap gap-1">
+                          {item.student.teachingSkills.slice(0, 3).map((s, idx) => (
+                            <span
+                              key={idx}
+                              className="px-2 py-0.5 rounded text-[11px] font-medium bg-surface-hover text-foreground border border-border"
+                            >
+                              {s.name}
+                            </span>
+                          ))}
                         </div>
                       </div>
                     </div>
 
                     {/* Card Actions */}
-                    <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between">
+                    <div className="pt-3 border-t border-border flex items-center justify-between">
                       <Button
                         variant="ghost"
                         size="sm"
@@ -360,8 +358,8 @@ export const ConnectionsPage: React.FC = () => {
                           variant="ghost"
                           size="sm"
                           onClick={() => setUnfriendConfirmId(item.id)}
-                          leftIcon={<UserMinus className="w-3.5 h-3.5 text-rose-400" />}
-                          className="text-xs text-rose-400 hover:text-rose-300 hover:bg-rose-950/30"
+                          leftIcon={<UserMinus className="w-3.5 h-3.5" />}
+                          className="text-xs text-foreground-muted hover:text-rose-500"
                         >
                           Remove
                         </Button>
@@ -376,23 +374,25 @@ export const ConnectionsPage: React.FC = () => {
 
         {/* Tab 2: Requests (Incoming & Outgoing) */}
         {activeTab === 'requests' && (
-          <div className="space-y-6">
-            <div className="flex gap-3 border-b border-slate-800 pb-2">
+          <div className="space-y-5">
+            <div className="flex gap-2 border-b border-border pb-2">
               <button
                 onClick={() => setRequestsSubTab('incoming')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${requestsSubTab === 'incoming'
-                    ? 'bg-slate-800 text-white'
-                    : 'text-slate-400 hover:text-white'
-                  }`}
+                className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-colors cursor-pointer ${
+                  requestsSubTab === 'incoming'
+                    ? 'bg-surface-hover text-foreground border border-border'
+                    : 'text-foreground-secondary hover:text-foreground'
+                }`}
               >
                 Incoming ({incomingRequests.length})
               </button>
               <button
                 onClick={() => setRequestsSubTab('outgoing')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${requestsSubTab === 'outgoing'
-                    ? 'bg-slate-800 text-white'
-                    : 'text-slate-400 hover:text-white'
-                  }`}
+                className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-colors cursor-pointer ${
+                  requestsSubTab === 'outgoing'
+                    ? 'bg-surface-hover text-foreground border border-border'
+                    : 'text-foreground-secondary hover:text-foreground'
+                }`}
               >
                 Outgoing ({outgoingRequests.length})
               </button>
@@ -401,7 +401,7 @@ export const ConnectionsPage: React.FC = () => {
             {requestsSubTab === 'incoming' ? (
               incomingRequests.length === 0 ? (
                 <EmptyState
-                  icon={<UserPlus className="w-8 h-8" />}
+                  icon={<UserPlus className="w-6 h-6" />}
                   title="No incoming requests"
                   description="You have no pending requests. Connect with study partners in Discover to start collaborating."
                   action={{
@@ -411,31 +411,31 @@ export const ConnectionsPage: React.FC = () => {
                   }}
                 />
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                   {incomingRequests.map((req) => (
                     <div
                       key={req.id}
-                      className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-4"
+                      className="bg-card border border-border rounded-xl p-5 shadow-xs space-y-3.5"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center font-bold text-white text-sm">
+                        <div className="w-9 h-9 rounded-lg bg-surface-hover border border-border flex items-center justify-center font-bold text-foreground text-xs">
                           {req.sender.fullName.charAt(0).toUpperCase()}
                         </div>
                         <div>
-                          <h4 className="font-bold text-white text-sm">{req.sender.fullName}</h4>
-                          <span className="text-xs text-slate-400 block truncate max-w-[180px]">
+                          <h4 className="font-bold text-foreground text-xs sm:text-sm">{req.sender.fullName}</h4>
+                          <span className="text-xs text-foreground-muted block truncate max-w-[160px]">
                             {req.sender.college}
                           </span>
                         </div>
                       </div>
 
-                      <div className="text-xs text-slate-300">
-                        <span className="text-slate-400 block mb-1">Teaches:</span>
+                      <div className="text-xs text-foreground-secondary">
+                        <span className="text-foreground-muted block mb-1">Teaches:</span>
                         <div className="flex flex-wrap gap-1">
                           {req.sender.teachingSkills.slice(0, 3).map((s, idx) => (
                             <span
                               key={idx}
-                              className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 text-[10px]"
+                              className="px-2 py-0.5 rounded bg-surface-hover border border-border text-foreground text-[10px] font-medium"
                             >
                               {s.name}
                             </span>
@@ -443,13 +443,13 @@ export const ConnectionsPage: React.FC = () => {
                         </div>
                       </div>
 
-                      <div className="pt-2 border-t border-slate-800 flex items-center justify-end gap-2">
+                      <div className="pt-2 border-t border-border flex items-center justify-end gap-2">
                         <Button
                           variant="ghost"
                           size="sm"
                           isLoading={actionLoading}
                           onClick={() => handleDeclineRequest(req.id)}
-                          className="text-xs text-rose-400 hover:bg-rose-950/30"
+                          className="text-xs"
                         >
                           Decline
                         </Button>
@@ -470,7 +470,7 @@ export const ConnectionsPage: React.FC = () => {
               )
             ) : outgoingRequests.length === 0 ? (
               <EmptyState
-                icon={<UserPlus className="w-8 h-8" />}
+                icon={<UserPlus className="w-6 h-6" />}
                 title="No outgoing requests"
                 description="You haven't sent any friend requests yet. Discover students by skill or campus to connect."
                 action={{
@@ -480,19 +480,19 @@ export const ConnectionsPage: React.FC = () => {
                 }}
               />
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 {outgoingRequests.map((req) => (
                   <div
                     key={req.id}
-                    className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg flex items-center justify-between"
+                    className="bg-card border border-border rounded-xl p-5 shadow-xs flex items-center justify-between"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-purple-600 flex items-center justify-center font-bold text-white text-sm">
+                      <div className="w-9 h-9 rounded-lg bg-surface-hover border border-border flex items-center justify-center font-bold text-foreground text-xs">
                         {req.receiver.fullName.charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <h4 className="font-bold text-white text-sm">{req.receiver.fullName}</h4>
-                        <span className="text-xs text-slate-400 block truncate max-w-[160px]">
+                        <h4 className="font-bold text-foreground text-xs sm:text-sm">{req.receiver.fullName}</h4>
+                        <span className="text-xs text-foreground-muted block truncate max-w-[150px]">
                           {req.receiver.college}
                         </span>
                       </div>
@@ -517,10 +517,10 @@ export const ConnectionsPage: React.FC = () => {
 
         {/* Tab 3: Saved Partners */}
         {activeTab === 'saved' && (
-          <div className="space-y-6">
+          <div className="space-y-5">
             {savedPartners.length === 0 ? (
               <EmptyState
-                icon={<Bookmark className="w-8 h-8" />}
+                icon={<Bookmark className="w-6 h-6" />}
                 title="No saved learning partners"
                 description="Bookmark students on the Discover page to save them for quick reference later."
                 action={{
@@ -529,33 +529,33 @@ export const ConnectionsPage: React.FC = () => {
                 }}
               />
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 {savedPartners.map((item) => (
                   <div
                     key={item.id}
-                    className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg flex flex-col justify-between"
+                    className="bg-card border border-border rounded-xl p-5 shadow-xs flex flex-col justify-between"
                   >
                     <div>
                       <div className="flex items-center gap-3 mb-3">
-                        <div className="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center font-bold text-white text-sm">
+                        <div className="w-9 h-9 rounded-lg bg-surface-hover border border-border flex items-center justify-center font-bold text-foreground text-xs">
                           {item.student.fullName.charAt(0).toUpperCase()}
                         </div>
                         <div>
-                          <h4 className="font-bold text-white text-sm">{item.student.fullName}</h4>
-                          <span className="text-xs text-slate-400 block truncate max-w-[180px]">
+                          <h4 className="font-bold text-foreground text-xs sm:text-sm">{item.student.fullName}</h4>
+                          <span className="text-xs text-foreground-muted block truncate max-w-[160px]">
                             {item.student.college}
                           </span>
                         </div>
                       </div>
 
                       {item.notes && (
-                        <p className="text-xs text-slate-400 italic bg-slate-800/40 p-2.5 rounded-xl border border-slate-800 mb-3">
+                        <p className="text-xs text-foreground-secondary italic bg-background p-2.5 rounded-lg border border-border mb-3">
                           "{item.notes}"
                         </p>
                       )}
                     </div>
 
-                    <div className="pt-3 border-t border-slate-800 flex items-center justify-between">
+                    <div className="pt-3 border-t border-border flex items-center justify-between">
                       <Button
                         variant="ghost"
                         size="sm"
@@ -570,7 +570,7 @@ export const ConnectionsPage: React.FC = () => {
                         size="sm"
                         isLoading={actionLoading}
                         onClick={() => handleRemoveSaved(item.savedStudentId)}
-                        className="text-xs text-rose-400 hover:bg-rose-950/30"
+                        className="text-xs text-foreground-muted hover:text-rose-500"
                       >
                         Remove
                       </Button>
@@ -584,29 +584,29 @@ export const ConnectionsPage: React.FC = () => {
 
         {/* Tab 4: Blocked Students */}
         {activeTab === 'blocked' && (
-          <div className="space-y-6">
+          <div className="space-y-5">
             {blockedStudents.length === 0 ? (
               <EmptyState
-                icon={<ShieldAlert className="w-8 h-8" />}
+                icon={<ShieldAlert className="w-6 h-6" />}
                 title="No blocked students"
                 description="You haven't blocked anyone. Students you block will not be able to connect or message you."
               />
             ) : (
-              <div className="max-w-2xl space-y-3">
+              <div className="max-w-2xl space-y-2.5">
                 {blockedStudents.map((item) => (
                   <div
                     key={item.id}
-                    className="bg-slate-900 border border-slate-800 rounded-xl p-4 flex items-center justify-between"
+                    className="bg-card border border-border rounded-lg p-4 flex items-center justify-between shadow-xs"
                   >
                     <div>
-                      <span className="font-semibold text-white text-sm block">
+                      <span className="font-semibold text-foreground text-sm block">
                         {item.blockedStudent.fullName}
                       </span>
-                      <span className="text-xs text-slate-400 block">
+                      <span className="text-xs text-foreground-muted block">
                         Blocked on {new Date(item.createdAt).toLocaleDateString()}
                       </span>
                       {item.reason && (
-                        <span className="text-[11px] text-slate-500 block italic">
+                        <span className="text-[11px] text-foreground-secondary block italic">
                           Reason: {item.reason}
                         </span>
                       )}

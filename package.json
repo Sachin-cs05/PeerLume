@@ -2,7 +2,7 @@
   "name": "peerlume-monorepo",
   "version": "0.1.0",
   "private": true,
-  "description": "PeerLume — A production-minded, scalable peer-to-peer learning platform for students. Learn Together. Grow Together.",
+  "description": "PeerLearn — A production-minded, scalable peer-to-peer learning platform for students. Learn Together. Grow Together.",
   "engines": {
     "node": ">=20.0.0",
     "npm": ">=10.0.0"

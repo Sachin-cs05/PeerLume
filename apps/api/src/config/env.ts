@@ -45,7 +45,7 @@ const envSchema = z.object({
   SMTP_PORT: z.string().optional(),
   SMTP_USER: z.string().optional(),
   SMTP_PASS: z.string().optional(),
-  EMAIL_FROM: z.string().default('PeerLume <noreply@peerlume.local>'),
+  EMAIL_FROM: z.string().default('PeerLearn <noreply@peerlearn.local>'),
 
   // WebRTC STUN/TURN Configuration
   STUN_SERVERS: z

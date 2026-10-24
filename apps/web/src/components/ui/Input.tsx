@@ -23,29 +23,31 @@ export const Input: React.FC<InputProps> = ({
       {label && (
         <label
           htmlFor={inputId}
-          className="block text-xs font-semibold uppercase tracking-wider text-slate-300"
+          className="block text-xs font-medium text-foreground-secondary"
         >
           {label}
         </label>
       )}
-      <div className="relative rounded-xl">
+      <div className="relative rounded-lg">
         {leftIcon && (
-          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-foreground-muted">
             {leftIcon}
           </div>
         )}
         <input
           id={inputId}
-          className={`w-full rounded-xl border bg-slate-800/80 px-4 py-2.5 text-sm text-slate-100 placeholder-slate-400 backdrop-blur-sm transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 ${leftIcon ? 'pl-10' : ''
-            } ${error
-              ? 'border-rose-500/80 focus:ring-rose-500'
-              : 'border-slate-700/80 hover:border-slate-600'
-            } ${className}`}
+          className={`w-full rounded-lg border bg-white dark:bg-[#18181B] px-3.5 py-2 text-sm text-foreground placeholder:text-foreground-muted transition-colors focus:outline-none focus:ring-1 focus:ring-foreground/25 dark:focus:ring-white/25 focus:border-foreground dark:focus:border-white ${
+            leftIcon ? 'pl-10' : ''
+          } ${
+            error
+              ? 'border-rose-500 focus:ring-rose-500/20 focus:border-rose-500'
+              : 'border-border hover:border-border-strong'
+          } ${className}`}
           {...props}
         />
       </div>
-      {error && <p className="text-xs text-rose-400">{error}</p>}
-      {!error && helperText && <p className="text-xs text-slate-400">{helperText}</p>}
+      {error && <p className="text-xs text-rose-500 font-medium">{error}</p>}
+      {!error && helperText && <p className="text-xs text-foreground-muted">{helperText}</p>}
     </div>
   );
 };
