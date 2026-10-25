@@ -99,10 +99,14 @@ export const NotificationDropdown: React.FC = () => {
       <button
         type="button"
         onClick={handleToggle}
-        className="relative p-2 text-foreground-secondary hover:text-foreground hover:bg-surface rounded-full transition-colors focus:outline-none focus:ring-1 focus:ring-ring"
+        className="relative p-2 text-foreground-secondary hover:text-foreground hover:bg-surface rounded-full transition-all duration-150 active:scale-95 focus:outline-none focus:ring-1 focus:ring-ring group"
         title="Notifications"
       >
-        <Bell className="w-5 h-5" />
+        <Bell
+          className={`w-5 h-5 transition-transform duration-200 ${
+            unreadNotificationsCount > 0 ? 'animate-bell-swing' : 'group-hover:rotate-12'
+          }`}
+        />
         {unreadNotificationsCount > 0 && (
           <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground shadow-sm ring-2 ring-background animate-pulse">
             {unreadNotificationsCount > 9 ? '9+' : unreadNotificationsCount}
@@ -112,14 +116,14 @@ export const NotificationDropdown: React.FC = () => {
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-card rounded-2xl shadow-2xl border border-border py-2 z-50 animate-fade-in text-foreground">
+        <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-card rounded-2xl shadow-2xl border border-border py-2 z-50 origin-top-right transition-all duration-200 animate-in fade-in zoom-in-95 text-foreground">
           <div className="flex items-center justify-between px-4 py-2 border-b border-border">
             <h3 className="font-semibold text-foreground text-sm">Notifications</h3>
             {notifications.some((n) => !n.isRead) && (
               <button
                 type="button"
                 onClick={handleMarkAllRead}
-                className="text-xs text-foreground-secondary hover:text-foreground font-medium flex items-center gap-1 transition-colors"
+                className="text-xs text-foreground-secondary hover:text-foreground font-medium flex items-center gap-1 transition-colors hover:underline"
               >
                 <CheckCheck className="w-3.5 h-3.5" />
                 <span>Mark all as read</span>
@@ -144,11 +148,11 @@ export const NotificationDropdown: React.FC = () => {
                 <div
                   key={n.id}
                   onClick={() => handleNotificationClick(n)}
-                  className={`p-3 hover:bg-surface-hover cursor-pointer flex items-start gap-3 transition-colors ${
+                  className={`p-3 hover:bg-surface-hover cursor-pointer flex items-start gap-3 transition-all duration-150 hover:translate-x-0.5 ${
                     !n.isRead ? 'bg-surface' : ''
                   }`}
                 >
-                  <div className="p-2 rounded-xl bg-surface-elevated border border-border shrink-0 mt-0.5">
+                  <div className="p-2 rounded-xl bg-surface-elevated border border-border shrink-0 mt-0.5 transition-transform duration-150 hover:scale-105">
                     {getNotificationIcon(n.type)}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -166,7 +170,7 @@ export const NotificationDropdown: React.FC = () => {
                     <p className="text-xs text-foreground-secondary line-clamp-2 mt-0.5">{n.body}</p>
                   </div>
                   {!n.isRead && (
-                    <span className="w-2 h-2 rounded-full bg-primary shrink-0 mt-2" />
+                    <span className="w-2 h-2 rounded-full bg-primary shrink-0 mt-2 animate-pulse" />
                   )}
                 </div>
               ))

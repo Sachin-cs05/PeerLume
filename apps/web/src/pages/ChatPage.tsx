@@ -309,7 +309,7 @@ export const ChatPage: React.FC = () => {
                   <span
                     className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-card ${
                       onlineUsers.has(activeConversation.participant.id)
-                        ? 'bg-emerald-500'
+                        ? 'bg-emerald-500 animate-pulse-dot'
                         : 'bg-foreground-muted'
                     }`}
                   />
@@ -335,7 +335,7 @@ export const ChatPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => initiateCall(activeConversation.participant.id, 'AUDIO')}
-                  className="p-2 text-foreground-secondary hover:text-foreground bg-card hover:bg-surface-hover rounded-lg transition-colors border border-border cursor-pointer shadow-xs"
+                  className="p-2 text-foreground-secondary hover:text-foreground bg-card hover:bg-surface-hover rounded-lg transition-all duration-150 hover:scale-105 active:scale-95 border border-border cursor-pointer shadow-xs"
                   title="Start Voice Call"
                   aria-label="Start Voice Call"
                 >
@@ -344,7 +344,7 @@ export const ChatPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => initiateCall(activeConversation.participant.id, 'VIDEO')}
-                  className="p-2 text-foreground hover:opacity-90 bg-foreground text-background rounded-lg transition-all cursor-pointer shadow-xs"
+                  className="p-2 text-foreground hover:opacity-90 bg-foreground text-background rounded-lg transition-all duration-150 hover:scale-105 active:scale-95 cursor-pointer shadow-xs"
                   title="Start Video Call"
                   aria-label="Start Video Call"
                 >

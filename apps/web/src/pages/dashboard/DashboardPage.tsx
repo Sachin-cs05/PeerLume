@@ -186,10 +186,10 @@ export const DashboardPage: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
             <Link
               to="/profile/edit"
-              className="p-4 rounded-lg border border-border bg-background hover:border-foreground/30 hover:bg-surface-hover/30 transition-all flex flex-col justify-between gap-3"
+              className="group p-4 rounded-lg border border-border bg-background hover:border-border-strong hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between gap-3"
             >
               <div className="flex items-start justify-between">
-                <div className="p-2 rounded-md bg-surface-hover text-foreground border border-border">
+                <div className="p-2 rounded-md bg-surface-hover text-foreground border border-border group-hover:scale-105 transition-transform duration-200">
                   <User className="w-4 h-4" />
                 </div>
                 {isProfileComplete ? (
@@ -203,7 +203,7 @@ export const DashboardPage: React.FC = () => {
                 )}
               </div>
               <div>
-                <h4 className="font-semibold text-xs sm:text-sm text-foreground">
+                <h4 className="font-semibold text-xs sm:text-sm text-foreground group-hover:text-foreground">
                   1. Complete your profile
                 </h4>
                 <p className="text-xs text-foreground-muted mt-1 leading-relaxed">
@@ -214,10 +214,10 @@ export const DashboardPage: React.FC = () => {
 
             <Link
               to="/discover"
-              className="p-4 rounded-lg border border-border bg-background hover:border-foreground/30 hover:bg-surface-hover/30 transition-all flex flex-col justify-between gap-3"
+              className="group p-4 rounded-lg border border-border bg-background hover:border-border-strong hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between gap-3"
             >
               <div className="flex items-start justify-between">
-                <div className="p-2 rounded-md bg-surface-hover text-foreground border border-border">
+                <div className="p-2 rounded-md bg-surface-hover text-foreground border border-border group-hover:scale-105 transition-transform duration-200">
                   <Compass className="w-4 h-4" />
                 </div>
                 {isPartnerFound ? (
@@ -231,7 +231,7 @@ export const DashboardPage: React.FC = () => {
                 )}
               </div>
               <div>
-                <h4 className="font-semibold text-xs sm:text-sm text-foreground">
+                <h4 className="font-semibold text-xs sm:text-sm text-foreground group-hover:text-foreground">
                   2. Find a study partner
                 </h4>
                 <p className="text-xs text-foreground-muted mt-1 leading-relaxed">
@@ -242,10 +242,10 @@ export const DashboardPage: React.FC = () => {
 
             <Link
               to="/sessions"
-              className="p-4 rounded-lg border border-border bg-background hover:border-foreground/30 hover:bg-surface-hover/30 transition-all flex flex-col justify-between gap-3"
+              className="group p-4 rounded-lg border border-border bg-background hover:border-border-strong hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between gap-3"
             >
               <div className="flex items-start justify-between">
-                <div className="p-2 rounded-md bg-surface-hover text-foreground border border-border">
+                <div className="p-2 rounded-md bg-surface-hover text-foreground border border-border group-hover:scale-105 transition-transform duration-200">
                   <Calendar className="w-4 h-4" />
                 </div>
                 {isSessionScheduled ? (
@@ -259,7 +259,7 @@ export const DashboardPage: React.FC = () => {
                 )}
               </div>
               <div>
-                <h4 className="font-semibold text-xs sm:text-sm text-foreground">
+                <h4 className="font-semibold text-xs sm:text-sm text-foreground group-hover:text-foreground">
                   3. Schedule your first session
                 </h4>
                 <p className="text-xs text-foreground-muted mt-1 leading-relaxed">

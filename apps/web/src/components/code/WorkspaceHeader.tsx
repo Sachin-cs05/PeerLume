@@ -132,7 +132,7 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
       <div className="flex items-center gap-2.5">
         {/* Connection Status */}
         <div
-          className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${
+          className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border transition-colors ${
             connectionStatus === 'connected'
               ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/20'
               : connectionStatus === 'connecting'
@@ -143,7 +143,7 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
           <span
             className={`w-1.5 h-1.5 rounded-full ${
               connectionStatus === 'connected'
-                ? 'bg-emerald-500'
+                ? 'bg-emerald-500 animate-pulse-dot'
                 : connectionStatus === 'connecting'
                 ? 'bg-amber-500'
                 : 'bg-rose-500'
@@ -154,7 +154,7 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
 
         {/* Save Status */}
         <div
-          className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${
+          className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border transition-all duration-200 ${
             saveStatus === 'saved'
               ? 'bg-surface text-foreground-secondary border-border-subtle'
               : saveStatus === 'saving'
@@ -180,7 +180,7 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
           value={language}
           onChange={(e) => onLanguageChange(e.target.value)}
           disabled={role === 'VIEWER'}
-          className="bg-surface text-foreground text-xs font-medium rounded-lg px-2.5 py-1.5 border border-border focus:outline-none focus:border-foreground disabled:opacity-60 cursor-pointer"
+          className="bg-surface text-foreground text-xs font-medium rounded-lg px-2.5 py-1.5 border border-border focus:outline-none focus:border-foreground disabled:opacity-60 cursor-pointer transition-colors hover:border-foreground/40"
         >
           {SUPPORTED_LANGUAGES.map((lang) => (
             <option key={lang.id} value={lang.id}>
@@ -194,7 +194,7 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
       <div className="flex items-center gap-2">
         <button
           onClick={onToggleSandbox}
-          className="p-2 text-foreground-secondary hover:text-foreground bg-surface hover:bg-surface-hover rounded-lg border border-border transition-colors flex items-center gap-1.5 text-xs font-medium shadow-xs"
+          className="p-2 text-foreground-secondary hover:text-foreground bg-surface hover:bg-surface-hover rounded-lg border border-border transition-all duration-150 hover:scale-105 active:scale-95 flex items-center gap-1.5 text-xs font-medium shadow-xs"
           title="Sandbox security & starter templates"
         >
           <ShieldAlert className="w-3.5 h-3.5 text-foreground-muted" />
@@ -203,7 +203,7 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
 
         <button
           onClick={onOpenRevisions}
-          className="p-2 text-foreground-secondary hover:text-foreground bg-surface hover:bg-surface-hover rounded-lg border border-border transition-colors flex items-center gap-1.5 text-xs font-medium shadow-xs"
+          className="p-2 text-foreground-secondary hover:text-foreground bg-surface hover:bg-surface-hover rounded-lg border border-border transition-all duration-150 hover:scale-105 active:scale-95 flex items-center gap-1.5 text-xs font-medium shadow-xs"
           title="View document revisions"
         >
           <History className="w-3.5 h-3.5" />
@@ -212,7 +212,7 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
 
         <button
           onClick={onCopy}
-          className="p-2 text-foreground-secondary hover:text-foreground bg-surface hover:bg-surface-hover rounded-lg border border-border transition-colors flex items-center gap-1.5 text-xs font-medium shadow-xs"
+          className="p-2 text-foreground-secondary hover:text-foreground bg-surface hover:bg-surface-hover rounded-lg border border-border transition-all duration-150 hover:scale-105 active:scale-95 flex items-center gap-1.5 text-xs font-medium shadow-xs"
           title="Copy full code to clipboard"
         >
           <Copy className="w-3.5 h-3.5" />
@@ -221,7 +221,7 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
 
         <button
           onClick={handleShareLink}
-          className="p-2 text-foreground-secondary hover:text-foreground bg-surface hover:bg-surface-hover rounded-lg border border-border transition-colors flex items-center gap-1.5 text-xs font-medium shadow-xs"
+          className="p-2 text-foreground-secondary hover:text-foreground bg-surface hover:bg-surface-hover rounded-lg border border-border transition-all duration-150 hover:scale-105 active:scale-95 flex items-center gap-1.5 text-xs font-medium shadow-xs"
           title="Copy workspace share link"
         >
           {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Share2 className="w-3.5 h-3.5" />}
@@ -232,7 +232,7 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
           <button
             onClick={onSave}
             disabled={saveStatus === 'saving'}
-            className="px-3.5 py-1.5 bg-foreground text-background hover:bg-foreground/90 disabled:opacity-50 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors"
+            className="px-3.5 py-1.5 bg-foreground text-background hover:bg-foreground/90 disabled:opacity-50 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all duration-150 hover:scale-105 active:scale-95 shadow-xs"
             title="Save code checkpoint (Ctrl+S)"
           >
             <Save className="w-3.5 h-3.5" />

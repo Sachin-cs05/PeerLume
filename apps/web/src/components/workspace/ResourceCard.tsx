@@ -93,7 +93,7 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
   const config = typeConfig[resource.type] || typeConfig.NOTE;
 
   return (
-    <div className="bg-card border border-border rounded-xl p-5 hover:border-foreground-muted/40 transition-all flex flex-col justify-between gap-4 shadow-sm">
+    <div className="bg-card border border-border rounded-xl p-5 hover:border-border-strong hover:shadow-md hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between gap-4 shadow-xs group">
       <div className="space-y-3">
         {/* Header: Type Badge, Title, Privacy, Action icons */}
         <div className="flex items-start justify-between gap-2">

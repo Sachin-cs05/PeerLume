@@ -22,6 +22,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [isPrivate, setIsPrivate] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -92,7 +93,35 @@ export const FileUpload: React.FC<FileUploadProps> = ({
         <label className="block text-xs font-semibold text-foreground mb-1.5">
           Select Document or PDF (Max 15MB) *
         </label>
-        <div className="border-2 border-dashed border-border hover:border-foreground/50 rounded-xl p-6 text-center bg-surface transition-colors">
+        <div
+          onDragOver={(e) => {
+            e.preventDefault();
+            setIsDragging(true);
+          }}
+          onDragLeave={() => setIsDragging(false)}
+          onDrop={(e) => {
+            e.preventDefault();
+            setIsDragging(false);
+            const dropped = e.dataTransfer.files?.[0];
+            if (dropped) {
+              if (dropped.size > MAX_FILE_SIZE) {
+                setError('File size exceeds the 15MB limit.');
+                return;
+              }
+              setFile(dropped);
+              if (!title.trim()) {
+                const nameParts = dropped.name.split('.');
+                if (nameParts.length > 1) nameParts.pop();
+                setTitle(nameParts.join('.'));
+              }
+            }
+          }}
+          className={`border-2 border-dashed rounded-xl p-6 text-center transition-all duration-200 group ${
+            isDragging
+              ? 'border-foreground bg-surface-hover scale-[1.01] shadow-md'
+              : 'border-border hover:border-foreground/50 bg-surface'
+          }`}
+        >
           <input
             type="file"
             id="workspace-file"
@@ -101,7 +130,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
             accept=".pdf,.doc,.docx,.txt,.md,.json,.zip,.png,.jpg,.jpeg"
           />
           <label htmlFor="workspace-file" className="cursor-pointer block">
-            <div className="w-12 h-12 mx-auto mb-3 rounded-xl bg-surface-elevated border border-border text-foreground flex items-center justify-center">
+            <div className="w-12 h-12 mx-auto mb-3 rounded-xl bg-surface-elevated border border-border text-foreground flex items-center justify-center transition-transform duration-200 group-hover:-translate-y-0.5">
               <Upload className="w-6 h-6" />
             </div>
             {file ? (

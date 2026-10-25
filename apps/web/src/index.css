@@ -168,6 +168,60 @@
   .animate-pulse-dot {
     animation: pulseDot 2s ease-in-out infinite;
   }
+
+  /* Bell swing animation for notifications */
+  @keyframes bellSwing {
+    0%, 100% {
+      transform: rotate(0deg);
+    }
+    20% {
+      transform: rotate(14deg);
+    }
+    40% {
+      transform: rotate(-14deg);
+    }
+    60% {
+      transform: rotate(8deg);
+    }
+    80% {
+      transform: rotate(-8deg);
+    }
+  }
+
+  .animate-bell-swing {
+    animation: bellSwing 2.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    transform-origin: top center;
+  }
+
+  /* Ripple wave for calling state */
+  @keyframes rippleWave {
+    0% {
+      transform: scale(0.95);
+      opacity: 0.8;
+    }
+    100% {
+      transform: scale(1.3);
+      opacity: 0;
+    }
+  }
+
+  .animate-ripple {
+    animation: rippleWave 1.8s ease-out infinite;
+  }
+
+  /* Flame breathing pulse */
+  @keyframes flamePulse {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.12);
+    }
+  }
+
+  .animate-flame {
+    animation: flamePulse 2s ease-in-out infinite;
+  }
 }
 
 /* Reduced motion preference support */

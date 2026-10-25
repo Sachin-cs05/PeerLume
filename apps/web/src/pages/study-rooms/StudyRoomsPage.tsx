@@ -172,7 +172,7 @@ export const StudyRoomsPage: React.FC = () => {
           {filteredRooms.map((room) => (
             <div
               key={room.id}
-              className="group flex flex-col justify-between p-5 bg-card border border-border hover:border-foreground/30 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200"
+              className="group flex flex-col justify-between p-5 bg-card border border-border hover:border-border-strong rounded-2xl shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-200"
             >
               <div>
                 <div className="flex items-center justify-between mb-3">
@@ -180,7 +180,7 @@ export const StudyRoomsPage: React.FC = () => {
                       ? 'bg-surface text-foreground border border-border'
                       : 'bg-surface text-foreground-muted border border-border-subtle'
                     }`}>
-                    {room.isActive && <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />}
+                    {room.isActive && <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse-dot" />}
                     <span>{room.isActive ? 'Active Room' : 'Ended'}</span>
                   </span>
 
@@ -214,7 +214,7 @@ export const StudyRoomsPage: React.FC = () => {
 
                 <Link
                   to={`/study-rooms/${room.id}`}
-                  className="inline-flex items-center gap-1 text-xs font-medium text-foreground group-hover:translate-x-0.5 transition-transform"
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-foreground group-hover:translate-x-1 transition-transform duration-150"
                 >
                   <span>Enter Room</span>
                   <ArrowRight className="w-3.5 h-3.5" />

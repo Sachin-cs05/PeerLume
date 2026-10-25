@@ -37,7 +37,7 @@ export const MatchScoreBadge: React.FC<MatchScoreBadgeProps> = ({
   return (
     <div className="relative inline-block">
       <div
-        className={`inline-flex items-center font-mono font-semibold rounded-md border border-border bg-surface-hover text-foreground shadow-2xs transition-all cursor-pointer hover:border-border-strong ${sizeClasses}`}
+        className={`inline-flex items-center font-mono font-semibold rounded-md border border-border bg-surface-hover text-foreground shadow-2xs transition-all duration-150 hover:scale-105 active:scale-95 cursor-pointer hover:border-border-strong ${sizeClasses}`}
         onClick={() => setShowTooltip(!showTooltip)}
         onMouseEnter={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
@@ -53,7 +53,7 @@ export const MatchScoreBadge: React.FC<MatchScoreBadgeProps> = ({
 
       {/* Tooltip Breakdown */}
       {showTooltip && breakdown && (
-        <div className="absolute right-0 top-full mt-2 z-30 w-56 p-3 rounded-lg bg-card border border-border shadow-lg text-xs space-y-2 text-foreground">
+        <div className="absolute right-0 top-full mt-2 z-30 w-56 p-3 rounded-lg bg-card border border-border shadow-lg text-xs space-y-2 text-foreground origin-top-right transition-all duration-150 animate-in fade-in zoom-in-95">
           <div className="font-semibold text-foreground border-b border-border pb-1.5 flex justify-between items-center">
             <span>Score Breakdown</span>
             <span className="font-mono font-bold text-foreground">{score} / 100</span>

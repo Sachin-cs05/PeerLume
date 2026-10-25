@@ -74,7 +74,7 @@ export const Header: React.FC = () => {
           <div className="flex items-center justify-between h-14 sm:h-16">
             {/* Logo & Brand */}
             <Link to="/" className="flex items-center gap-2.5 group">
-              <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-[#111113] text-white dark:bg-white dark:text-[#09090B] flex items-center justify-center font-bold text-sm shadow-xs transition-transform group-hover:scale-105">
+              <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-[#111113] text-white dark:bg-white dark:text-[#09090B] flex items-center justify-center font-bold text-sm shadow-xs transition-all duration-300 group-hover:scale-110 group-hover:rotate-6">
                 <Layers className="w-4 h-4" />
               </div>
               <span className="text-base sm:text-lg font-bold tracking-tight text-foreground">
@@ -82,37 +82,37 @@ export const Header: React.FC = () => {
               </span>
             </Link>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-1">
+            {/* Desktop Navigation with Animated Active Indicator */}
+            <nav className="hidden md:flex items-center gap-1 bg-card/60 border border-border/70 p-1 rounded-xl backdrop-blur-md">
               {user && (
                 <>
-                  <Link to="/dashboard" className={getNavLinkClass('/dashboard')}>
-                    <span>Dashboard</span>
-                  </Link>
-
-                  <Link to="/discover" className={getNavLinkClass('/discover')}>
-                    <span>Discover</span>
-                  </Link>
-
-                  <Link to="/sessions" className={getNavLinkClass('/sessions')}>
-                    <span>Sessions</span>
-                  </Link>
-
-                  <Link to="/chat" className={getNavLinkClass('/chat')}>
-                    <span>Messages</span>
-                  </Link>
-
-                  <Link to="/workspace" className={getNavLinkClass('/workspace')}>
-                    <span>Workspace</span>
-                  </Link>
-
-                  <Link to="/code" className={getNavLinkClass('/code')}>
-                    <span>Code</span>
-                  </Link>
-
-                  <Link to="/study-rooms" className={getNavLinkClass('/study-rooms')}>
-                    <span>Rooms</span>
-                  </Link>
+                  {[
+                    { path: '/dashboard', label: 'Dashboard' },
+                    { path: '/discover', label: 'Discover' },
+                    { path: '/sessions', label: 'Sessions' },
+                    { path: '/chat', label: 'Messages' },
+                    { path: '/workspace', label: 'Workspace' },
+                    { path: '/code', label: 'Code' },
+                    { path: '/study-rooms', label: 'Rooms' },
+                  ].map((item) => {
+                    const isActive = location.pathname === item.path || location.pathname.startsWith(`${item.path}/`);
+                    return (
+                      <Link
+                        key={item.path}
+                        to={item.path}
+                        className={`relative px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 ${
+                          isActive
+                            ? 'text-foreground bg-surface-hover font-semibold shadow-2xs'
+                            : 'text-foreground-secondary hover:text-foreground hover:bg-surface-hover/70 hover:-translate-y-0.5'
+                        }`}
+                      >
+                        <span>{item.label}</span>
+                        {isActive && (
+                          <span className="absolute bottom-0.5 left-2.5 right-2.5 h-[2px] bg-foreground rounded-full animate-fade-in" />
+                        )}
+                      </Link>
+                    );
+                  })}
                 </>
               )}
             </nav>
@@ -123,7 +123,7 @@ export const Header: React.FC = () => {
               {user && (
                 <button
                   onClick={() => setSearchModalOpen(true)}
-                  className="flex items-center gap-2 px-2.5 py-1.5 text-xs text-foreground-secondary hover:text-foreground bg-card hover:bg-surface-hover border border-border rounded-lg transition-colors cursor-pointer"
+                  className="flex items-center gap-2 px-2.5 py-1.5 text-xs text-foreground-secondary hover:text-foreground bg-card hover:bg-surface-hover border border-border hover:border-border-strong rounded-lg transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
                   title="Search (Ctrl+K)"
                   aria-label="Open search dialog"
                 >
@@ -138,25 +138,27 @@ export const Header: React.FC = () => {
               {/* Notifications */}
               {user && <NotificationDropdown />}
 
-              {/* Theme Toggle Button */}
+              {/* Theme Toggle Button with 360 Spin */}
               <button
                 onClick={toggleTheme}
-                className="p-1.5 sm:p-2 rounded-lg text-foreground-secondary hover:text-foreground bg-card hover:bg-surface-hover border border-border transition-colors cursor-pointer"
+                className="p-1.5 sm:p-2 rounded-lg text-foreground-secondary hover:text-foreground bg-card hover:bg-surface-hover border border-border transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer group"
                 title={`Switch to ${effectiveTheme === 'dark' ? 'light' : 'dark'} mode`}
                 aria-label={`Switch to ${effectiveTheme === 'dark' ? 'light' : 'dark'} mode`}
               >
-                {effectiveTheme === 'dark' ? (
-                  <Sun className="w-4 h-4 text-foreground" />
-                ) : (
-                  <Moon className="w-4 h-4 text-foreground" />
-                )}
+                <div className="transition-transform duration-300 group-hover:rotate-45">
+                  {effectiveTheme === 'dark' ? (
+                    <Sun className="w-4 h-4 text-foreground" />
+                  ) : (
+                    <Moon className="w-4 h-4 text-foreground" />
+                  )}
+                </div>
               </button>
 
               {user ? (
                 <div className="flex items-center gap-2 pl-1 border-l border-border">
                   <Link
                     to="/profile"
-                    className="flex items-center justify-center w-8 h-8 rounded-full bg-card border border-border hover:border-foreground/40 text-foreground text-xs font-semibold transition-transform hover:scale-105"
+                    className="flex items-center justify-center w-8 h-8 rounded-full bg-card border border-border hover:border-foreground/40 text-foreground text-xs font-semibold transition-all hover:scale-105"
                     title={user.fullName}
                   >
                     {user.fullName ? user.fullName.slice(0, 2).toUpperCase() : 'ME'}
@@ -164,7 +166,7 @@ export const Header: React.FC = () => {
 
                   <button
                     onClick={handleLogout}
-                    className="p-1.5 rounded-lg text-foreground-muted hover:text-foreground transition-colors cursor-pointer"
+                    className="p-1.5 rounded-lg text-foreground-muted hover:text-foreground hover:translate-x-0.5 transition-all cursor-pointer"
                     title="Sign Out"
                     aria-label="Sign Out"
                   >

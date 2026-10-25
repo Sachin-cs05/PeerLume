@@ -16,12 +16,12 @@ export const DashboardSummaryCard: React.FC<DashboardSummaryCardProps> = ({
   icon,
 }) => {
   return (
-    <div className="bg-card border border-border rounded-xl p-5 shadow-xs flex flex-col justify-between gap-3 hover:border-border-strong transition-all">
+    <div className="group bg-card border border-border rounded-xl p-5 shadow-xs hover:shadow-md hover:-translate-y-1 hover:border-border-strong transition-all duration-200 flex flex-col justify-between gap-3">
       <div className="flex items-center justify-between">
-        <span className="text-xs font-medium text-foreground-secondary uppercase tracking-wider">
+        <span className="text-xs font-medium text-foreground-secondary uppercase tracking-wider group-hover:text-foreground transition-colors">
           {title}
         </span>
-        <div className="p-2 rounded-lg bg-surface-hover text-foreground border border-border">
+        <div className="p-2 rounded-lg bg-surface-hover text-foreground border border-border group-hover:scale-105 group-hover:border-foreground/30 transition-all duration-200">
           {icon}
         </div>
       </div>
@@ -31,7 +31,7 @@ export const DashboardSummaryCard: React.FC<DashboardSummaryCardProps> = ({
           {value}
         </div>
         {trend && (
-          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-surface-hover text-foreground border border-border">
+          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-surface-hover text-foreground border border-border group-hover:scale-105 transition-transform duration-150">
             {trend}
           </span>
         )}

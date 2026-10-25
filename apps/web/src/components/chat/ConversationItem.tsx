@@ -40,7 +40,7 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({
     <button
       type="button"
       onClick={onClick}
-      className={`w-full text-left p-3 flex items-center gap-3 rounded-lg transition-all border cursor-pointer ${
+      className={`w-full text-left p-3 flex items-center gap-3 rounded-lg transition-all duration-150 border cursor-pointer hover:translate-x-0.5 active:scale-[0.99] group ${
         isSelected
           ? 'bg-surface-hover border-border-strong shadow-2xs'
           : 'bg-card border-transparent hover:bg-surface-hover/50'
@@ -48,7 +48,7 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({
     >
       {/* Avatar with Presence Indicator */}
       <div className="relative shrink-0">
-        <div className="w-10 h-10 rounded-full bg-surface-hover border border-border flex items-center justify-center text-foreground font-semibold text-xs overflow-hidden">
+        <div className="w-10 h-10 rounded-full bg-surface-hover border border-border flex items-center justify-center text-foreground font-semibold text-xs overflow-hidden group-hover:scale-105 transition-transform duration-150">
           {participant.avatarUrl ? (
             <img
               src={participant.avatarUrl}
@@ -62,7 +62,7 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({
         {/* Presence Dot */}
         <span
           className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-background ${
-            isOnline ? 'bg-emerald-500' : 'bg-foreground-muted'
+            isOnline ? 'bg-emerald-500 animate-pulse-dot' : 'bg-foreground-muted'
           }`}
           title={isOnline ? 'Online' : 'Offline'}
         />

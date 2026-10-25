@@ -60,7 +60,7 @@ export const SessionCard: React.FC<SessionCardProps> = ({
   const otherParticipants = session.participants.filter((p) => p.userId !== session.organizerId);
 
   return (
-    <div className="bg-card border border-border rounded-xl p-5 hover:border-foreground-muted/40 transition-all duration-200 shadow-sm flex flex-col justify-between gap-4">
+    <div className="bg-card border border-border rounded-xl p-5 hover:border-border-strong hover:shadow-md hover:-translate-y-1 transition-all duration-200 shadow-xs flex flex-col justify-between gap-4 group">
       {/* Header: Title, Topic, Status Badge */}
       <div className="space-y-2">
         <div className="flex items-start justify-between gap-3">

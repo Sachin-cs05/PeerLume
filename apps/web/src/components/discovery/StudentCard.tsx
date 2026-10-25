@@ -94,23 +94,26 @@ export const StudentCard: React.FC<StudentCardProps> = ({
 
   return (
     <>
-      <div className="relative group bg-card border border-border hover:border-border-strong rounded-xl p-5 shadow-xs transition-all duration-200 flex flex-col justify-between">
+      <div className="relative group bg-card border border-border hover:border-border-strong rounded-xl p-5 shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
         <div>
           {/* Card Top: Avatar, Name & Match Score */}
           <div className="flex items-start justify-between gap-3 mb-3.5">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-surface-hover border border-border flex items-center justify-center overflow-hidden shrink-0">
-                {student.avatarUrl ? (
-                  <img src={student.avatarUrl} alt={student.fullName} className="w-full h-full object-cover" />
-                ) : (
-                  <span className="text-sm font-bold text-foreground">
-                    {student.fullName.charAt(0).toUpperCase()}
-                  </span>
-                )}
+              <div className="relative shrink-0">
+                <div className="w-10 h-10 rounded-lg bg-surface-hover border border-border flex items-center justify-center overflow-hidden group-hover:scale-105 transition-transform duration-200">
+                  {student.avatarUrl ? (
+                    <img src={student.avatarUrl} alt={student.fullName} className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-sm font-bold text-foreground">
+                      {student.fullName.charAt(0).toUpperCase()}
+                    </span>
+                  )}
+                </div>
+                <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-card ring-1 ring-emerald-500/30 animate-pulse-dot" />
               </div>
 
               <div>
-                <h3 className="font-bold text-foreground text-sm line-clamp-1">
+                <h3 className="font-bold text-foreground text-sm line-clamp-1 group-hover:text-foreground">
                   {student.fullName}
                 </h3>
                 <div className="flex items-center gap-1.5 text-xs text-foreground-secondary mt-0.5">
@@ -134,7 +137,7 @@ export const StudentCard: React.FC<StudentCardProps> = ({
               <button
                 onClick={handleToggleSave}
                 disabled={loading}
-                className={`p-1.5 rounded-md border transition-colors cursor-pointer ${
+                className={`p-1.5 rounded-md border transition-all duration-150 active:scale-95 hover:scale-105 cursor-pointer ${
                   isSaved
                     ? 'bg-foreground text-background border-foreground'
                     : 'bg-background hover:bg-surface-hover border-border text-foreground-muted hover:text-foreground'
@@ -175,7 +178,7 @@ export const StudentCard: React.FC<StudentCardProps> = ({
                 {student.teachingSkills.slice(0, 4).map((ts, idx) => (
                   <span
                     key={idx}
-                    className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-surface-hover text-foreground border border-border"
+                    className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-surface-hover text-foreground border border-border transition-transform duration-150 hover:scale-105"
                   >
                     {ts.name}
                   </span>
@@ -201,7 +204,7 @@ export const StudentCard: React.FC<StudentCardProps> = ({
                 {student.learningGoals.slice(0, 4).map((lg, idx) => (
                   <span
                     key={idx}
-                    className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-background text-foreground-secondary border border-border"
+                    className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-background text-foreground-secondary border border-border transition-transform duration-150 hover:scale-105"
                   >
                     {lg.name}
                   </span>
