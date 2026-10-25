@@ -31,16 +31,33 @@ export default {
           900: '#0F0F10',
           950: '#09090B',
         },
+        accent: {
+          DEFAULT: '#6366F1',
+          hover: '#4F46E5',
+          light: '#818CF8',
+          subtle: 'rgba(99, 102, 241, 0.12)',
+          border: 'rgba(99, 102, 241, 0.35)',
+        },
         peer: {
           teal: '#10b981',
           emerald: '#10b981',
           amber: '#f59e0b',
           rose: '#ef4444',
+          indigo: '#6366f1',
+          violet: '#8b5cf6',
         },
       },
       borderRadius: {
         card: '14px',
         panel: '18px',
+      },
+      boxShadow: {
+        'glow-sm': '0 0 16px -2px rgba(99, 102, 241, 0.25)',
+        glow: '0 0 28px -4px rgba(99, 102, 241, 0.35)',
+        'glow-lg': '0 0 48px -6px rgba(99, 102, 241, 0.45)',
+        'glow-emerald': '0 0 20px -3px rgba(16, 185, 129, 0.35)',
+        glass: '0 8px 32px 0 rgba(0, 0, 0, 0.36)',
+        'card-sheen': '0 1px 0 0 rgba(255, 255, 255, 0.08) inset',
       },
       fontFamily: {
         sans: [
@@ -55,11 +72,21 @@ export default {
       animation: {
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'fade-in': 'fadeIn 0.3s ease-out forwards',
+        'glow-pulse': 'glowPulse 4s ease-in-out infinite',
+        float: 'float 6s ease-in-out infinite',
       },
       keyframes: {
         fadeIn: {
           '0%': { opacity: '0', transform: 'translateY(4px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        glowPulse: {
+          '0%, 100%': { opacity: '0.4', transform: 'scale(1)' },
+          '50%': { opacity: '0.8', transform: 'scale(1.04)' },
+        },
+        float: {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-6px)' },
         },
       },
     },

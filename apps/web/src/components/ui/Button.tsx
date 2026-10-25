@@ -2,7 +2,7 @@ import React, { type ButtonHTMLAttributes } from 'react';
 import { Loader2 } from 'lucide-react';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'accent';
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
   leftIcon?: React.ReactNode;
@@ -30,21 +30,24 @@ export const Button: React.FC<ButtonProps> = ({
   };
 
   const variantStyles = {
-    // Light Mode: Black bg (#111113) with White text. Dark Mode: White bg (#FFFFFF) with Deep Black text (#09090B)
+    // Primary: High-contrast button with subtle glow and crisp press state
     primary:
-      'bg-[#111113] hover:bg-[#27272A] active:bg-[#000000] text-white dark:bg-white dark:hover:bg-[#E4E4E7] dark:active:bg-[#D4D4D8] dark:text-[#09090B] font-semibold shadow-xs',
+      'bg-[#111113] hover:bg-[#202025] active:scale-[0.98] text-white dark:bg-white dark:hover:bg-[#F4F4F5] dark:text-[#09090B] font-semibold shadow-xs hover:shadow-glow-sm',
+    // Accent: Electric Indigo / Violet glow button (Linear/Raycast style)
+    accent:
+      'bg-indigo-600 hover:bg-indigo-500 active:scale-[0.98] text-white font-semibold shadow-sm shadow-indigo-500/30 hover:shadow-glow-sm border border-indigo-400/20',
     // Secondary: Transparent background with border, Near Black text in light mode, Pure White text in dark mode
     secondary:
-      'bg-transparent hover:bg-surface-hover active:bg-surface-hover/80 text-foreground border border-border hover:border-border-strong font-medium',
+      'bg-transparent hover:bg-surface-hover active:scale-[0.98] text-foreground border border-border hover:border-border-strong font-medium',
     // Outline: Clean subtle border, text-foreground
     outline:
-      'bg-transparent hover:bg-surface-hover text-foreground border border-border hover:border-foreground/40 font-medium',
+      'bg-transparent hover:bg-surface-hover active:scale-[0.98] text-foreground border border-border hover:border-foreground/40 font-medium',
     // Ghost: Clean hover surface
     ghost:
-      'bg-transparent hover:bg-surface-hover text-foreground-secondary hover:text-foreground font-medium',
+      'bg-transparent hover:bg-surface-hover active:scale-[0.98] text-foreground-secondary hover:text-foreground font-medium',
     // Danger: Restrained semantic red
     danger:
-      'bg-rose-500/10 hover:bg-rose-500/20 active:bg-rose-500/25 text-rose-600 dark:text-rose-400 border border-rose-500/20 dark:border-rose-500/30 font-medium',
+      'bg-rose-500/10 hover:bg-rose-500/20 active:scale-[0.98] text-rose-600 dark:text-rose-400 border border-rose-500/20 dark:border-rose-500/30 font-medium',
   };
 
   return (

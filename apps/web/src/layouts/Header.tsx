@@ -108,7 +108,7 @@ export const Header: React.FC = () => {
                       >
                         <span>{item.label}</span>
                         {isActive && (
-                          <span className="absolute bottom-0.5 left-2.5 right-2.5 h-[2px] bg-foreground rounded-full animate-fade-in" />
+                          <span className="absolute bottom-0.5 left-2.5 right-2.5 h-[2px] bg-gradient-to-r from-indigo-500 to-indigo-400 rounded-full shadow-[0_0_8px_rgba(99,102,241,0.6)] animate-fade-in" />
                         )}
                       </Link>
                     );

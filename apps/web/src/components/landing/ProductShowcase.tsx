@@ -111,7 +111,7 @@ export const ProductShowcase: React.FC = () => {
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer ${
                     isActive
-                      ? 'bg-foreground text-background font-semibold shadow-xs scale-100'
+                      ? 'bg-indigo-600 text-white font-semibold shadow-[0_0_16px_rgba(99,102,241,0.45)] scale-100'
                       : 'text-foreground-secondary hover:text-foreground hover:bg-surface-hover hover:scale-[1.02]'
                   }`}
                 >
@@ -125,7 +125,7 @@ export const ProductShowcase: React.FC = () => {
 
         {/* Tab Content Window Container */}
         <div
-          className={`rounded-2xl border border-border bg-card shadow-2xl overflow-hidden transition-all duration-700 delay-150 ease-out hover:border-border-strong ${
+          className={`rounded-2xl border border-border/80 dark:border-white/10 bg-card/90 backdrop-blur-xl shadow-glass shadow-indigo-500/5 hover:shadow-glow-sm overflow-hidden transition-all duration-500 border-t border-t-white/80 dark:border-t-white/15 ${
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
           }`}
         >

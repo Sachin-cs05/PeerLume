@@ -2,7 +2,7 @@ import React from 'react';
 
 export interface BadgeProps {
   children: React.ReactNode;
-  variant?: 'brand' | 'success' | 'warning' | 'danger' | 'neutral' | 'outline';
+  variant?: 'brand' | 'accent' | 'success' | 'warning' | 'danger' | 'neutral' | 'outline';
   size?: 'sm' | 'md';
   dot?: boolean;
   className?: string;
@@ -18,12 +18,14 @@ export const Badge: React.FC<BadgeProps> = ({
   const variantStyles = {
     brand:
       'bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 border-neutral-800 dark:border-neutral-200',
+    accent:
+      'bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 border-indigo-500/20 shadow-[0_0_12px_-2px_rgba(99,102,241,0.25)]',
     neutral:
       'bg-surface-hover text-foreground border-border',
     outline:
       'bg-transparent text-foreground border-border',
     success:
-      'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20',
+      'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20 shadow-[0_0_12px_-2px_rgba(16,185,129,0.25)]',
     warning:
       'bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20',
     danger:
@@ -32,9 +34,10 @@ export const Badge: React.FC<BadgeProps> = ({
 
   const dotColors = {
     brand: 'bg-white dark:bg-neutral-900',
+    accent: 'bg-indigo-500 animate-pulse',
     neutral: 'bg-foreground-muted',
     outline: 'bg-foreground-muted',
-    success: 'bg-emerald-500',
+    success: 'bg-emerald-500 animate-pulse',
     warning: 'bg-amber-500',
     danger: 'bg-rose-500',
   };

@@ -120,7 +120,7 @@ export const LandingNavbar: React.FC = () => {
 
           {/* Desktop Navigation Links */}
           <nav
-            className="hidden md:flex items-center gap-1 bg-card/60 border border-border/80 px-2.5 py-1.5 rounded-full backdrop-blur-md shadow-2xs"
+            className="hidden md:flex items-center gap-1 bg-card/70 border border-border/80 px-2.5 py-1.5 rounded-full backdrop-blur-md shadow-2xs"
             aria-label="Main navigation"
           >
             {NAV_ITEMS.map((item) => {
@@ -130,9 +130,9 @@ export const LandingNavbar: React.FC = () => {
                   key={item.href}
                   href={item.href}
                   onClick={(e) => handleNavClick(e, item.href)}
-                  className={`px-3.5 py-1 text-xs font-medium rounded-full transition-all duration-150 ${
+                  className={`px-3.5 py-1 text-xs font-medium rounded-full transition-all duration-200 ${
                     isActive
-                      ? 'bg-foreground text-background font-semibold shadow-2xs'
+                      ? 'bg-indigo-600 text-white font-semibold shadow-[0_0_12px_rgba(99,102,241,0.45)]'
                       : 'text-foreground-secondary hover:text-foreground hover:bg-surface-hover/70'
                   }`}
                   aria-current={isActive ? 'page' : undefined}
@@ -163,7 +163,7 @@ export const LandingNavbar: React.FC = () => {
               <div className="flex items-center gap-2">
                 <Link to="/dashboard">
                   <Button
-                    variant="primary"
+                    variant="accent"
                     size="sm"
                     leftIcon={<LayoutDashboard className="w-3.5 h-3.5" />}
                   >
@@ -172,7 +172,7 @@ export const LandingNavbar: React.FC = () => {
                 </Link>
                 <Link
                   to="/profile"
-                  className="flex items-center justify-center w-8 h-8 rounded-full bg-card border border-border hover:border-foreground/40 text-foreground text-xs font-semibold transition-transform hover:scale-105"
+                  className="flex items-center justify-center w-8 h-8 rounded-full bg-card border border-border hover:border-indigo-500/50 text-foreground text-xs font-semibold transition-transform hover:scale-105"
                   title={user.fullName}
                   aria-label="View your profile"
                 >
@@ -188,7 +188,7 @@ export const LandingNavbar: React.FC = () => {
                 </Link>
                 <Link to="/register">
                   <Button
-                    variant="primary"
+                    variant="accent"
                     size="sm"
                     rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
                   >

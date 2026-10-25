@@ -57,20 +57,23 @@ export const HeroSection: React.FC = () => {
       ref={ref}
       className="relative pt-12 pb-16 md:pt-20 md:pb-24 overflow-hidden border-b border-border/40"
     >
-      {/* Subtle Monochrome Grid Background */}
+      {/* Ambient Electric Indigo Mesh Aura */}
+      <div className="ambient-glow-top" />
+
+      {/* Subtle Grid Background */}
       <div className="absolute inset-0 bg-subtle-grid opacity-35 pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
           {/* Left Column: Copy & Actions with Staggered Entrance */}
           <div className="lg:col-span-6 space-y-6 text-center lg:text-left">
             {/* Tag / Badge */}
             <div
-              className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-border bg-card/90 text-foreground-secondary text-xs font-medium shadow-2xs transition-all duration-700 ease-out ${
+              className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-indigo-500/25 bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 text-xs font-medium shadow-[0_0_16px_-3px_rgba(99,102,241,0.25)] transition-all duration-700 ease-out ${
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
               }`}
             >
-              <span className="w-2 h-2 rounded-full bg-foreground animate-pulse-dot" />
+              <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
               <span>Peer-to-Peer Student Learning Platform</span>
             </div>
 
@@ -81,7 +84,7 @@ export const HeroSection: React.FC = () => {
               }`}
             >
               Learn Together.<br />
-              <span className="text-foreground-muted font-bold">Grow Together.</span>
+              <span className="gradient-accent font-extrabold">Grow Together.</span>
             </h1>
 
             {/* Supporting Description */}
@@ -103,7 +106,7 @@ export const HeroSection: React.FC = () => {
               <Link to={user ? '/discover' : '/register'} className="w-full sm:w-auto">
                 <Button
                   size="lg"
-                  variant="primary"
+                  variant="accent"
                   className="w-full sm:w-auto transition-transform hover:scale-[1.02] active:scale-[0.98]"
                   rightIcon={<ArrowRight className="w-4 h-4" />}
                 >
@@ -127,15 +130,15 @@ export const HeroSection: React.FC = () => {
               }`}
             >
               <div className="flex items-center gap-1.5 hover:text-foreground transition-colors">
-                <CheckCircle2 className="w-3.5 h-3.5 text-foreground" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-indigo-500" />
                 <span>Verified Student Network</span>
               </div>
               <div className="flex items-center gap-1.5 hover:text-foreground transition-colors">
-                <Shield className="w-3.5 h-3.5 text-foreground" />
+                <Shield className="w-3.5 h-3.5 text-indigo-500" />
                 <span>Zero Ads or Distractions</span>
               </div>
               <div className="flex items-center gap-1.5 hover:text-foreground transition-colors">
-                <Users className="w-3.5 h-3.5 text-foreground" />
+                <Users className="w-3.5 h-3.5 text-indigo-500" />
                 <span>Collaborative Study Rooms</span>
               </div>
             </div>
@@ -155,10 +158,10 @@ export const HeroSection: React.FC = () => {
                 transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
                 transition: tilt.x === 0 && tilt.y === 0 ? 'transform 0.5s ease-out' : 'transform 0.1s ease-out',
               }}
-              className="relative rounded-2xl border border-border bg-card shadow-2xl overflow-hidden hover:border-border-strong group"
+              className="relative rounded-2xl border border-border/80 dark:border-white/10 bg-card/90 backdrop-blur-xl shadow-2xl hover:shadow-glow-sm overflow-hidden hover:border-indigo-500/40 group border-t border-t-white/80 dark:border-t-white/15 transition-all duration-300"
             >
               {/* Window Chrome Header */}
-              <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-background-secondary text-xs text-foreground-muted select-none">
+              <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-background-secondary/80 backdrop-blur-md text-xs text-foreground-muted select-none">
                 <div className="flex items-center gap-2">
                   <div className="flex gap-1.5">
                     <div className="w-2.5 h-2.5 rounded-full bg-border-strong" />

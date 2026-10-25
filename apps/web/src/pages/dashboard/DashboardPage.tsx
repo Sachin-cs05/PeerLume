@@ -112,7 +112,7 @@ export const DashboardPage: React.FC = () => {
 
         <div className="flex items-center gap-2">
           <Link to="/sessions">
-            <Button variant="primary" size="sm" leftIcon={<Calendar className="w-3.5 h-3.5" />}>
+            <Button variant="accent" size="sm" leftIcon={<Calendar className="w-3.5 h-3.5" />}>
               Schedule Session
             </Button>
           </Link>
