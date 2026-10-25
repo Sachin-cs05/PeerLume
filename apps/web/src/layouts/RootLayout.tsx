@@ -1,18 +1,21 @@
 import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { Header } from './Header.js';
 import { Footer } from './Footer.js';
 import { IncomingCallDialog } from '../components/calls/IncomingCallDialog.js';
 import { CallModal } from '../components/calls/CallModal.js';
 
 export const RootLayout: React.FC = () => {
+  const location = useLocation();
+  const isLandingPage = location.pathname === '/';
+
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-150">
-      <Header />
+      {!isLandingPage && <Header />}
       <main className="flex-1 flex flex-col">
         <Outlet />
       </main>
-      <Footer />
+      {!isLandingPage && <Footer />}
       {/* Real-time Call Signaling & Calling UI */}
       <IncomingCallDialog />
       <CallModal />

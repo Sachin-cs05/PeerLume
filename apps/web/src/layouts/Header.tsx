@@ -78,7 +78,7 @@ export const Header: React.FC = () => {
                 <Layers className="w-4 h-4" />
               </div>
               <span className="text-base sm:text-lg font-bold tracking-tight text-foreground">
-                Peer<span className="text-foreground-muted font-normal">Learn</span>
+                Learn<span className="text-foreground-muted font-normal">Peer</span>
               </span>
             </Link>
 

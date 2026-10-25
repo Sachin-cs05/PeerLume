@@ -59,7 +59,7 @@ export const Footer: React.FC = () => {
       </div>
 
       <div className="max-w-7xl mx-auto mt-6 pt-5 border-t border-border flex flex-col sm:flex-row items-center justify-between text-xs text-foreground-muted gap-2">
-        <p>© {new Date().getFullYear()} PeerLearn. Designed for student peer collaboration.</p>
+        <p>© {new Date().getFullYear()} LearnPeer. Designed for student peer collaboration.</p>
         <p className="text-foreground-muted">
           Minimalist &amp; high-performance monochrome workspace
         </p>
