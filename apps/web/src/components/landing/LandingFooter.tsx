@@ -28,7 +28,7 @@ export const LandingFooter: React.FC = () => {
     e.preventDefault();
     setLegalModalContent({
       title: 'Privacy Policy',
-      body: 'LearnPeer is committed to preserving student privacy. We do not sell your personal information, search history, or session data to any advertisers or third-party brokers. Passwords are encrypted with Argon2id, session tokens are signed cryptographically, and video/audio calls are established peer-to-peer over WebRTC with end-to-end data transfer.',
+      body: 'PeerLearn is committed to preserving student privacy. We do not sell your personal information, search history, or session data to any advertisers or third-party brokers. Passwords are encrypted with Argon2id, session tokens are signed cryptographically, and video/audio calls are established peer-to-peer over WebRTC with end-to-end data transfer.',
     });
   };
 
@@ -36,7 +36,7 @@ export const LandingFooter: React.FC = () => {
     e.preventDefault();
     setLegalModalContent({
       title: 'Terms of Service',
-      body: 'By accessing LearnPeer, you agree to treat fellow student peers with mutual academic respect. Harassment, unauthorized spam, cheating on proctored examinations, or academic dishonesty will result in immediate profile suspension. LearnPeer is provided to foster collective student learning, peer instruction, and open collaboration.',
+      body: 'By accessing PeerLearn, you agree to treat fellow student peers with mutual academic respect. Harassment, unauthorized spam, cheating on proctored examinations, or academic dishonesty will result in immediate profile suspension. PeerLearn is provided to foster collective student learning, peer instruction, and open collaboration.',
     });
   };
 
@@ -44,7 +44,7 @@ export const LandingFooter: React.FC = () => {
     e.preventDefault();
     setLegalModalContent({
       title: 'Student Honor Code',
-      body: 'LearnPeer operates on student trust and integrity. We encourage open code reviews, derivation walkthroughs, and conceptual tutoring. Members pledge to learn through understanding and constructive questioning, rather than copying or plagiarizing peer assignments.',
+      body: 'PeerLearn operates on student trust and integrity. We encourage open code reviews, derivation walkthroughs, and conceptual tutoring. Members pledge to learn through understanding and constructive questioning, rather than copying or plagiarizing peer assignments.',
     });
   };
 
@@ -59,15 +59,15 @@ export const LandingFooter: React.FC = () => {
                 href="#hero"
                 onClick={(e) => handleAnchorClick(e, '#hero')}
                 className="flex items-center gap-2.5 group cursor-pointer inline-flex"
-                aria-label="LearnPeer home"
+                aria-label="PeerLearn home"
               >
                 <div className="w-8 h-8 rounded-lg bg-[#111113] text-white dark:bg-white dark:text-[#09090B] flex items-center justify-center font-bold text-sm shadow-xs transition-transform duration-200 group-hover:scale-105">
                   <Layers className="w-4 h-4" />
                 </div>
                 <div className="flex items-baseline">
-                  <span className="text-lg font-bold tracking-tight text-foreground">Learn</span>
+                  <span className="text-lg font-bold tracking-tight text-foreground">Peer</span>
                   <span className="text-lg font-normal text-foreground-secondary tracking-tight">
-                    Peer
+                    Learn
                   </span>
                 </div>
               </a>
@@ -118,11 +118,11 @@ export const LandingFooter: React.FC = () => {
                 </li>
                 <li>
                   <a
-                    href="#why-learnpeer"
-                    onClick={(e) => handleAnchorClick(e, '#why-learnpeer')}
+                    href="#why-peerlearn"
+                    onClick={(e) => handleAnchorClick(e, '#why-peerlearn')}
                     className="hover:text-foreground transition-colors"
                   >
-                    Why LearnPeer
+                    Why PeerLearn
                   </a>
                 </li>
                 <li>
@@ -212,7 +212,7 @@ export const LandingFooter: React.FC = () => {
 
           {/* Bottom Copyright Bar */}
           <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-foreground-muted gap-3">
-            <p>© {new Date().getFullYear()} LearnPeer. Engineered for student peer collaboration.</p>
+            <p>© {new Date().getFullYear()} PeerLearn. Engineered for student peer collaboration.</p>
             <p className="text-foreground-muted">
               Built with precision • Monochrome Black &amp; White design system
             </p>

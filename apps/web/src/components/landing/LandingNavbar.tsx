@@ -15,7 +15,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Features', href: '#features' },
   { label: 'How It Works', href: '#how-it-works' },
   { label: 'Showcase', href: '#showcase' },
-  { label: 'Why LearnPeer', href: '#why-learnpeer' },
+  { label: 'Why PeerLearn', href: '#why-peerlearn' },
   { label: 'FAQ', href: '#faq' },
 ];
 
@@ -107,14 +107,14 @@ export const LandingNavbar: React.FC = () => {
             href="#hero"
             onClick={(e) => handleNavClick(e, '#hero')}
             className="flex items-center gap-2.5 group cursor-pointer"
-            aria-label="LearnPeer home"
+            aria-label="PeerLearn home"
           >
             <div className="w-8 h-8 rounded-lg bg-[#111113] text-white dark:bg-white dark:text-[#09090B] flex items-center justify-center font-bold text-sm shadow-xs transition-transform duration-200 group-hover:scale-105">
               <Layers className="w-4 h-4" />
             </div>
             <div className="flex items-baseline">
-              <span className="text-lg font-bold tracking-tight text-foreground">Learn</span>
-              <span className="text-lg font-normal text-foreground-secondary tracking-tight">Peer</span>
+              <span className="text-lg font-bold tracking-tight text-foreground">Peer</span>
+              <span className="text-lg font-normal text-foreground-secondary tracking-tight">Learn</span>
             </div>
           </a>
 

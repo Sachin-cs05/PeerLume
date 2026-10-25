@@ -62,11 +62,11 @@ export const AudienceSection: React.FC = () => {
             <span>Tailored for Every Learner</span>
           </div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-foreground tracking-tight">
-            Who Is LearnPeer For?
+            Who Is PeerLearn For?
           </h2>
           <p className="text-base sm:text-lg text-foreground-secondary leading-relaxed font-normal">
             Whether preparing for high-stakes university exams or mastering modern software development,
-            LearnPeer provides your collaborative backbone.
+            PeerLearn provides your collaborative backbone.
           </p>
         </div>
 

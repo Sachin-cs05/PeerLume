@@ -60,7 +60,7 @@ export const ProblemSolutionSection: React.FC = () => {
             Learning Is Better When Knowledge Is Shared.
           </h2>
           <p className="text-base sm:text-lg text-foreground-secondary leading-relaxed font-normal">
-            Mastering tough academic subjects alone often leads to friction and burnout. LearnPeer
+            Mastering tough academic subjects alone often leads to friction and burnout. PeerLearn
             bridges the gap between individual effort and collective student intelligence.
           </p>
         </div>
@@ -108,7 +108,7 @@ export const ProblemSolutionSection: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Column: The LearnPeer Solution (Slides from Right) */}
+          {/* Right Column: The PeerLearn Solution (Slides from Right) */}
           <div
             className={`rounded-2xl border border-foreground/30 bg-card p-6 sm:p-8 space-y-6 flex flex-col justify-between shadow-sm relative overflow-hidden transition-all duration-700 delay-150 ease-out hover:border-foreground/50 ${
               isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'
@@ -120,7 +120,7 @@ export const ProblemSolutionSection: React.FC = () => {
                   <CheckCircle2 className="w-4 h-4 text-background" />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-foreground">The LearnPeer Advantage</h3>
+                  <h3 className="text-base font-bold text-foreground">The PeerLearn Advantage</h3>
                   <p className="text-xs text-foreground-muted">Engineered for collective academic growth</p>
                 </div>
               </div>

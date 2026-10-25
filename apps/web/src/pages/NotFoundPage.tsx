@@ -21,7 +21,7 @@ export const NotFoundPage: React.FC = () => {
         <div className="pt-2">
           <Link to="/">
             <Button variant="primary" leftIcon={<ArrowLeft className="w-4 h-4" />}>
-              Return to PeerLume
+              Return to PeerLearn
             </Button>
           </Link>
         </div>

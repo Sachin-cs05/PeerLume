@@ -56,7 +56,7 @@ export const BenefitsSection: React.FC = () => {
             </h2>
             <p className="text-base sm:text-lg text-foreground-secondary leading-relaxed font-normal">
               Peer instruction has been shown to double conceptual understanding compared to
-              passive lectures alone. LearnPeer provides the digital infrastructure to make it work.
+              passive lectures alone. PeerLearn provides the digital infrastructure to make it work.
             </p>
 
             <div className="p-4 rounded-xl border border-border bg-card/60 space-y-2 text-xs text-foreground-secondary">

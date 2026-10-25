@@ -1,4 +1,4 @@
-export const APP_NAME = 'LearnPeer';
+export const APP_NAME = 'PeerLearn';
 export const APP_TAGLINE = 'Learn Together. Grow Together.';
 export const APP_VERSION = '0.1.0';
 

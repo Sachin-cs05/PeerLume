@@ -62,7 +62,7 @@ export const HowItWorksSection: React.FC = () => {
             <span>Simple 4-Step Process</span>
           </div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-foreground tracking-tight">
-            How LearnPeer Works.
+            How PeerLearn Works.
           </h2>
           <p className="text-base sm:text-lg text-foreground-secondary leading-relaxed font-normal">
             A frictionless workflow designed to take you from studying in isolation to active,

@@ -87,7 +87,7 @@ export const ProductShowcase: React.FC = () => {
             Everything You Need to Learn Together.
           </h2>
           <p className="text-base sm:text-lg text-foreground-secondary leading-relaxed font-normal">
-            Take a hands-on preview of the core workflows inside LearnPeer. Built with focused,
+            Take a hands-on preview of the core workflows inside PeerLearn. Built with focused,
             minimalist tools tailored for serious academic progress.
           </p>
         </div>
@@ -138,7 +138,7 @@ export const ProductShowcase: React.FC = () => {
                 <div className="w-2.5 h-2.5 rounded-full bg-border-strong" />
               </div>
               <span className="ml-2 font-mono text-[11px] text-foreground-secondary">
-                learnpeer.app / {activeTab}
+                peerlearn.app / {activeTab}
               </span>
             </div>
             <div className="flex items-center gap-2 font-medium">

@@ -38,7 +38,7 @@ export const StudyRoomPage: React.FC = () => {
 
   // Toolbar State
   const [tool, setTool] = useState<WhiteboardTool>('pen');
-  const [color, setColor] = useState('#6366f1');
+  const [color, setColor] = useState('#111113');
   const [strokeWidth, setStrokeWidth] = useState(4);
   const [zoom, setZoom] = useState(1);
   const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'dirty' | 'failed'>('saved');

@@ -23,7 +23,7 @@ const WHY_POINTS: WhyItem[] = [
     title: 'Goal-Oriented Connections',
     tagline: 'Aligned incentives and mutual targets',
     description:
-      'Unlike broad social networks, connections on LearnPeer are formed around specific academic subjects, imminent exams, and technical project milestones.',
+      'Unlike broad social networks, connections on PeerLearn are formed around specific academic subjects, imminent exams, and technical project milestones.',
   },
   {
     icon: <Zap className="w-5 h-5 text-foreground transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6" />,
@@ -45,7 +45,7 @@ export const WhyLearnPeerSection: React.FC = () => {
   const { ref, isVisible } = useScrollReveal({ threshold: 0.15 });
 
   return (
-    <section id="why-learnpeer" ref={ref} className="py-16 md:py-24 border-b border-border/40 scroll-mt-16">
+    <section id="why-peerlearn" ref={ref} className="py-16 md:py-24 border-b border-border/40 scroll-mt-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div
@@ -61,7 +61,7 @@ export const WhyLearnPeerSection: React.FC = () => {
           </h2>
           <p className="text-base sm:text-lg text-foreground-secondary leading-relaxed font-normal">
             Research consistently demonstrates that collaborative peer study outperforms solitary
-            cramming. Here is how LearnPeer maximizes your academic growth.
+            cramming. Here is how PeerLearn maximizes your academic growth.
           </p>
         </div>
 
@@ -100,3 +100,5 @@ export const WhyLearnPeerSection: React.FC = () => {
     </section>
   );
 };
+
+export const WhyPeerLearnSection = WhyLearnPeerSection;

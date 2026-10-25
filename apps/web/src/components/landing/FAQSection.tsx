@@ -11,15 +11,15 @@ interface FAQItem {
 const FAQS: FAQItem[] = [
   {
     id: 'faq-1',
-    question: 'What is LearnPeer?',
+    question: 'What is PeerLearn?',
     answer:
-      'LearnPeer is a dedicated peer-to-peer student collaboration platform. It helps students connect with study partners, schedule focused academic blocks, chat in real time, pair-program using a shared multi-cursor code editor, and collaborate on infinite digital whiteboards.',
+      'PeerLearn is a dedicated peer-to-peer student collaboration platform. It helps students connect with study partners, schedule focused academic blocks, chat in real time, pair-program using a shared multi-cursor code editor, and collaborate on infinite digital whiteboards.',
   },
   {
     id: 'faq-2',
     question: 'How does the partner discovery algorithm find matching peers?',
     answer:
-      'LearnPeer matches students based on several academic dimensions: currently enrolled courses, shared learning goals, complementary skills (e.g. one student strong in Algorithms helping another who excels in Databases), university branch, semester, and overlapping availability.',
+      'PeerLearn matches students based on several academic dimensions: currently enrolled courses, shared learning goals, complementary skills (e.g. one student strong in Algorithms helping another who excels in Databases), university branch, semester, and overlapping availability.',
   },
   {
     id: 'faq-3',
@@ -29,21 +29,21 @@ const FAQS: FAQItem[] = [
   },
   {
     id: 'faq-4',
-    question: 'Is LearnPeer free to use for students?',
+    question: 'Is PeerLearn free to use for students?',
     answer:
-      'Yes, LearnPeer is completely free for students. Our mission is to democratize high-quality academic peer collaboration with zero subscription paywalls, ads, or commercial distractions.',
+      'Yes, PeerLearn is completely free for students. Our mission is to democratize high-quality academic peer collaboration with zero subscription paywalls, ads, or commercial distractions.',
   },
   {
     id: 'faq-5',
-    question: 'Does LearnPeer support built-in audio and video calling?',
+    question: 'Does PeerLearn support built-in audio and video calling?',
     answer:
-      'Yes. LearnPeer integrates native peer-to-peer WebRTC audio and video calling directly in your browser. You can talk through tough derivations and code reviews with sub-30ms latency without installing third-party meeting software.',
+      'Yes. PeerLearn integrates native peer-to-peer WebRTC audio and video calling directly in your browser. You can talk through tough derivations and code reviews with sub-30ms latency without installing third-party meeting software.',
   },
   {
     id: 'faq-6',
     question: 'Can we write code collaboratively in real time?',
     answer:
-      'Absolutely. LearnPeer includes a collaborative Monaco Editor (the same technology behind VS Code) powered by Yjs CRDT synchronization. Multiple students can edit the same files simultaneously with distinct color-coded cursors across 9+ programming languages including TypeScript, Python, C++, and Java.',
+      'Absolutely. PeerLearn includes a collaborative Monaco Editor (the same technology behind VS Code) powered by Yjs CRDT synchronization. Multiple students can edit the same files simultaneously with distinct color-coded cursors across 9+ programming languages including TypeScript, Python, C++, and Java.',
   },
   {
     id: 'faq-7',
@@ -53,7 +53,7 @@ const FAQS: FAQItem[] = [
   },
   {
     id: 'faq-8',
-    question: 'How does LearnPeer protect student privacy and account safety?',
+    question: 'How does PeerLearn protect student privacy and account safety?',
     answer:
       'Student security is foundational. All passwords are encrypted using state-of-the-art Argon2id hashing, API endpoints are safeguarded with strict JWT session verification and Helmet headers, and personal contact details are never exposed to advertisers or third parties.',
   },

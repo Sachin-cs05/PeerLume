@@ -166,7 +166,7 @@ export const HeroSection: React.FC = () => {
                     <div className="w-2.5 h-2.5 rounded-full bg-border-strong" />
                   </div>
                   <span className="ml-2 font-mono text-[11px] text-foreground-secondary">
-                    learnpeer.workspace / algorithms-session
+                    peerlearn.workspace / algorithms-session
                   </span>
                 </div>
                 <div className="flex items-center gap-2 font-medium">

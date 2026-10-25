@@ -165,7 +165,7 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({ isOpen, on
           {loading ? (
             <div className="py-12 text-center text-foreground-muted">
               <div className="inline-block animate-spin w-6 h-6 border-2 border-foreground border-t-transparent rounded-full mb-2"></div>
-              <p className="text-sm">Searching across LearnPeer...</p>
+              <p className="text-sm">Searching across PeerLearn...</p>
             </div>
           ) : results.length > 0 ? (
             results.map((item, idx) => (
@@ -225,7 +225,7 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({ isOpen, on
             </div>
           ) : (
             <div className="py-8 text-center text-foreground-muted text-xs">
-              Type to search across LearnPeer or use <kbd className="px-1.5 py-0.5 rounded bg-surface border border-border">↑</kbd> <kbd className="px-1.5 py-0.5 rounded bg-surface border border-border">↓</kbd> to navigate
+              Type to search across PeerLearn or use <kbd className="px-1.5 py-0.5 rounded bg-surface border border-border">↑</kbd> <kbd className="px-1.5 py-0.5 rounded bg-surface border border-border">↓</kbd> to navigate
             </div>
           )}
         </div>

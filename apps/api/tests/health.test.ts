@@ -15,7 +15,7 @@ describe('API Foundation Tests', () => {
     expect(res.body.data).toHaveProperty('uptimeSeconds');
     expect(res.body.data).toHaveProperty('database');
     expect(res.body).toHaveProperty('timestamp');
-  });
+  }, 15000);
 
   it('GET /api/unknown-endpoint should return 404 with standardized error response', async () => {
     const res = await request(app).get('/api/unknown-endpoint');

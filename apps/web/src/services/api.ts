@@ -59,6 +59,27 @@ export interface ApiResult<T> {
   status: number;
 }
 
+let refreshPromise: Promise<boolean> | null = null;
+
+async function tryRefreshToken(): Promise<boolean> {
+  if (!refreshPromise) {
+    refreshPromise = (async () => {
+      try {
+        const res = await fetch(`${API_BASE_URL}/auth/refresh`, {
+          method: 'POST',
+          credentials: 'include',
+        });
+        return res.ok;
+      } catch {
+        return false;
+      } finally {
+        refreshPromise = null;
+      }
+    })();
+  }
+  return refreshPromise;
+}
+
 export async function apiRequest<T>(
   endpoint: string,
   options?: RequestInit
@@ -66,7 +87,7 @@ export async function apiRequest<T>(
   const url = `${API_BASE_URL}${endpoint.startsWith('/') ? endpoint : `/${endpoint}`}`;
 
   try {
-    const response = await fetch(url, {
+    let response = await fetch(url, {
       credentials: 'include', // Ensures HttpOnly cookies are transmitted
       headers: {
         ...(options?.body instanceof FormData ? {} : { 'Content-Type': 'application/json' }),
@@ -74,6 +95,27 @@ export async function apiRequest<T>(
       },
       ...options,
     });
+
+    // Auto-refresh token if 401 Unauthorized (except on auth entrypoints)
+    if (
+      response.status === 401 &&
+      !endpoint.includes('/auth/login') &&
+      !endpoint.includes('/auth/refresh') &&
+      !endpoint.includes('/auth/register') &&
+      !endpoint.includes('/auth/logout')
+    ) {
+      const refreshed = await tryRefreshToken();
+      if (refreshed) {
+        response = await fetch(url, {
+          credentials: 'include',
+          headers: {
+            ...(options?.body instanceof FormData ? {} : { 'Content-Type': 'application/json' }),
+            ...options?.headers,
+          },
+          ...options,
+        });
+      }
+    }
 
     const isJson = response.headers.get('content-type')?.includes('application/json');
     const body = isJson ? await response.json() : null;
