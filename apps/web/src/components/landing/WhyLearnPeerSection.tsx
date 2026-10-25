@@ -1,6 +1,6 @@
 import React from 'react';
 import { Sparkles, Target, Zap, ShieldCheck } from 'lucide-react';
-import { Card } from '../ui/Card.js';
+import { SpotlightCard } from './SpotlightCard.js';
 import { useScrollReveal } from '../../hooks/useScrollReveal.js';
 
 interface WhyItem {
@@ -12,28 +12,28 @@ interface WhyItem {
 
 const WHY_POINTS: WhyItem[] = [
   {
-    icon: <Sparkles className="w-5 h-5 text-foreground" />,
+    icon: <Sparkles className="w-5 h-5 text-foreground transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6" />,
     title: 'Peer-Based Active Learning',
     tagline: 'Deep comprehension through explanation',
     description:
       'Explaining a difficult concept to a fellow peer forces mental synthesis (the Feynman Technique), turning fragile memorization into genuine conceptual mastery.',
   },
   {
-    icon: <Target className="w-5 h-5 text-foreground" />,
+    icon: <Target className="w-5 h-5 text-foreground transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3" />,
     title: 'Goal-Oriented Connections',
     tagline: 'Aligned incentives and mutual targets',
     description:
       'Unlike broad social networks, connections on LearnPeer are formed around specific academic subjects, imminent exams, and technical project milestones.',
   },
   {
-    icon: <Zap className="w-5 h-5 text-foreground" />,
+    icon: <Zap className="w-5 h-5 text-foreground transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6" />,
     title: 'Zero-Friction Collaboration',
     tagline: 'Built for study groups, not corporate meetings',
     description:
       'No more jumping across three separate apps to share a code snippet, sketch a diagram, and talk. Everything lives in one seamless, high-speed study room.',
   },
   {
-    icon: <ShieldCheck className="w-5 h-5 text-foreground" />,
+    icon: <ShieldCheck className="w-5 h-5 text-foreground transition-transform duration-300 group-hover:scale-110" />,
     title: 'Accountability & Momentum',
     tagline: 'Consistent study habits that compound',
     description:
@@ -65,31 +65,35 @@ export const WhyLearnPeerSection: React.FC = () => {
           </p>
         </div>
 
-        {/* 2x2 Grid */}
-        <div
-          className={`grid grid-cols-1 md:grid-cols-2 gap-6 transition-all duration-700 delay-150 ease-out ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-          }`}
-        >
-          {WHY_POINTS.map((item) => (
-            <Card
+        {/* 2x2 Grid with Spotlight & Staggered delays */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {WHY_POINTS.map((item, index) => (
+            <div
               key={item.title}
-              hoverEffect
-              className="p-6 sm:p-8 space-y-4 bg-card border border-border"
+              style={{
+                transitionDelay: `${index * 80}ms`,
+              }}
+              className={`transition-all duration-700 ease-out ${
+                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              }`}
             >
-              <div className="w-10 h-10 rounded-xl bg-surface-hover border border-border flex items-center justify-center">
-                {item.icon}
-              </div>
-              <div className="space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-bold text-foreground tracking-tight">{item.title}</h3>
+              <SpotlightCard className="p-6 sm:p-8 space-y-4 group h-full">
+                <div className="w-10 h-10 rounded-xl bg-surface-hover border border-border flex items-center justify-center transition-colors group-hover:border-foreground/30">
+                  {item.icon}
                 </div>
-                <p className="text-xs font-mono text-foreground-muted">{item.tagline}</p>
-                <p className="text-sm text-foreground-secondary leading-relaxed pt-2 font-normal">
-                  {item.description}
-                </p>
-              </div>
-            </Card>
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-bold text-foreground tracking-tight group-hover:text-foreground">
+                      {item.title}
+                    </h3>
+                  </div>
+                  <p className="text-xs font-mono text-foreground-muted">{item.tagline}</p>
+                  <p className="text-sm text-foreground-secondary leading-relaxed pt-2 font-normal">
+                    {item.description}
+                  </p>
+                </div>
+              </SpotlightCard>
+            </div>
           ))}
         </div>
       </div>

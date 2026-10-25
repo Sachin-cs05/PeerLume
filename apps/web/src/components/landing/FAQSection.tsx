@@ -87,7 +87,7 @@ export const FAQSection: React.FC = () => {
           </p>
         </div>
 
-        {/* Accordion List */}
+        {/* Accordion List with CSS Grid Smooth Transition */}
         <div
           className={`space-y-3 transition-all duration-700 delay-150 ease-out ${
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
@@ -98,9 +98,9 @@ export const FAQSection: React.FC = () => {
             return (
               <div
                 key={faq.id}
-                className={`rounded-xl border transition-colors duration-200 overflow-hidden ${
+                className={`rounded-xl border transition-all duration-200 overflow-hidden ${
                   isOpen
-                    ? 'border-border-strong bg-card'
+                    ? 'border-border-strong bg-card shadow-xs'
                     : 'border-border bg-card/60 hover:bg-card hover:border-border-strong/70'
                 }`}
               >
@@ -116,24 +116,29 @@ export const FAQSection: React.FC = () => {
                     {faq.question}
                   </span>
                   <div
-                    className={`w-6 h-6 rounded-lg bg-surface-hover border border-border flex items-center justify-center shrink-0 transition-transform duration-200 ${
-                      isOpen ? 'rotate-180' : 'rotate-0'
+                    className={`w-7 h-7 rounded-lg bg-surface-hover border border-border flex items-center justify-center shrink-0 transition-transform duration-300 ease-out ${
+                      isOpen ? 'rotate-180 bg-surface-hover/90 border-foreground/30' : 'rotate-0'
                     }`}
                   >
-                    <ChevronDown className="w-3.5 h-3.5 text-foreground" />
+                    <ChevronDown className="w-4 h-4 text-foreground" />
                   </div>
                 </button>
 
-                {isOpen && (
-                  <div
-                    id={`panel-${faq.id}`}
-                    role="region"
-                    aria-labelledby={`btn-${faq.id}`}
-                    className="px-4 pb-5 sm:px-5 sm:pb-6 text-xs sm:text-sm text-foreground-secondary leading-relaxed animate-fade-in border-t border-border/40 pt-3"
-                  >
-                    {faq.answer}
+                {/* CSS Grid Smooth Expand / Collapse Container */}
+                <div
+                  id={`panel-${faq.id}`}
+                  role="region"
+                  aria-labelledby={`btn-${faq.id}`}
+                  className={`accordion-grid overflow-hidden ${
+                    isOpen ? 'accordion-grid-expanded' : 'accordion-grid-collapsed'
+                  }`}
+                >
+                  <div className="min-h-0">
+                    <div className="px-4 pb-5 sm:px-5 sm:pb-6 text-xs sm:text-sm text-foreground-secondary leading-relaxed border-t border-border/40 pt-3">
+                      {faq.answer}
+                    </div>
                   </div>
-                )}
+                </div>
               </div>
             );
           })}

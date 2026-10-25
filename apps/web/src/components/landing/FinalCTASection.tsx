@@ -16,59 +16,65 @@ export const FinalCTASection: React.FC = () => {
             isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-6 scale-98'
           }`}
         >
-          {/* Subtle Accent Glow effect using monochrome contrast */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/20 dark:border-black/20 text-xs font-semibold">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Join Verified Students</span>
+          {/* Subtle Monochrome Shimmer Beam */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-3xl">
+            <div className="w-1/2 h-full bg-gradient-to-r from-transparent via-white/10 dark:via-black/5 to-transparent -skew-x-12 animate-shimmer" />
           </div>
 
-          <div className="space-y-3 max-w-2xl mx-auto">
-            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
-              Your Next Learning Partner Is One Connection Away.
-            </h2>
-            <p className="text-sm sm:text-base opacity-80 leading-relaxed font-normal">
-              Connect with fellow students, share your knowledge, and discover new ways to learn
-              together. Zero fees, zero distractions.
-            </p>
-          </div>
+          <div className="relative z-10 space-y-6">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/20 dark:border-black/20 text-xs font-semibold backdrop-blur-xs">
+              <Sparkles className="w-3.5 h-3.5 animate-pulse-dot" />
+              <span>Join Verified Students</span>
+            </div>
 
-          {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
-            {user ? (
-              <Link to="/dashboard" className="w-full sm:w-auto">
-                <button className="w-full sm:w-auto px-6 py-3 rounded-xl bg-white text-[#09090B] dark:bg-[#09090B] dark:text-white font-bold text-sm hover:opacity-90 transition-opacity shadow-lg flex items-center justify-center gap-2 cursor-pointer">
-                  <span>Go to My Dashboard</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </Link>
-            ) : (
-              <>
-                <Link to="/register" className="w-full sm:w-auto">
-                  <button className="w-full sm:w-auto px-6 py-3 rounded-xl bg-white text-[#09090B] dark:bg-[#09090B] dark:text-white font-bold text-sm hover:opacity-90 transition-opacity shadow-lg flex items-center justify-center gap-2 cursor-pointer">
-                    <span>Get Started Free</span>
-                    <ArrowRight className="w-4 h-4" />
+            <div className="space-y-3 max-w-2xl mx-auto">
+              <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
+                Your Next Learning Partner Is One Connection Away.
+              </h2>
+              <p className="text-sm sm:text-base opacity-80 leading-relaxed font-normal">
+                Connect with fellow students, share your knowledge, and discover new ways to learn
+                together. Zero fees, zero distractions.
+              </p>
+            </div>
+
+            {/* Action Buttons with magnetic scale on hover */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
+              {user ? (
+                <Link to="/dashboard" className="w-full sm:w-auto">
+                  <button className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-white text-[#09090B] dark:bg-[#09090B] dark:text-white font-bold text-sm hover:opacity-95 hover:scale-[1.03] active:scale-[0.98] transition-all shadow-xl flex items-center justify-center gap-2 cursor-pointer group">
+                    <span>Go to My Dashboard</span>
+                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                   </button>
                 </Link>
-                <Link to="/login" className="w-full sm:w-auto">
-                  <button className="w-full sm:w-auto px-6 py-3 rounded-xl border border-white/30 dark:border-black/30 font-semibold text-sm hover:bg-white/10 dark:hover:bg-black/10 transition-colors cursor-pointer">
-                    Log In to Account
-                  </button>
-                </Link>
-              </>
-            )}
-          </div>
+              ) : (
+                <>
+                  <Link to="/register" className="w-full sm:w-auto">
+                    <button className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-white text-[#09090B] dark:bg-[#09090B] dark:text-white font-bold text-sm hover:opacity-95 hover:scale-[1.03] active:scale-[0.98] transition-all shadow-xl flex items-center justify-center gap-2 cursor-pointer group">
+                      <span>Get Started Free</span>
+                      <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                    </button>
+                  </Link>
+                  <Link to="/login" className="w-full sm:w-auto">
+                    <button className="w-full sm:w-auto px-7 py-3.5 rounded-xl border border-white/30 dark:border-black/30 font-semibold text-sm hover:bg-white/10 dark:hover:bg-black/10 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer">
+                      Log In to Account
+                    </button>
+                  </Link>
+                </>
+              )}
+            </div>
 
-          {/* Guarantee Badges */}
-          <div className="pt-6 flex flex-wrap items-center justify-center gap-6 text-xs opacity-70">
-            <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-3.5 h-3.5" /> Instant Account Activation
-            </span>
-            <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-3.5 h-3.5" /> 100% Free for Students
-            </span>
-            <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-3.5 h-3.5" /> End-to-End Privacy
-            </span>
+            {/* Guarantee Badges */}
+            <div className="pt-6 flex flex-wrap items-center justify-center gap-6 text-xs opacity-75">
+              <span className="flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5" /> Instant Account Activation
+              </span>
+              <span className="flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5" /> 100% Free for Students
+              </span>
+              <span className="flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5" /> End-to-End Privacy
+              </span>
+            </div>
           </div>
         </div>
       </div>

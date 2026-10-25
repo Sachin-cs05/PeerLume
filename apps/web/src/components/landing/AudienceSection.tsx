@@ -1,6 +1,6 @@
 import React from 'react';
 import { GraduationCap, Code2, Cpu, BookOpen } from 'lucide-react';
-import { Card } from '../ui/Card.js';
+import { SpotlightCard } from './SpotlightCard.js';
 import { useScrollReveal } from '../../hooks/useScrollReveal.js';
 
 interface AudienceItem {
@@ -13,7 +13,7 @@ interface AudienceItem {
 
 const AUDIENCES: AudienceItem[] = [
   {
-    icon: <GraduationCap className="w-5 h-5 text-foreground" />,
+    icon: <GraduationCap className="w-5 h-5 text-foreground transition-transform duration-300 group-hover:scale-110" />,
     title: 'University & College Students',
     subtitle: 'Undergraduates & Postgraduates',
     description:
@@ -21,7 +21,7 @@ const AUDIENCES: AudienceItem[] = [
     badge: 'Campus Academics',
   },
   {
-    icon: <Code2 className="w-5 h-5 text-foreground" />,
+    icon: <Code2 className="w-5 h-5 text-foreground transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6" />,
     title: 'Collaborative Coders',
     subtitle: 'Software & Algorithm Learners',
     description:
@@ -29,7 +29,7 @@ const AUDIENCES: AudienceItem[] = [
     badge: 'Pair Programming',
   },
   {
-    icon: <Cpu className="w-5 h-5 text-foreground" />,
+    icon: <Cpu className="w-5 h-5 text-foreground transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3" />,
     title: 'Self-Directed Skill Builders',
     subtitle: 'Technology & Tool Enthusiasts',
     description:
@@ -37,7 +37,7 @@ const AUDIENCES: AudienceItem[] = [
     badge: 'Tech Skills',
   },
   {
-    icon: <BookOpen className="w-5 h-5 text-foreground" />,
+    icon: <BookOpen className="w-5 h-5 text-foreground transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3" />,
     title: 'Exam & Interview Study Circles',
     subtitle: 'Focused Test Preparation',
     description:
@@ -70,42 +70,46 @@ export const AudienceSection: React.FC = () => {
           </p>
         </div>
 
-        {/* 4 Cards Grid */}
-        <div
-          className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 transition-all duration-700 delay-150 ease-out ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-          }`}
-        >
-          {AUDIENCES.map((item) => (
-            <Card
+        {/* 4 Cards Grid with Spotlight and Staggered Delay */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {AUDIENCES.map((item, index) => (
+            <div
               key={item.title}
-              hoverEffect
-              className="p-6 space-y-4 flex flex-col justify-between bg-card border border-border"
+              style={{
+                transitionDelay: `${index * 80}ms`,
+              }}
+              className={`transition-all duration-700 ease-out ${
+                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              }`}
             >
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="w-10 h-10 rounded-xl bg-surface-hover border border-border flex items-center justify-center">
-                    {item.icon}
+              <SpotlightCard className="p-6 space-y-4 flex flex-col justify-between group h-full">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="w-10 h-10 rounded-xl bg-surface-hover border border-border flex items-center justify-center transition-colors group-hover:border-foreground/30">
+                      {item.icon}
+                    </div>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-hover border border-border text-foreground-muted transition-colors group-hover:text-foreground">
+                      {item.badge}
+                    </span>
                   </div>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-hover border border-border text-foreground-muted">
-                    {item.badge}
-                  </span>
+
+                  <div className="space-y-1">
+                    <h3 className="text-base font-bold text-foreground tracking-tight group-hover:text-foreground">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs font-mono text-foreground-muted">{item.subtitle}</p>
+                  </div>
+
+                  <p className="text-xs sm:text-sm text-foreground-secondary leading-relaxed font-normal pt-1">
+                    {item.description}
+                  </p>
                 </div>
 
-                <div className="space-y-1">
-                  <h3 className="text-base font-bold text-foreground tracking-tight">{item.title}</h3>
-                  <p className="text-xs font-mono text-foreground-muted">{item.subtitle}</p>
+                <div className="pt-3 border-t border-border/60 text-[11px] text-foreground-muted">
+                  Student-tested workflows &amp; zero fluff.
                 </div>
-
-                <p className="text-xs sm:text-sm text-foreground-secondary leading-relaxed font-normal pt-1">
-                  {item.description}
-                </p>
-              </div>
-
-              <div className="pt-3 border-t border-border/60 text-[11px] text-foreground-muted">
-                Student-tested workflows &amp; zero fluff.
-              </div>
-            </Card>
+              </SpotlightCard>
+            </div>
           ))}
         </div>
       </div>

@@ -45,7 +45,7 @@ export const ProblemSolutionSection: React.FC = () => {
   ];
 
   return (
-    <section ref={ref} className="py-16 md:py-24 border-b border-border/40">
+    <section ref={ref} className="py-16 md:py-24 border-b border-border/40 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div
@@ -65,14 +65,14 @@ export const ProblemSolutionSection: React.FC = () => {
           </p>
         </div>
 
-        {/* 2-Column Comparison Layout */}
-        <div
-          className={`grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch transition-all duration-700 delay-150 ease-out ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-          }`}
-        >
-          {/* Left Column: The Problem */}
-          <div className="rounded-2xl border border-border/80 bg-card/60 p-6 sm:p-8 space-y-6 flex flex-col justify-between">
+        {/* 2-Column Comparison Layout with Dual-Slide Animation */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+          {/* Left Column: The Problem (Slides from Left) */}
+          <div
+            className={`rounded-2xl border border-border/80 bg-card/60 p-6 sm:p-8 space-y-6 flex flex-col justify-between transition-all duration-700 delay-100 ease-out hover:border-border-strong ${
+              isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'
+            }`}
+          >
             <div className="space-y-4">
               <div className="flex items-center gap-2.5 pb-3 border-b border-border">
                 <div className="w-8 h-8 rounded-lg bg-surface-hover border border-border flex items-center justify-center text-foreground-muted">
@@ -86,12 +86,14 @@ export const ProblemSolutionSection: React.FC = () => {
 
               <div className="space-y-4 pt-2">
                 {challenges.map((item) => (
-                  <div key={item.title} className="flex items-start gap-3">
-                    <div className="mt-1 w-4 h-4 rounded-full bg-surface-hover border border-border flex items-center justify-center shrink-0">
+                  <div key={item.title} className="flex items-start gap-3 group">
+                    <div className="mt-1 w-4 h-4 rounded-full bg-surface-hover border border-border flex items-center justify-center shrink-0 group-hover:border-foreground/40 transition-colors">
                       <div className="w-1.5 h-1.5 rounded-full bg-foreground-muted" />
                     </div>
                     <div className="space-y-0.5">
-                      <h4 className="text-sm font-semibold text-foreground">{item.title}</h4>
+                      <h4 className="text-sm font-semibold text-foreground group-hover:text-foreground/90">
+                        {item.title}
+                      </h4>
                       <p className="text-xs sm:text-sm text-foreground-secondary leading-relaxed font-normal">
                         {item.description}
                       </p>
@@ -106,11 +108,15 @@ export const ProblemSolutionSection: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Column: The LearnPeer Solution */}
-          <div className="rounded-2xl border border-foreground/30 bg-card p-6 sm:p-8 space-y-6 flex flex-col justify-between shadow-sm relative overflow-hidden">
+          {/* Right Column: The LearnPeer Solution (Slides from Right) */}
+          <div
+            className={`rounded-2xl border border-foreground/30 bg-card p-6 sm:p-8 space-y-6 flex flex-col justify-between shadow-sm relative overflow-hidden transition-all duration-700 delay-150 ease-out hover:border-foreground/50 ${
+              isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'
+            }`}
+          >
             <div className="space-y-4">
               <div className="flex items-center gap-2.5 pb-3 border-b border-border">
-                <div className="w-8 h-8 rounded-lg bg-foreground text-background flex items-center justify-center">
+                <div className="w-8 h-8 rounded-lg bg-foreground text-background flex items-center justify-center transition-transform hover:scale-105">
                   <CheckCircle2 className="w-4 h-4 text-background" />
                 </div>
                 <div>
@@ -121,8 +127,8 @@ export const ProblemSolutionSection: React.FC = () => {
 
               <div className="space-y-4 pt-2">
                 {solutions.map((item) => (
-                  <div key={item.title} className="flex items-start gap-3">
-                    <div className="mt-1 w-4 h-4 rounded-full bg-foreground text-background flex items-center justify-center shrink-0">
+                  <div key={item.title} className="flex items-start gap-3 group">
+                    <div className="mt-1 w-4 h-4 rounded-full bg-foreground text-background flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                       <div className="w-1.5 h-1.5 rounded-full bg-background" />
                     </div>
                     <div className="space-y-0.5">
@@ -140,10 +146,10 @@ export const ProblemSolutionSection: React.FC = () => {
               <span className="text-xs text-foreground-muted">Accelerate your understanding</span>
               <Link
                 to="/register"
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-foreground hover:underline"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-foreground hover:underline group"
               >
                 <span>Join a study circle</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-3.5 h-3.5 transition-transform duration-150 group-hover:translate-x-1" />
               </Link>
             </div>
           </div>

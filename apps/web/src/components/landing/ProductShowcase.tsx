@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   LayoutDashboard,
   Compass,
@@ -8,6 +8,7 @@ import {
   Terminal,
   Search,
   Clock,
+  TrendingUp,
 } from 'lucide-react';
 import { Badge } from '../ui/Badge.js';
 import { useScrollReveal } from '../../hooks/useScrollReveal.js';
@@ -27,9 +28,48 @@ const TABS: TabItem[] = [
   { id: 'workspace', label: 'Collaborative Workspace', icon: <Code2 className="w-4 h-4" /> },
 ];
 
+function useAnimatedCounter(target: number, decimals: number = 0, active: boolean = true) {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!active) {
+      setCount(0);
+      return;
+    }
+    let startTimestamp: number | null = null;
+    let frameId: number;
+    const duration = 900;
+
+    const step = (timestamp: number) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+      const current = easeOut * target;
+      setCount(Number(current.toFixed(decimals)));
+
+      if (progress < 1) {
+        frameId = requestAnimationFrame(step);
+      } else {
+        setCount(target);
+      }
+    };
+
+    frameId = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(frameId);
+  }, [target, decimals, active]);
+
+  return count;
+}
+
 export const ProductShowcase: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabId>('dashboard');
   const { ref, isVisible } = useScrollReveal({ threshold: 0.1 });
+
+  // Animated counters for dashboard tab
+  const studyHours = useAnimatedCounter(34.5, 1, isVisible && activeTab === 'dashboard');
+  const sessionsCount = useAnimatedCounter(18, 0, isVisible && activeTab === 'dashboard');
+  const peersCount = useAnimatedCounter(12, 0, isVisible && activeTab === 'dashboard');
+  const streakCount = useAnimatedCounter(7, 0, isVisible && activeTab === 'dashboard');
 
   return (
     <section id="showcase" ref={ref} className="py-16 md:py-24 border-b border-border/40 scroll-mt-16">
@@ -52,7 +92,7 @@ export const ProductShowcase: React.FC = () => {
           </p>
         </div>
 
-        {/* Tab Selection Bar */}
+        {/* Tab Selection Bar with Sliding Transition */}
         <div className="flex items-center justify-center mb-8 overflow-x-auto py-2">
           <div
             role="tablist"
@@ -69,10 +109,10 @@ export const ProductShowcase: React.FC = () => {
                   aria-selected={isActive}
                   aria-controls={`panel-${tab.id}`}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-150 cursor-pointer ${
+                  className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer ${
                     isActive
-                      ? 'bg-foreground text-background font-semibold shadow-xs'
-                      : 'text-foreground-secondary hover:text-foreground hover:bg-surface-hover'
+                      ? 'bg-foreground text-background font-semibold shadow-xs scale-100'
+                      : 'text-foreground-secondary hover:text-foreground hover:bg-surface-hover hover:scale-[1.02]'
                   }`}
                 >
                   {tab.icon}
@@ -85,12 +125,12 @@ export const ProductShowcase: React.FC = () => {
 
         {/* Tab Content Window Container */}
         <div
-          className={`rounded-2xl border border-border bg-card shadow-xl overflow-hidden transition-all duration-700 delay-150 ease-out ${
+          className={`rounded-2xl border border-border bg-card shadow-2xl overflow-hidden transition-all duration-700 delay-150 ease-out hover:border-border-strong ${
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
           }`}
         >
           {/* Window Chrome Header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-background-secondary text-xs text-foreground-muted">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-background-secondary text-xs text-foreground-muted select-none">
             <div className="flex items-center gap-2">
               <div className="flex gap-1.5">
                 <div className="w-2.5 h-2.5 rounded-full bg-border-strong" />
@@ -102,16 +142,17 @@ export const ProductShowcase: React.FC = () => {
               </span>
             </div>
             <div className="flex items-center gap-2 font-medium">
-              <span className="w-2 h-2 rounded-full bg-emerald-500" />
-              <span className="text-[11px] text-foreground-secondary">Live System Preview</span>
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse-dot" />
+              <span className="text-[11px] text-foreground-secondary">Interactive Mode</span>
             </div>
           </div>
 
-          {/* Tab Panels */}
+          {/* Tab Panels with smooth cross-fade animation */}
           <div className="p-4 sm:p-6 md:p-8 bg-card min-h-[440px]">
-            {/* Panel 1: Dashboard */}
+            {/* Panel 1: Dashboard with live counter animation */}
             {activeTab === 'dashboard' && (
               <div
+                key="panel-dashboard"
                 role="tabpanel"
                 id="panel-dashboard"
                 aria-labelledby="tab-dashboard"
@@ -119,32 +160,42 @@ export const ProductShowcase: React.FC = () => {
               >
                 {/* Stats Bar */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-                  <div className="p-4 rounded-xl border border-border bg-background space-y-1">
-                    <span className="text-[11px] font-semibold text-foreground-muted uppercase tracking-wider">
-                      Study Hours
+                  <div className="p-4 rounded-xl border border-border bg-background space-y-1 hover:border-border-strong transition-colors">
+                    <span className="text-[11px] font-semibold text-foreground-muted uppercase tracking-wider flex items-center gap-1">
+                      <Clock className="w-3 h-3" /> Study Hours
                     </span>
-                    <div className="text-2xl font-extrabold text-foreground">34.5 hrs</div>
-                    <span className="text-[10px] text-foreground-muted">This month (+12% vs last)</span>
+                    <div className="text-2xl font-extrabold text-foreground font-mono">
+                      {studyHours} hrs
+                    </div>
+                    <span className="text-[10px] text-emerald-500 font-medium flex items-center gap-0.5">
+                      <TrendingUp className="w-3 h-3" /> +12% this month
+                    </span>
                   </div>
-                  <div className="p-4 rounded-xl border border-border bg-background space-y-1">
+                  <div className="p-4 rounded-xl border border-border bg-background space-y-1 hover:border-border-strong transition-colors">
                     <span className="text-[11px] font-semibold text-foreground-muted uppercase tracking-wider">
                       Completed Sessions
                     </span>
-                    <div className="text-2xl font-extrabold text-foreground">18</div>
+                    <div className="text-2xl font-extrabold text-foreground font-mono">
+                      {sessionsCount}
+                    </div>
                     <span className="text-[10px] text-foreground-muted">Across 4 subjects</span>
                   </div>
-                  <div className="p-4 rounded-xl border border-border bg-background space-y-1">
+                  <div className="p-4 rounded-xl border border-border bg-background space-y-1 hover:border-border-strong transition-colors">
                     <span className="text-[11px] font-semibold text-foreground-muted uppercase tracking-wider">
                       Active Connections
                     </span>
-                    <div className="text-2xl font-extrabold text-foreground">12 Peers</div>
+                    <div className="text-2xl font-extrabold text-foreground font-mono">
+                      {peersCount} Peers
+                    </div>
                     <span className="text-[10px] text-foreground-muted">4 currently online</span>
                   </div>
-                  <div className="p-4 rounded-xl border border-border bg-background space-y-1">
+                  <div className="p-4 rounded-xl border border-border bg-background space-y-1 hover:border-border-strong transition-colors">
                     <span className="text-[11px] font-semibold text-foreground-muted uppercase tracking-wider">
                       Study Streak
                     </span>
-                    <div className="text-2xl font-extrabold text-foreground">7 Days 🔥</div>
+                    <div className="text-2xl font-extrabold text-foreground font-mono">
+                      {streakCount} Days 🔥
+                    </div>
                     <span className="text-[10px] text-foreground-muted">Personal record</span>
                   </div>
                 </div>
@@ -158,7 +209,7 @@ export const ProductShowcase: React.FC = () => {
                     </div>
 
                     <div className="space-y-2.5">
-                      <div className="p-3.5 rounded-xl border border-border bg-background flex items-center justify-between">
+                      <div className="p-3.5 rounded-xl border border-border bg-background flex items-center justify-between hover:border-border-strong transition-colors">
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 rounded-lg bg-surface-hover border border-border flex items-center justify-center font-bold text-xs">
                             CS
@@ -180,7 +231,7 @@ export const ProductShowcase: React.FC = () => {
                         </Badge>
                       </div>
 
-                      <div className="p-3.5 rounded-xl border border-border bg-background flex items-center justify-between">
+                      <div className="p-3.5 rounded-xl border border-border bg-background flex items-center justify-between hover:border-border-strong transition-colors">
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 rounded-lg bg-surface-hover border border-border flex items-center justify-center font-bold text-xs">
                             OS
@@ -212,7 +263,7 @@ export const ProductShowcase: React.FC = () => {
 
                     <div className="p-3.5 rounded-xl border border-border bg-background space-y-3">
                       <div className="flex items-start gap-2.5 text-xs">
-                        <div className="w-2 h-2 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
+                        <div className="w-2 h-2 rounded-full bg-emerald-500 mt-1.5 shrink-0 animate-pulse-dot" />
                         <div>
                           <p className="text-foreground font-medium">Alex Rivera shared a note</p>
                           <p className="text-foreground-muted text-[11px]">
@@ -238,6 +289,7 @@ export const ProductShowcase: React.FC = () => {
             {/* Panel 2: Find Partners */}
             {activeTab === 'partners' && (
               <div
+                key="panel-partners"
                 role="tabpanel"
                 id="panel-partners"
                 aria-labelledby="tab-partners"
@@ -251,7 +303,7 @@ export const ProductShowcase: React.FC = () => {
                       type="text"
                       readOnly
                       value="Data Structures, Algorithms, React"
-                      className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-border bg-background text-foreground"
+                      className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-border bg-background text-foreground focus:outline-none"
                     />
                   </div>
                   <div className="flex items-center gap-2 w-full sm:w-auto">
@@ -267,7 +319,7 @@ export const ProductShowcase: React.FC = () => {
                 {/* Partner Result Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {/* Partner 1 */}
-                  <div className="p-4 rounded-xl border border-border bg-background space-y-3.5 flex flex-col justify-between">
+                  <div className="p-4 rounded-xl border border-border bg-background space-y-3.5 flex flex-col justify-between hover:border-border-strong hover:-translate-y-0.5 transition-all">
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2.5">
@@ -302,13 +354,13 @@ export const ProductShowcase: React.FC = () => {
                       </div>
                     </div>
 
-                    <button className="w-full py-1.5 rounded-lg bg-foreground text-background text-xs font-semibold hover:opacity-90 transition-opacity">
+                    <button className="w-full py-1.5 rounded-lg bg-foreground text-background text-xs font-semibold hover:opacity-90 transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer">
                       Request Study Session
                     </button>
                   </div>
 
                   {/* Partner 2 */}
-                  <div className="p-4 rounded-xl border border-border bg-background space-y-3.5 flex flex-col justify-between">
+                  <div className="p-4 rounded-xl border border-border bg-background space-y-3.5 flex flex-col justify-between hover:border-border-strong hover:-translate-y-0.5 transition-all">
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2.5">
@@ -343,13 +395,13 @@ export const ProductShowcase: React.FC = () => {
                       </div>
                     </div>
 
-                    <button className="w-full py-1.5 rounded-lg bg-foreground text-background text-xs font-semibold hover:opacity-90 transition-opacity">
+                    <button className="w-full py-1.5 rounded-lg bg-foreground text-background text-xs font-semibold hover:opacity-90 transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer">
                       Request Study Session
                     </button>
                   </div>
 
                   {/* Partner 3 */}
-                  <div className="p-4 rounded-xl border border-border bg-background space-y-3.5 flex flex-col justify-between">
+                  <div className="p-4 rounded-xl border border-border bg-background space-y-3.5 flex flex-col justify-between hover:border-border-strong hover:-translate-y-0.5 transition-all">
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2.5">
@@ -384,7 +436,7 @@ export const ProductShowcase: React.FC = () => {
                       </div>
                     </div>
 
-                    <button className="w-full py-1.5 rounded-lg bg-foreground text-background text-xs font-semibold hover:opacity-90 transition-opacity">
+                    <button className="w-full py-1.5 rounded-lg bg-foreground text-background text-xs font-semibold hover:opacity-90 transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer">
                       Request Study Session
                     </button>
                   </div>
@@ -392,9 +444,10 @@ export const ProductShowcase: React.FC = () => {
               </div>
             )}
 
-            {/* Panel 3: Messages & Calling */}
+            {/* Panel 3: Messages & Calling with Simulated Live Typing */}
             {activeTab === 'messages' && (
               <div
+                key="panel-messages"
                 role="tabpanel"
                 id="panel-messages"
                 aria-labelledby="tab-messages"
@@ -407,7 +460,7 @@ export const ProductShowcase: React.FC = () => {
                       <div className="w-8 h-8 rounded-full bg-surface-hover border border-border flex items-center justify-center font-bold text-xs">
                         EM
                       </div>
-                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 absolute bottom-0 right-0 border-2 border-background" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 absolute bottom-0 right-0 border-2 border-background animate-pulse-dot" />
                     </div>
                     <div>
                       <div className="text-xs sm:text-sm font-bold text-foreground">Elena Miller</div>
@@ -417,14 +470,14 @@ export const ProductShowcase: React.FC = () => {
 
                   <div className="flex items-center gap-2">
                     <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-hover border border-border text-[11px] font-medium text-foreground">
-                      <Video className="w-3.5 h-3.5 text-emerald-500" />
+                      <Video className="w-3.5 h-3.5 text-emerald-500 animate-pulse-dot" />
                       <span>WebRTC Connected (24ms)</span>
                     </span>
                   </div>
                 </div>
 
                 {/* Message Conversation Flow */}
-                <div className="p-4 rounded-xl border border-border bg-background space-y-3 text-xs">
+                <div className="p-4 rounded-xl border border-border bg-background space-y-3.5 text-xs">
                   {/* Message from Elena */}
                   <div className="flex items-start gap-2.5 max-w-lg">
                     <div className="w-6 h-6 rounded-full bg-surface-hover border border-border flex items-center justify-center text-[10px] font-bold shrink-0">
@@ -455,13 +508,24 @@ export const ProductShowcase: React.FC = () => {
                       <span className="text-[10px] text-background/70 block text-right">4:14 PM • Read</span>
                     </div>
                   </div>
+
+                  {/* Elena Typing Indicator Simulation */}
+                  <div className="flex items-center gap-2 text-foreground-muted text-[11px] pl-8 pt-1">
+                    <span>Elena is typing</span>
+                    <span className="inline-flex gap-1 items-center">
+                      <span className="w-1.5 h-1.5 rounded-full bg-foreground-muted animate-pulse" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-foreground-muted animate-pulse [animation-delay:200ms]" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-foreground-muted animate-pulse [animation-delay:400ms]" />
+                    </span>
+                  </div>
                 </div>
               </div>
             )}
 
-            {/* Panel 4: Collaborative Workspace */}
+            {/* Panel 4: Collaborative Workspace with Remote Live Cursor */}
             {activeTab === 'workspace' && (
               <div
+                key="panel-workspace"
                 role="tabpanel"
                 id="panel-workspace"
                 aria-labelledby="tab-workspace"
@@ -470,7 +534,7 @@ export const ProductShowcase: React.FC = () => {
                 {/* Editor & Whiteboard Split */}
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
                   {/* Left: Code Editor (7 cols) */}
-                  <div className="lg:col-span-7 rounded-xl border border-border bg-background p-4 space-y-2 font-mono text-xs">
+                  <div className="lg:col-span-7 rounded-xl border border-border bg-background p-4 space-y-2 font-mono text-xs relative">
                     <div className="flex items-center justify-between text-[11px] text-foreground-muted pb-2 border-b border-border">
                       <span className="flex items-center gap-1.5">
                         <Terminal className="w-3.5 h-3.5 text-foreground" />
@@ -480,11 +544,13 @@ export const ProductShowcase: React.FC = () => {
                         <span className="px-2 py-0.5 rounded bg-surface-hover text-[10px] font-mono border border-border">
                           TypeScript 5.7
                         </span>
-                        <span className="text-[11px] text-emerald-500 font-medium">Yjs Synchronized</span>
+                        <span className="text-[11px] text-emerald-500 font-medium flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse-dot" /> Yjs Sync
+                        </span>
                       </div>
                     </div>
 
-                    <div className="space-y-1 text-[12px] leading-relaxed pt-1">
+                    <div className="space-y-1 text-[12px] leading-relaxed pt-1 relative">
                       <p>
                         <span className="text-foreground font-semibold">class</span>{' '}
                         <span className="text-foreground">LRUCache</span>&lt;K, V&gt; &#123;
@@ -503,9 +569,15 @@ export const ProductShowcase: React.FC = () => {
                         <span className="text-foreground font-semibold">const</span> node = this.map.get(key);
                       </p>
                       <p className="pl-8 text-foreground">if (!node) return undefined;</p>
-                      <p className="pl-8">
-                        this.moveToHead(node); <span className="text-foreground-muted">// Peer cursor active</span>
+
+                      {/* Line with Simulated Remote User Cursor */}
+                      <p className="pl-8 relative flex items-center">
+                        <span>this.moveToHead(node);</span>
+                        <span className="inline-flex items-center ml-1.5 px-1.5 py-0.5 rounded text-[10px] font-sans font-semibold bg-foreground text-background shadow-xs animate-float-subtle">
+                          Alex Rivera
+                        </span>
                       </p>
+
                       <p className="pl-8 text-foreground">return node.value;</p>
                       <p className="pl-4">&#125;</p>
                       <p>&#125;</p>
@@ -524,13 +596,13 @@ export const ProductShowcase: React.FC = () => {
 
                       {/* Diagram Representation */}
                       <div className="p-3 rounded-lg border border-border/80 bg-surface-hover/30 space-y-2 font-mono text-[11px]">
-                        <div className="text-center font-bold text-foreground">[ Head Node ]</div>
+                        <div className="text-center font-bold text-foreground transition-transform hover:scale-105">[ Head Node ]</div>
                         <div className="text-center text-foreground-muted">↕ next / prev</div>
-                        <div className="p-2 rounded border border-border bg-background text-center font-semibold text-foreground">
+                        <div className="p-2 rounded border border-border bg-background text-center font-semibold text-foreground hover:border-foreground/40 transition-colors">
                           Node(Key: "user_42", Val: Data)
                         </div>
                         <div className="text-center text-foreground-muted">↕ next / prev</div>
-                        <div className="text-center font-bold text-foreground">[ Tail Node (LRU) ]</div>
+                        <div className="text-center font-bold text-foreground transition-transform hover:scale-105">[ Tail Node (LRU) ]</div>
                       </div>
                     </div>
 
